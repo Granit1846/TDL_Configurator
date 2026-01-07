@@ -1,0 +1,8 @@
+﻿<UserControl x:Class="TDL.Configurator.App.Pages.ChaosPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel>
+        <TextBlock Text="Chaos" FontSize="22" FontWeight="SemiBold"/>
+        <TextBlock Text="Здесь будут настройки Chaos (из TDL_StreamPlugin.ini)." Opacity="0.7" Margin="0,8,0,0"/>
+    </StackPanel>
+</UserControl>
