@@ -79,19 +79,30 @@ public partial class TestPage : System.Windows.Controls.UserControl
     }
     private void TeleportRandomCity_Click(object sender, System.Windows.RoutedEventArgs e)
     {
-        // TODO: логика будет на следующем шаге
+        // TELEPORT_RANDOM_CITY: FORCE COUNT <= 5
+        if (!TryGetForceParams(maxCount: 5, out var count, out var interval))
+            return;
+
+        RunToolForce("TELEPORT_RANDOM_CITY", count, interval);
     }
 
     private void TeleportRandomDanger_Click(object sender, System.Windows.RoutedEventArgs e)
     {
-        // TODO: логика будет на следующем шаге
+        // TELEPORT_RANDOM_DANGER: FORCE COUNT <= 5
+        if (!TryGetForceParams(maxCount: 5, out var count, out var interval))
+            return;
+
+        RunToolForce("TELEPORT_RANDOM_DANGER", count, interval);
     }
 
     private void VirusDisease_Click(object sender, System.Windows.RoutedEventArgs e)
     {
-        // TODO: логика будет на следующем шаге
-    }
+        // VIRUS_DISEASE: FORCE COUNT <= 15
+        if (!TryGetForceParams(maxCount: 15, out var count, out var interval))
+            return;
 
+        RunToolForce("VIRUS_DISEASE", count, interval);
+    }
 
     private void RunToolNormal(string action)
     {

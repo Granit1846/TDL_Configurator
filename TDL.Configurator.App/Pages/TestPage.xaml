@@ -38,7 +38,7 @@
                          Margin="0,0,12,0"
                          ToolTip="Опционально. Если пусто — берётся default из TDL_Cooldowns.ini"/>
 
-                <TextBlock Text="(для Scatter max COUNT=10)" Opacity="0.7" VerticalAlignment="Center"/>
+                <TextBlock Text="(для inventory max COUNT=10, для teleport - 5, для summon - 50, для virus - 15)" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
 
             <!-- Connectivity -->
@@ -51,7 +51,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" Text="SYSTEM_PING" />
+                    <TextBlock VerticalAlignment="Center" Text="PING" />
 
                     <Button Grid.Column="1" Width="90" Margin="8,0,0,0" Content="NORMAL" Click="PingNormal_Click"/>
                     <Button Grid.Column="2" Width="90" Margin="8,0,0,0" Content="FORCE1" IsEnabled="False"/>
@@ -69,7 +69,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" Text="SYSTEM_HEALING" />
+                    <TextBlock VerticalAlignment="Center" Text="HEALING" />
 
                     <Button Grid.Column="1" Width="90" Margin="8,0,0,0" Content="NORMAL" Click="HealingNormal_Click"/>
                     <Button Grid.Column="2" Width="90" Margin="8,0,0,0" Content="FORCE1" Click="HealingForce1_Click"/>
@@ -87,7 +87,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" Text="INVENTORY_SCATTER" />
+                    <TextBlock VerticalAlignment="Center" Text="INVENTORY" />
 
                     <Button Grid.Column="1" Width="90" Margin="8,0,0,0" Content="NORMAL" Click="ScatterNormal_Click"/>
                     <Button Grid.Column="2" Width="90" Margin="8,0,0,0" Content="FORCE1" IsEnabled="False"/>
@@ -103,10 +103,10 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" Text="Teleport" />
+                    <TextBlock VerticalAlignment="Center" Text="TELEPORT" />
 
-                    <Button Content="Random City" Grid.Column="1" Width="140" Margin="8,0,0,0" Click="TeleportRandomCity_Click"/>
-                    <Button Content="Random Danger" Grid.Column="2" Width="140" Margin="8,0,0,0" Click="TeleportRandomDanger_Click"/>
+                    <Button Content="Random City" Grid.Column="1" Width="139" Margin="8,0,0,0" Click="TeleportRandomCity_Click"/>
+                    <Button Content="Random Danger" Grid.Column="2" Width="139" Margin="8,0,0,0" Click="TeleportRandomDanger_Click"/>
                 </Grid>
             </GroupBox>
 
@@ -114,13 +114,13 @@
             <GroupBox Header="Inventory" Margin="0,0,0,12">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Virus" VerticalAlignment="Center"/>
+                    <TextBlock Text="VIRUS" VerticalAlignment="Center"/>
 
-                    <Button Content="Random Disease" Grid.Column="2" Width="90" Margin="8,0,0,0" Click="VirusDisease_Click"/>
+                    <Button Content="Random Disease" Grid.Column="2" Width="286" Margin="8,0,0,0" Click="VirusDisease_Click"/>
                 </Grid>
             </GroupBox>                            
 
