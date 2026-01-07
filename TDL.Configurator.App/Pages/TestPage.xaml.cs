@@ -77,6 +77,21 @@ public partial class TestPage : System.Windows.Controls.UserControl
 
         RunToolForce("INVENTORY_SCATTER", count, interval);
     }
+    private void TeleportRandomCity_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        // TODO: логика будет на следующем шаге
+    }
+
+    private void TeleportRandomDanger_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        // TODO: логика будет на следующем шаге
+    }
+
+    private void VirusDisease_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        // TODO: логика будет на следующем шаге
+    }
+
 
     private void RunToolNormal(string action)
     {

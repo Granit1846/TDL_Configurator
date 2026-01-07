@@ -94,6 +94,35 @@
                     <Button Grid.Column="3" Width="90" Margin="8,0,0,0" Content="FORCE" Click="ScatterForce_Click"/>
                 </Grid>
             </GroupBox>
+            <!-- TELEPORT -->
+            <GroupBox Header="Inventory" Margin="0,0,0,12">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock VerticalAlignment="Center" Text="Teleport" />
+
+                    <Button Content="Random City" Grid.Column="1" Width="140" Margin="8,0,0,0" Click="TeleportRandomCity_Click"/>
+                    <Button Content="Random Danger" Grid.Column="2" Width="140" Margin="8,0,0,0" Click="TeleportRandomDanger_Click"/>
+                </Grid>
+            </GroupBox>
+
+            <!-- VIRUS -->
+            <GroupBox Header="Inventory" Margin="0,0,0,12">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Virus" VerticalAlignment="Center"/>
+
+                    <Button Content="Random Disease" Grid.Column="2" Width="90" Margin="8,0,0,0" Click="VirusDisease_Click"/>
+                </Grid>
+            </GroupBox>                            
 
             <!-- Output -->
             <GroupBox Header="Результат">
