@@ -42,7 +42,7 @@
             </WrapPanel>
 
             <!-- Connectivity -->
-            <GroupBox Header="Connectivity" Margin="0,0,0,12">
+            <Expander Header="Connectivity" Margin="0,0,0,12">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -51,16 +51,16 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" Text="PING" />
+                    <TextBlock VerticalAlignment="Center" Text="SYSTEM_PING" />
 
                     <Button Grid.Column="1" Width="90" Margin="8,0,0,0" Content="NORMAL" Click="PingNormal_Click"/>
                     <Button Grid.Column="2" Width="90" Margin="8,0,0,0" Content="FORCE1" IsEnabled="False"/>
                     <Button Grid.Column="3" Width="90" Margin="8,0,0,0" Content="FORCE" IsEnabled="False"/>
                 </Grid>
-            </GroupBox>
+            </Expander>
 
-            <!-- System -->
-            <GroupBox Header="System" Margin="0,0,0,12">
+            <!-- Healing -->
+            <Expander Header="Healing" Margin="0,0,0,12">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -69,16 +69,16 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" Text="HEALING" />
+                    <TextBlock VerticalAlignment="Center" Text="SYSTEM_HEALING" />
 
                     <Button Grid.Column="1" Width="90" Margin="8,0,0,0" Content="NORMAL" Click="HealingNormal_Click"/>
                     <Button Grid.Column="2" Width="90" Margin="8,0,0,0" Content="FORCE1" Click="HealingForce1_Click"/>
                     <Button Grid.Column="3" Width="90" Margin="8,0,0,0" Content="FORCE" IsEnabled="False"/>
                 </Grid>
-            </GroupBox>
+            </Expander>
 
             <!-- Inventory -->
-            <GroupBox Header="Inventory" Margin="0,0,0,12">
+            <Expander Header="Inventory" Margin="0,0,0,12">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -87,15 +87,15 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" Text="INVENTORY" />
+                    <TextBlock VerticalAlignment="Center" Text="INVENTORY_SCATTER" />
 
                     <Button Grid.Column="1" Width="90" Margin="8,0,0,0" Content="NORMAL" Click="ScatterNormal_Click"/>
                     <Button Grid.Column="2" Width="90" Margin="8,0,0,0" Content="FORCE1" IsEnabled="False"/>
                     <Button Grid.Column="3" Width="90" Margin="8,0,0,0" Content="FORCE" Click="ScatterForce_Click"/>
                 </Grid>
-            </GroupBox>
+            </Expander>
             <!-- TELEPORT -->
-            <GroupBox Header="Inventory" Margin="0,0,0,12">
+            <Expander Header="Teleport" Margin="0,0,0,12">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -103,36 +103,76 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock VerticalAlignment="Center" Text="TELEPORT" />
+                    <TextBlock VerticalAlignment="Center" Text="TELEPORT_RANDOM" />
 
-                    <Button Content="Random City" Grid.Column="1" Width="139" Margin="8,0,0,0" Click="TeleportRandomCity_Click"/>
-                    <Button Content="Random Danger" Grid.Column="2" Width="139" Margin="8,0,0,0" Click="TeleportRandomDanger_Click"/>
+                    <Button Content="City" Grid.Column="1" Width="139" Margin="8,0,0,0" Click="TeleportRandomCity_Click"/>
+                    <Button Content="Danger" Grid.Column="2" Width="139" Margin="8,0,0,0" Click="TeleportRandomDanger_Click"/>
                 </Grid>
-            </GroupBox>
+            </Expander>
 
             <!-- VIRUS -->
-            <GroupBox Header="Inventory" Margin="0,0,0,12">
+            <Expander Header="Virus" Margin="0,0,0,12">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="VIRUS" VerticalAlignment="Center"/>
+                    <TextBlock Text="VIRUS_DISEASE" VerticalAlignment="Center"/>
 
                     <Button Content="Random Disease" Grid.Column="2" Width="286" Margin="8,0,0,0" Click="VirusDisease_Click"/>
                 </Grid>
-            </GroupBox>                            
+            </Expander>
+
+            <!-- SUMMON -->
+            <Expander Header="Summon" Margin="0,0,0,24">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- слева: подпись -->
+                    <TextBlock Text="SUMMON_*" VerticalAlignment="Center"/>
+
+                    <!-- справа: кнопки в 3 строки -->
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- 1-я строка: Any -->
+                        <Button Content="Any" Grid.Row="0" Margin="8,0,0,8" Click="SummonForceAny_Click" Grid.ColumnSpan="3"/>
+                        <!-- 2-я строка: 3 кнопки -->
+                        <Button Content="Skeleton" Grid.Row="1" Grid.Column="0" Width="90" Margin="8,0,0,8" Click="SummonForceSkeleton_Click"/>
+                        <Button Content="Animal" Grid.Row="1" Grid.Column="1" Width="90" Margin="8,0,0,8" Click="SummonForceAnimal_Click"/>
+                        <Button Content="Humanoid" Grid.Row="1" Grid.Column="2" Width="90" Margin="8,0,0,8" Click="SummonForceHumanoid_Click"/>
+                        <!-- 3-я строка: 3 кнопки -->
+                        <Button Content="Undead" Grid.Row="2" Grid.Column="0" Width="90" Margin="8,0,0,0" Click="SummonForceUndead_Click"/>
+                        <Button Content="Strong" Grid.Row="2" Grid.Column="1" Width="90" Margin="8,0,0,0" Click="SummonForceStrong_Click"/>
+                        <Button Content="Dragon" Grid.Row="2" Grid.Column="2" Width="90" Margin="8,0,0,0" Click="SummonForceDragon_Click"/>
+                    </Grid>
+                </Grid>
+            </Expander>
+
+
 
             <!-- Output -->
-            <GroupBox Header="Результат">
+            <Expander Header="Результат">
                 <TextBox x:Name="OutputBox"
                          Margin="10"
                          Height="260"
                          IsReadOnly="True"
                          TextWrapping="Wrap"
                          VerticalScrollBarVisibility="Auto"/>
-            </GroupBox>
+            </Expander>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

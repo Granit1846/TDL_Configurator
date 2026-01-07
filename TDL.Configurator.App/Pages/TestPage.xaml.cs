@@ -104,6 +104,62 @@ public partial class TestPage : System.Windows.Controls.UserControl
         RunToolForce("VIRUS_DISEASE", count, interval);
     }
 
+    private void SummonForceAny_Click(object sender, RoutedEventArgs e)
+    {
+        // SUMMON_*: FORCE COUNT <= 50
+        if (!TryGetForceParams(maxCount: 50, out var count, out var interval))
+            return;
+
+        RunToolForce("SUMMON_ANY", count, interval);
+    }
+    private void SummonForceSkeleton_Click(object sender, RoutedEventArgs e)
+    {
+        // SUMMON_*: FORCE COUNT <= 50
+        if (!TryGetForceParams(maxCount: 50, out var count, out var interval))
+            return;
+
+        RunToolForce("SUMMON_SKELETON", count, interval);
+    }
+    private void SummonForceAnimal_Click(object sender, RoutedEventArgs e)
+    {
+        // SUMMON_*: FORCE COUNT <= 50
+        if (!TryGetForceParams(maxCount: 50, out var count, out var interval))
+            return;
+
+        RunToolForce("SUMMON_ANIMAL", count, interval);
+    }
+    private void SummonForceHumanoid_Click(object sender, RoutedEventArgs e)
+    {
+        // SUMMON_*: FORCE COUNT <= 50
+        if (!TryGetForceParams(maxCount: 50, out var count, out var interval))
+            return;
+
+        RunToolForce("SUMMON_HUMANOID", count, interval);
+    }
+    private void SummonForceUndead_Click(object sender, RoutedEventArgs e)
+    {
+        // SUMMON_*: FORCE COUNT <= 50
+        if (!TryGetForceParams(maxCount: 50, out var count, out var interval))
+            return;
+
+        RunToolForce("SUMMON_UNDEAD", count, interval);
+    }
+    private void SummonForceStrong_Click(object sender, RoutedEventArgs e)
+    {
+        // SUMMON_*: FORCE COUNT <= 50
+        if (!TryGetForceParams(maxCount: 50, out var count, out var interval))
+            return;
+
+        RunToolForce("SUMMON_STRONG", count, interval);
+    }
+    private void SummonForceDragon_Click(object sender, RoutedEventArgs e)
+    {
+        // SUMMON_*: FORCE COUNT <= 50
+        if (!TryGetForceParams(maxCount: 50, out var count, out var interval))
+            return;
+
+        RunToolForce("SUMMON_DRAGON", count, interval);
+    }
     private void RunToolNormal(string action)
     {
         if (!EnsureToolReady()) return;
@@ -136,13 +192,18 @@ public partial class TestPage : System.Windows.Controls.UserControl
         intervalArg = null;
 
         var countText = (ForceCountBox?.Text ?? "").Trim();
-        if (!int.TryParse(countText, NumberStyles.Integer, CultureInfo.InvariantCulture, out count) &&
-            !int.TryParse(countText, NumberStyles.Integer, CultureInfo.CurrentCulture, out count))
+        if (string.IsNullOrWhiteSpace(countText))
+        {
+            count = 1;
+        }
+        else if (!int.TryParse(countText, NumberStyles.Integer, CultureInfo.InvariantCulture, out count) &&
+                 !int.TryParse(countText, NumberStyles.Integer, CultureInfo.CurrentCulture, out count))
         {
             System.Windows.MessageBox.Show("COUNT должен быть целым числом.", "TDL Configurator",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
+
 
         if (count < 1) count = 1;
         if (count > maxCount)

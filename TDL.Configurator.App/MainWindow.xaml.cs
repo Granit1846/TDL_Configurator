@@ -39,6 +39,12 @@ public partial class MainWindow : Window
             "Chaos" => new ChaosPage(),
             "Quick access" => new QuickAccessPage(),
             "Test" => new TestPage(),
+
+            "Inventory" => new InventoryPage(),
+            "Wrath" => new WrathPage(),
+            "Hunter" => new HunterPage(),
+            "Gigant" => new GigantPage(),
+            "Comedy" => new ComedyPage(),
             _ => new TextBlock
             {
                 Text = $"Страница: {key}\n(контент добавим позже)",
