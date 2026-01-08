@@ -82,15 +82,31 @@
                             Click="DefaultRow_Click"/>
 
                     <!-- ShoutPushForce -->
-                    <TextBlock Grid.Row="2" Grid.Column="0"
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
                                Text="Сила отталкивания игрока при крике"
-                               VerticalAlignment="Center"
-                               ToolTip="Изменяет силу отталкивания игрока при Backfire на крике."/>
+                               VerticalAlignment="Center">
+                        <TextBlock.ToolTip>
+                            <ToolTip MaxWidth="520">
+                                <TextBlock TextWrapping="Wrap">
+                                    <Run Text="Изменяет силу отталкивания игрока при Backfire на крике. "/>
+                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text=" Установка большого значения может привести к полету через всю карту и попаданию в текстуру."
+                                         Foreground="Red"/>
+                                </TextBlock>
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+
                     <TextBox x:Name="ShoutPushForceBox"
-                             Grid.Row="2" Grid.Column="1"
+                             Grid.Row="2"
+                             Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>
-                    <Button Grid.Row="2" Grid.Column="2"
-                            Width="28" Height="26"
+
+                    <Button Grid.Row="2"
+                            Grid.Column="2"
+                            Width="28"
+                            Height="26"
                             Content="↺"
                             Tag="ShoutPushForce"
                             ToolTip="Сбросить на default (20)"
@@ -112,10 +128,21 @@
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackForce -->
-                    <TextBlock Grid.Row="4" Grid.Column="0"
+                    <TextBlock Grid.Row="4"
+                               Grid.Column="0"
                                Text="Сила отталкивания врагов"
-                               VerticalAlignment="Center"
-                               ToolTip="Изменяет силу отталкивания врагов при срабатывании эффекта."/>
+                               VerticalAlignment="Center">
+                        <TextBlock.ToolTip>
+                            <ToolTip MaxWidth="520">
+                                <TextBlock TextWrapping="Wrap">
+                                    <Run Text="Изменяет силу отталкивания врагов при срабатывании эффекта. "/>
+                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text=" Установка большого значения может привести к полету врага через всю карту и попаданию в текстуру."
+                                         Foreground="Red"/>
+                                </TextBlock>
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
                     <TextBox x:Name="KnockbackForceBox"
                              Grid.Row="4" Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>
@@ -127,14 +154,25 @@
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackCooldown -->
-                    <TextBlock Grid.Row="5" Grid.Column="0"
-                               Text="Кулдаун отталкивания (сек)"
-                               VerticalAlignment="Center"
-                               ToolTip="Минимальная пауза между отталкиваниями, чтобы эффект не спамился."/>
+                    <TextBlock Grid.Row="6"
+                               Grid.Column="0"
+                               Text="Задержка отталкивания магией (сек)"
+                               VerticalAlignment="Center">
+                        <TextBlock.ToolTip>
+                            <ToolTip MaxWidth="520">
+                                <TextBlock TextWrapping="Wrap">
+                                    <Run Text="Задержка перед отталкиванием при попаданием магией. "/>
+                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text=" При установке маленького значения урон противнику не успевает нанестись."
+                                         Foreground="Red"/>
+                                </TextBlock>
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
                     <TextBox x:Name="KnockbackCooldownBox"
-                             Grid.Row="5" Grid.Column="1"
+                             Grid.Row="6" Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>
-                    <Button Grid.Row="5" Grid.Column="2"
+                    <Button Grid.Row="6" Grid.Column="2"
                             Width="28" Height="26"
                             Content="↺"
                             Tag="KnockbackCooldown"
@@ -142,14 +180,14 @@
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackRadius -->
-                    <TextBlock Grid.Row="6" Grid.Column="0"
+                    <TextBlock Grid.Row="5" Grid.Column="0"
                                Text="Радиус поиска цели (units)"
                                VerticalAlignment="Center"
                                ToolTip="Максимальная дистанция, в которой ищется цель для отталкивания."/>
                     <TextBox x:Name="KnockbackRadiusBox"
-                             Grid.Row="6" Grid.Column="1"
+                             Grid.Row="5" Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>
-                    <Button Grid.Row="6" Grid.Column="2"
+                    <Button Grid.Row="5" Grid.Column="2"
                             Width="28" Height="26"
                             Content="↺"
                             Tag="KnockbackRadius"
@@ -157,10 +195,21 @@
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackMeleeDelay -->
-                    <TextBlock Grid.Row="7" Grid.Column="0"
+                    <TextBlock Grid.Row="7"
+                               Grid.Column="0"
                                Text="Задержка отталкивания при мили (сек)"
-                               VerticalAlignment="Center"
-                               ToolTip="Задержка перед отталкиванием при ударе в ближнем бою."/>
+                               VerticalAlignment="Center">
+                        <TextBlock.ToolTip>
+                            <ToolTip MaxWidth="520">
+                                <TextBlock TextWrapping="Wrap">
+                                    <Run Text="Задержка перед отталкиванием при ударе в ближнем бою. "/>
+                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text=" При установке маленького значения урон противнику не успевает нанестись."
+                                         Foreground="Red"/>
+                                </TextBlock>
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
                     <TextBox x:Name="KnockbackMeleeDelayBox"
                              Grid.Row="7" Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>
@@ -172,10 +221,21 @@
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackBowDelay -->
-                    <TextBlock Grid.Row="8" Grid.Column="0"
+                    <TextBlock Grid.Row="8"
+                               Grid.Column="0"
                                Text="Задержка отталкивания при луке (сек)"
-                               VerticalAlignment="Center"
-                               ToolTip="Задержка перед отталкиванием при выстреле из лука/арбалета."/>
+                               VerticalAlignment="Center">
+                        <TextBlock.ToolTip>
+                            <ToolTip MaxWidth="520">
+                                <TextBlock TextWrapping="Wrap">
+                                    <Run Text="Задержка перед отталкиванием при выстреле из лука/арбалета. "/>
+                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text=" При установке маленького значения урон противнику не успевает нанестись."
+                                         Foreground="Red"/>
+                                </TextBlock>
+                            </ToolTip>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
                     <TextBox x:Name="KnockbackBowDelayBox"
                              Grid.Row="8" Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>

@@ -63,7 +63,7 @@
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="ScatterExactCountBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterExactCount" ToolTip="Default" Click="DefaultRow_Click"/>
+                                    Tag="ScatterExactCount" ToolTip="Сбросить на Default (0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Минимум предметов"
@@ -71,15 +71,23 @@
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="ScatterMinCountBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterMinCount" ToolTip="Default" Click="DefaultRow_Click"/>
+                                    Tag="ScatterMinCount" ToolTip="Сбросить на Default (150)" Click="DefaultRow_Click"/>
 
-                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Максимум предметов"
-                                       ToolTip="Максимум предметов (когда точное количество = 0)."/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Максимум предметов">
+                                <TextBlock.ToolTip>
+                                    <ToolTip MaxWidth="420">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Максимум предметов (когда точное количество = 0). "/>
+                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text=" Установка большого значения может привести к падения FPS и вылетам игры" Foreground="Red"/>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="ScatterMaxCountBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterMaxCount" ToolTip="Default" Click="DefaultRow_Click"/>
+                                    Tag="ScatterMaxCount" ToolTip="Сбросить на Default (250)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Радиус разброса"
@@ -87,7 +95,7 @@
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="ScatterRadiusBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterRadius" ToolTip="Default" Click="DefaultRow_Click"/>
+                                    Tag="ScatterRadius" ToolTip="Сбросить на Default (800)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
@@ -114,15 +122,26 @@
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="DropBatchSizeBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DropBatchSize" ToolTip="Default" Click="DefaultRow_Click"/>
+                                    Tag="DropBatchSize" ToolTip="Сбросить на Default (10)" Click="DefaultRow_Click"/>
 
+                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Пауза между выбросами">
+                                <TextBlock.ToolTip>
+                                    <ToolTip MaxWidth="420">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Задержка (сек) между циклами выбрасывания. "/>
+                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text=" Установка маленького значения может привести к вылетам игры" Foreground="Red"/>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Пауза между выбросами"
                                        ToolTip="Задержка (сек) между циклами выбрасывания."/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="DropIntervalBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DropInterval" ToolTip="Default" Click="DefaultRow_Click"/>
+                                    Tag="DropInterval" ToolTip="Сбросить на Default (0.2)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Таймаут (сек)"
@@ -130,7 +149,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="DropTimeoutBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DropTimeout" ToolTip="Default" Click="DefaultRow_Click"/>
+                                    Tag="DropTimeout" ToolTip="Сбросить на Default (30)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Защитить важное"
@@ -138,7 +157,7 @@
                             <CheckBox Grid.Row="3" Grid.Column="1" x:Name="ProtectTokensByNameCheck"
                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ProtectTokensByName" ToolTip="Default" Click="DefaultRow_Click"/>
+                                    Tag="ProtectTokensByName" ToolTip="Сбросить на Default (1)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Показывать процесс"
@@ -146,7 +165,7 @@
                             <CheckBox Grid.Row="4" Grid.Column="1" x:Name="DropShowProgressCheck"
                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DropShowProgress" ToolTip="Default" Click="DefaultRow_Click"/>
+                                    Tag="DropShowProgress" ToolTip="Сбросить на Default (0)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 

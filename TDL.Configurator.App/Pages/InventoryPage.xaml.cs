@@ -16,6 +16,16 @@ namespace TDL.Configurator.App.Pages;
 public partial class InventoryPage : System.Windows.Controls.UserControl
 {
     private const string SectionName = "Inventory";
+    private const string UiTitle = "TDL Configurator";
+
+    private static void ShowInfo(string message)
+    {
+        System.Windows.MessageBox.Show(
+            message,
+            UiTitle,
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
 
     // Default значения (как у тебя в шаблоне INI)
     private const int DefaultScatterExactCount = 0;
@@ -88,16 +98,17 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         DropShowProgressCheck.IsChecked = GetOr(map, "DropShowProgress", DefaultDropShowProgress ? "1" : "0") != "0";
 
         InventoryStatusText.Text = $"Загружено: {DateTime.Now:HH:mm:ss}";
+        ShowInfo("Успешно загружено.");
     }
 
     private void Save_Click(object sender, RoutedEventArgs e)
     {
         if (!EnsureGamePath()) return;
 
-        if (!TryGetInt(ScatterExactCountBox, "ScatterExactCount", 0, 5000, out var scatterExact)) return;
-        if (!TryGetInt(ScatterMinCountBox, "ScatterMinCount", 0, 5000, out var scatterMin)) return;
-        if (!TryGetInt(ScatterMaxCountBox, "ScatterMaxCount", 0, 5000, out var scatterMax)) return;
-        if (!TryGetInt(ScatterRadiusBox, "ScatterRadius", 0, 20000, out var scatterRadius)) return;
+        if (!TryGetInt(ScatterExactCountBox, "ScatterExactCount", 0, 2000, out var scatterExact)) return;
+        if (!TryGetInt(ScatterMinCountBox, "ScatterMinCount", 1, 2000, out var scatterMin)) return;
+        if (!TryGetInt(ScatterMaxCountBox, "ScatterMaxCount", 1, 2000, out var scatterMax)) return;
+        if (!TryGetInt(ScatterRadiusBox, "ScatterRadius", 100, 5000, out var scatterRadius)) return;
 
         if (scatterExact == 0 && scatterMin > scatterMax)
         {
@@ -109,9 +120,9 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
             return;
         }
 
-        if (!TryGetInt(DropBatchSizeBox, "DropBatchSize", 1, 200, out var dropBatchSize)) return;
-        if (!TryGetDouble(DropIntervalBox, "DropInterval", 0.01, 10.0, out var dropInterval)) return;
-        if (!TryGetInt(DropTimeoutBox, "DropTimeout", 1, 600, out var dropTimeout)) return;
+        if (!TryGetInt(DropBatchSizeBox, "DropBatchSize", 1, 100, out var dropBatchSize)) return;
+        if (!TryGetDouble(DropIntervalBox, "DropInterval", 0.05, 1.0, out var dropInterval)) return;
+        if (!TryGetInt(DropTimeoutBox, "DropTimeout", 5, 120, out var dropTimeout)) return;
 
         var protectTokens = ProtectTokensByNameCheck.IsChecked == true ? 1 : 0;
         var showProgress = DropShowProgressCheck.IsChecked == true ? 1 : 0;
@@ -141,12 +152,14 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
 
         File.WriteAllLines(IniPath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
         InventoryStatusText.Text = $"Сохранено: {DateTime.Now:HH:mm:ss}";
+        ShowInfo("Успешно сохранено");
     }
 
     private void DefaultsAll_Click(object sender, RoutedEventArgs e)
     {
         ApplyDefaultsToUi();
         InventoryStatusText.Text = "Готово (default).";
+        ShowInfo("Сброшено на значения по умолчанию.");
     }
 
     private void DefaultRow_Click(object sender, RoutedEventArgs e)

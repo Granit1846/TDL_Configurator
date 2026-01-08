@@ -15,6 +15,16 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
 {
     private const string IniRelativePath = @"Data\SKSE\Plugins\TDL_StreamPlugin.ini";
     private const string SectionName = "Chaos";
+    private const string UiTitle = "TDL Configurator";
+
+    private static void ShowInfo(string message)
+    {
+        System.Windows.MessageBox.Show(
+            message,
+            UiTitle,
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
 
     public ChaosPage()
     {
@@ -102,6 +112,8 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
     {
         SetDefaultsFromTemplate();
         StatusText.Text = $"Сброшено на default ({SafeNow()}).";
+        ShowInfo("Сброшено на значения по умолчанию.");
+
     }
 
     private void DefaultRow_Click(object sender, RoutedEventArgs e)
@@ -148,6 +160,8 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         KnockbackBowDelayBox.Text = GetOr(map, "KnockbackBowDelay", KnockbackBowDelayBox.Text);
 
         StatusText.Text = $"Загружено ({SafeNow()}).";
+        ShowInfo("Успешно загружено.");
+
     }
 
     private void Save_Click(object sender, RoutedEventArgs e)
@@ -184,6 +198,8 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         UpsertSection(iniPath, SectionName, kv);
 
         StatusText.Text = $"Сохранено ({SafeNow()}).";
+        ShowInfo("Успешно сохранено");
+
     }
 
     // ---------- INI helpers ----------
