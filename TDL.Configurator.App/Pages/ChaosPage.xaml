@@ -1,87 +1,178 @@
 ﻿<UserControl x:Class="TDL.Configurator.App.Pages.ChaosPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
 
-        <!-- Header row -->
-        <DockPanel Grid.Row="0" LastChildFill="False">
-            <TextBlock Text="Chaos"
-                       FontSize="20"
-                       FontWeight="SemiBold"
-                       DockPanel.Dock="Left" />
+            <TextBlock Text="Chaos" FontSize="22" FontWeight="SemiBold"/>
+            <TextBlock Text="Настройки секции [Chaos] в TDL_StreamPlugin.ini"
+                       Opacity="0.7" Margin="0,6,0,16"/>
 
-            <StackPanel Orientation="Horizontal"
-                        DockPanel.Dock="Right"
-                        HorizontalAlignment="Right">
-                <Button Content="Загрузить"
-                        Width="110"
-                        Margin="0,0,8,0"
-                        Click="Load_Click"/>
-                <Button Content="Сохранить"
-                        Width="110"
-                        Click="Save_Click"/>
-            </StackPanel>
-        </DockPanel>
+            <!-- Верхние кнопки -->
+            <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
+                <Button Content="Загрузить" Width="120" Margin="0,0,8,0" Click="Load_Click"/>
+                <Button Content="Сохранить" Width="120" Margin="0,0,8,0" Click="Save_Click"/>
+                <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
+                <TextBlock x:Name="StatusText" Opacity="0.7" VerticalAlignment="Center"/>
+            </WrapPanel>
 
-        <ScrollViewer Grid.Row="1"
-                      Margin="0,12,0,0"
-                      VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+            <GroupBox Header="Параметры">
+                <Grid Margin="10">
 
-                <!-- Spoiler / Expander -->
-                <Expander Header="INI: [Chaos]"
-                          IsExpanded="True">
-                    <DockPanel Margin="8">
+                    <!-- 0: Название, 1: поле, 2: кнопка default -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                        <StackPanel Orientation="Horizontal"
-                                    DockPanel.Dock="Top"
-                                    Margin="0,0,0,8">
-                            <Button Content="Добавить строку"
-                                    Width="140"
-                                    Margin="0,0,8,0"
-                                    Click="AddRow_Click"/>
-                            <Button Content="Удалить выбранное"
-                                    Width="160"
-                                    Click="RemoveSelected_Click"/>
-                        </StackPanel>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                        <DataGrid x:Name="ChaosGrid"
-                                  ItemsSource="{Binding Entries}"
-                                  AutoGenerateColumns="False"
-                                  CanUserAddRows="False"
-                                  HeadersVisibility="Column"
-                                  MinHeight="220">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Key"
-                                                    Width="2*"
-                                                    Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}"/>
-                                <DataGridTextColumn Header="Value"
-                                                    Width="3*"
-                                                    Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </DockPanel>
-                </Expander>
-
-                <Expander Header="Подсказка"
-                          IsExpanded="False"
-                          Margin="0,8,0,0">
-                    <TextBlock Margin="8"
-                               TextWrapping="Wrap">
-                        Эта вкладка редактирует секцию [Chaos] в файле Data\SKSE\Plugins\TDL_StreamPlugin.ini.
-                        Если секции нет — она будет создана при сохранении.
+                    <!-- BackfireChance -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Вероятность Backfire (%)" VerticalAlignment="Center" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+                        <TextBlock.ToolTip>
+                            <Border Padding="8">
+                                <TextBlock TextWrapping="Wrap" Width="320"
+                                Text="Изменяет вероятность поражения игрока его же магией.&#10;Default: 20 (0–100)."/>
+                            </Border>
+                        </TextBlock.ToolTip>
                     </TextBlock>
-                </Expander>
+                    <TextBox x:Name="BackfireChanceBox" Grid.Row="0" Grid.Column="1" Width="120" Height="26" TextAlignment="Center" VerticalContentAlignment="Center" Padding="6,0"/>
+                    <Button Grid.Row="0" Grid.Column="2" Width="28" Height="26" Content="↺" Tag="BackfireChance" ToolTip="Сбросить на default (20)" Click="DefaultRow_Click"/>
 
-            </StackPanel>
-        </ScrollViewer>
-    </Grid>
+                    <!-- BackfireDuration -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Длительность Backfire (сек)" VerticalAlignment="Center" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+                        <TextBlock.ToolTip>
+                            <Border Padding="8">
+                                <TextBlock TextWrapping="Wrap" Width="320"
+                                Text="Изменяет длительность эффекта поражения игрока
+                                      его же магией. Default: 20 (0–100)."/>
+                            </Border>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                    <TextBox x:Name="BackfireDurationBox" Grid.Row="1" Grid.Column="1" Width="120" Height="26" TextAlignment="Center" VerticalContentAlignment="Center" Padding="6,0"/>
+                    <Button Grid.Row="1" Grid.Column="2" Width="28" Height="26" Content="↺" Tag="BackfireDuration" ToolTip="Сбросить на default (60)" Click="DefaultRow_Click"/>
+
+                    <!-- ShoutPushForce -->
+                    <TextBlock Grid.Row="2"
+                        Grid.Column="0" Text="Сила отталкивания при крике" VerticalAlignment="Center" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+                        <TextBlock.ToolTip>
+                            <Border Padding="8">
+                                <TextBlock TextWrapping="Wrap" Width="320">
+                                    <Run Text="Изменяет силу отталкивания игрока его же криком. Default: 20. "/>
+                                    <Run Text="ВНИМАНИЕ! " Foreground="#C00000" FontWeight="Bold"/>
+                                    <Run Text="При большом значении можно улететь на другой конец карты или провалиться через текстуру." Foreground="#C00000"/>
+                                </TextBlock>
+                            </Border>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                    <TextBox x:Name="ShoutPushForceBox" Grid.Row="2" Grid.Column="1" Width="120" Height="26" TextAlignment="Center" VerticalContentAlignment="Center" Padding="6,0"/>
+                    <Button Grid.Row="2" Grid.Column="2" Width="28" Height="26" Content="↺" Tag="ShoutPushForce" ToolTip="Сбросить на default (20)" Click="DefaultRow_Click"/>
+
+                    <!-- ShoutPushDelay -->
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Задержка крика (сек)" VerticalAlignment="Center" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+                        <TextBlock.ToolTip>
+                            <Border Padding="8">
+                                <TextBlock TextWrapping="Wrap" Width="320"
+                                Text="Изменяет задержку срабатывания отталкивания игрока
+                                      его же криком. Default: 0.05."/>
+                            </Border>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                    <TextBox x:Name="ShoutPushDelayBox" Grid.Row="3" Grid.Column="1" Width="120" Height="26" TextAlignment="Center" VerticalContentAlignment="Center" Padding="6,0"/>
+                    <Button Grid.Row="3" Grid.Column="2" Width="28" Height="26" Content="↺" Tag="ShoutPushDelay" ToolTip="Сбросить на default (0.05)" Click="DefaultRow_Click"/>
+
+                    <!-- KnockbackForce -->
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Сила отталкивания врагов" VerticalAlignment="Center" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+
+                        <TextBlock.ToolTip>
+                            <Border Padding="8">
+                                <TextBlock TextWrapping="Wrap" Width="320">
+                                    <Run Text="Изменяет силу отталкивания врагов. Default: 25. "/>
+                                    <Run Text="ВНИМАНИЕ! " Foreground="#C00000" FontWeight="Bold"/>
+                                    <Run Text="При большом значении можно улететь на другой конец карты или провалиться через текстуру." Foreground="#C00000"/>
+                                </TextBlock>
+                            </Border>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                    <TextBox x:Name="KnockbackForceBox" Grid.Row="4" Grid.Column="1" Width="120" Height="26" TextAlignment="Center" VerticalContentAlignment="Center" Padding="6,0"/>
+                    <Button Grid.Row="4" Grid.Column="2" Width="28" Height="26" Content="↺" Tag="KnockbackForce" ToolTip="Сбросить на default (25)" Click="DefaultRow_Click"/>
+
+                    <!-- KnockbackCooldown -->
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Задержка магии (сек)" VerticalAlignment="Center" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+                        <TextBlock.ToolTip>
+                            <Border Padding="8">
+                                <TextBlock TextWrapping="Wrap" Width="320">
+                                    <Run Text="Изменяет время срабатывания эффекта отталкивания врагов магией. Default: 0.35."/>
+                                    <Run Text="ВНИМАНИЕ! " Foreground="#C00000" FontWeight="Bold"/>
+                                    <Run Text="Низкие значения не будут наносить урон противнику." Foreground="#C00000"/>
+                                </TextBlock>
+                            </Border>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                    <TextBox x:Name="KnockbackCooldownBox" Grid.Row="5" Grid.Column="1" Width="120" Height="26" TextAlignment="Center" VerticalContentAlignment="Center" Padding="6,0"/>
+                    <Button Grid.Row="5" Grid.Column="2" Width="28" Height="26" Content="↺" Tag="KnockbackCooldown" ToolTip="Сбросить на default (0.35)" Click="DefaultRow_Click"/>
+
+                    <!-- KnockbackRadius -->
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Радиус отталкивания (units)" VerticalAlignment="Center" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+                        <TextBlock.ToolTip>
+                            <Border Padding="8">
+                                <TextBlock TextWrapping="Wrap" Width="320">
+                                    <Run Text="Изменяет радиус поиска цели (units). Default: 900. "/>
+                                    <Run Text="ВНИМАНИЕ! " Foreground="#C00000" FontWeight="Bold"/>
+                                    <Run Text="Не изменяйте этот параметр, если не знаете, что такое Aliases и как они работают." Foreground="#C00000"/>
+                                </TextBlock>
+                            </Border>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                    <TextBox x:Name="KnockbackRadiusBox" Grid.Row="6" Grid.Column="1" Width="120" Height="26" TextAlignment="Center" VerticalContentAlignment="Center" Padding="6,0"/>
+                    <Button Grid.Row="6" Grid.Column="2" Width="28" Height="26" Content="↺" Tag="KnockbackRadius" ToolTip="Сбросить на default (900)" Click="DefaultRow_Click"/>
+
+                    <!-- KnockbackMeleeDelay -->
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Задержка мили (сек)" VerticalAlignment="Center" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+                        <TextBlock.ToolTip>
+                            <Border Padding="8">
+                                <TextBlock TextWrapping="Wrap" Width="320">
+                                    <Run Text="Изменяет время срабатывания эффекта отталкивания врагов при ударе мечем и т.п. Default: 0.10."/>
+                                    <Run Text="ВНИМАНИЕ! " Foreground="#C00000" FontWeight="Bold"/>
+                                    <Run Text="Низкие значения не будут наносить урон противнику." Foreground="#C00000"/>
+                                </TextBlock>
+                            </Border>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                    <TextBox x:Name="KnockbackMeleeDelayBox" Grid.Row="7" Grid.Column="1" Width="120" Height="26" TextAlignment="Center" VerticalContentAlignment="Center" Padding="6,0"/>
+                    <Button Grid.Row="7" Grid.Column="2" Width="28" Height="26" Content="↺" Tag="KnockbackMeleeDelay" ToolTip="Сбросить на default (0.10)" Click="DefaultRow_Click"/>
+
+                    <!-- KnockbackBowDelay -->
+                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Задержка лука (сек)" VerticalAlignment="Center" ToolTipService.InitialShowDelay="250" ToolTipService.ShowDuration="20000">
+                        <TextBlock.ToolTip>
+                            <Border Padding="8">
+                                <TextBlock TextWrapping="Wrap" Width="320">
+                                    <Run Text="Изменяет время срабатывания эффекта отталкивания врагов при ударе стрелой или болтом. Default: 0.10."/>
+                                    <Run Text="ВНИМАНИЕ! " Foreground="#C00000" FontWeight="Bold"/>
+                                    <Run Text="Низкие значения не будут наносить урон противнику." Foreground="#C00000"/>
+                                </TextBlock>
+                            </Border>
+                        </TextBlock.ToolTip>
+                    </TextBlock>
+                    <TextBox x:Name="KnockbackBowDelayBox" Grid.Row="8" Grid.Column="1" Width="120" Height="26" TextAlignment="Center" VerticalContentAlignment="Center" Padding="6,0"/>
+                    <Button Grid.Row="8" Grid.Column="2" Width="28" Height="26" Content="↺" Tag="KnockbackBowDelay" ToolTip="Сбросить на default (0.10)" Click="DefaultRow_Click"/>
+
+                </Grid>
+            </GroupBox>
+
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
