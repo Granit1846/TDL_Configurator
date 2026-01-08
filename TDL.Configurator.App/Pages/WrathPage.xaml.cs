@@ -10,79 +10,51 @@ using TDL.Configurator.Core;
 
 using WpfButton = System.Windows.Controls.Button;
 using WpfTextBox = System.Windows.Controls.TextBox;
-using WpfUserControl = System.Windows.Controls.UserControl;
-using WpfMessageBox = System.Windows.MessageBox;
-using WpfMessageBoxButton = System.Windows.MessageBoxButton;
-using WpfMessageBoxImage = System.Windows.MessageBoxImage;
-
 
 namespace TDL.Configurator.App.Pages;
 
-public partial class WrathPage : WpfUserControl
-
+public partial class WrathPage : System.Windows.Controls.UserControl
 {
-    private const string IniRelativePath = @"Data\SKSE\Plugins\TDL_StreamPlugin.ini";
+    private const string UiTitle = "Wrath";
     private const string SectionName = "Wrath";
-    private const string UiTitle = "TDL Configurator";
 
-    // Диапазоны и default — из TDL_AllRanges.txt (WRATH).
-    // Валидация: min/max (step не форсируем в ini).
+    // INI: один и тот же файл, разные секции
+    private string GamePath => AppSettings.Load().GamePath.Trim();
+    private string PluginsFolder => Path.Combine(GamePath, "Data", "SKSE", "Plugins");
+    private string IniPath => Path.Combine(PluginsFolder, "TDL_StreamPlugin.ini");
 
-    private const int DefaultTotalBursts = 6;        // 1..50
-    private const double DefaultInterval = 0.40;     // 0.05..2.0
-    private const int DefaultRadius = 300;           // 100..2000
-    private const int DefaultZOffset = 50;           // 0..500
+    // Defaults (из диапазонов MCM)
+    private const int DefaultWrathTotalBursts = 24;
+    private const double DefaultWrathInterval = 0.10;
+    private const int DefaultWrathRadius = 350;
+    private const int DefaultWrathZOffset = 100;
 
-    private const int DefaultDamageMin = 5;          // 1..100
-    private const int DefaultDamageMax = 15;         // 1..100
-    private const double DefaultFireMult = 1.0;      // 0..5
-    private const double DefaultStormMag = 1.0;      // 0..5
-    private const double DefaultFrostSta = 1.0;      // 0..5
+    private const int DefaultWrathDamageMin = 35;
+    private const int DefaultWrathDamageMax = 70;
+    private const double DefaultWrathFireMult = 1.0;
+    private const double DefaultWrathStormMag = 100.0;
+    private const double DefaultWrathFrostSta = 50.0;
+    private const double DefaultWrathLevelScale = 0.5;
+    private const int DefaultWrathLevelCap = 30;
 
-    private const double DefaultLevelScale = 0.0;    // 0..0.10
-    private const double DefaultLevelCap = 3.0;      // 1..5
-
-    private const int DefaultShakeChance = 0;        // 0..100
-    private const double DefaultShakeDuration = 0.0; // 0..1
-    private const double DefaultShakeStrength = 0.0; // 0..1
-
-    private static string SafeNow() => DateTime.Now.ToString("HH:mm:ss");
-
-    private static void ShowInfo(string message)
-    {
-        WpfMessageBox.Show(message, UiTitle, MessageBoxButton.OK, MessageBoxImage.Information);
-    }
+    private const double DefaultWrathShakeChance = 0.25;
+    private const double DefaultWrathShakeStrength = 2.0;
+    private const double DefaultWrathShakeDuration = 0.35;
 
     public WrathPage()
     {
         InitializeComponent();
-        SetDefaultsFromTemplate();
-        StatusText.Text = "Готово (default).";
+        ApplyDefaultsToUi();
+        WrathStatusText.Text = "Готово (default).";
     }
 
-    private bool TryGetGamePath(out string gamePath)
+    private bool EnsureGamePath()
     {
-        gamePath = "";
-        try
+        if (string.IsNullOrWhiteSpace(GamePath) || !Directory.Exists(GamePath))
         {
-            var s = AppSettings.Load();
-            gamePath = (s?.GamePath ?? "").Trim();
-        }
-        catch (Exception ex)
-        {
-            WpfMessageBox.Show(
-                "Не удалось прочитать settings.json.\n" + ex.Message,
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-            return false;
-        }
-
-        if (string.IsNullOrWhiteSpace(gamePath) || !Directory.Exists(gamePath))
-        {
-            WpfMessageBox.Show(
-                "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.",
-                UiTitle,
+            System.Windows.MessageBox.Show(
+                "Сначала укажи путь к игре в Настройках (корень Skyrim Special Edition).",
+                "TDL Configurator",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -91,212 +63,189 @@ public partial class WrathPage : WpfUserControl
         return true;
     }
 
-    private bool TryGetIniPath(out string iniPath)
+    private void Load_Click(object sender, RoutedEventArgs e)
     {
-        iniPath = "";
-        if (!TryGetGamePath(out var gamePath))
-            return false;
+        if (!EnsureGamePath()) return;
 
-        iniPath = Path.Combine(gamePath, IniRelativePath);
-        return true;
+        if (!File.Exists(IniPath))
+        {
+            ApplyDefaultsToUi();
+            WrathStatusText.Text = "INI не найден — показаны default.";
+            ShowInfo("Файл TDL_StreamPlugin.ini не найден. Показаны значения по умолчанию.");
+            return;
+        }
+
+        var map = ReadSection(IniPath, SectionName);
+
+        WrathTotalBurstsBox.Text = GetOr(map, "WrathTotalBursts", DefaultWrathTotalBursts.ToString(CultureInfo.InvariantCulture));
+        WrathIntervalBox.Text = GetOr(map, "WrathInterval", DefaultWrathInterval.ToString(CultureInfo.InvariantCulture));
+        WrathRadiusBox.Text = GetOr(map, "WrathRadius", DefaultWrathRadius.ToString(CultureInfo.InvariantCulture));
+        WrathZOffsetBox.Text = GetOr(map, "WrathZOffset", DefaultWrathZOffset.ToString(CultureInfo.InvariantCulture));
+
+        WrathDamageMinBox.Text = GetOr(map, "WrathDamageMin", DefaultWrathDamageMin.ToString(CultureInfo.InvariantCulture));
+        WrathDamageMaxBox.Text = GetOr(map, "WrathDamageMax", DefaultWrathDamageMax.ToString(CultureInfo.InvariantCulture));
+        WrathFireMultBox.Text = GetOr(map, "WrathFireMult", DefaultWrathFireMult.ToString(CultureInfo.InvariantCulture));
+        WrathStormMagBox.Text = GetOr(map, "WrathStormMag", DefaultWrathStormMag.ToString(CultureInfo.InvariantCulture));
+        WrathFrostStaBox.Text = GetOr(map, "WrathFrostSta", DefaultWrathFrostSta.ToString(CultureInfo.InvariantCulture));
+        WrathLevelScaleBox.Text = GetOr(map, "WrathLevelScale", DefaultWrathLevelScale.ToString(CultureInfo.InvariantCulture));
+        WrathLevelCapBox.Text = GetOr(map, "WrathLevelCap", DefaultWrathLevelCap.ToString(CultureInfo.InvariantCulture));
+
+        WrathShakeChanceBox.Text = GetOr(map, "WrathShakeChance", DefaultWrathShakeChance.ToString(CultureInfo.InvariantCulture));
+        WrathShakeStrengthBox.Text = GetOr(map, "WrathShakeStrength", DefaultWrathShakeStrength.ToString(CultureInfo.InvariantCulture));
+        WrathShakeDurationBox.Text = GetOr(map, "WrathShakeDuration", DefaultWrathShakeDuration.ToString(CultureInfo.InvariantCulture));
+
+        WrathStatusText.Text = $"Загружено: {DateTime.Now:HH:mm:ss}";
+        ShowInfo("Загружено");
     }
 
-    // ---------- Defaults ----------
-    private void SetDefaultsFromTemplate()
+    private void Save_Click(object sender, RoutedEventArgs e)
     {
-        TotalBurstsBox.Text = DefaultTotalBursts.ToString(CultureInfo.InvariantCulture);
-        IntervalBox.Text = DefaultInterval.ToString("0.###", CultureInfo.InvariantCulture);
-        RadiusBox.Text = DefaultRadius.ToString(CultureInfo.InvariantCulture);
-        ZOffsetBox.Text = DefaultZOffset.ToString(CultureInfo.InvariantCulture);
+        if (!EnsureGamePath()) return;
 
-        DamageMinBox.Text = DefaultDamageMin.ToString(CultureInfo.InvariantCulture);
-        DamageMaxBox.Text = DefaultDamageMax.ToString(CultureInfo.InvariantCulture);
-        FireMultBox.Text = DefaultFireMult.ToString("0.###", CultureInfo.InvariantCulture);
-        StormMagBox.Text = DefaultStormMag.ToString("0.###", CultureInfo.InvariantCulture);
-        FrostStaBox.Text = DefaultFrostSta.ToString("0.###", CultureInfo.InvariantCulture);
+        // Диапазоны (из MCM)
+        if (!TryGetInt(WrathTotalBurstsBox, "WrathTotalBursts", 1, 500, out var totalBursts)) return;
+        if (!TryGetDouble(WrathIntervalBox, "WrathInterval", 0.01, 1.0, out var interval)) return;
+        if (!TryGetInt(WrathRadiusBox, "WrathRadius", 0, 3000, out var radius)) return;
+        if (!TryGetInt(WrathZOffsetBox, "WrathZOffset", -500, 500, out var zOffset)) return;
 
-        LevelScaleBox.Text = DefaultLevelScale.ToString("0.###", CultureInfo.InvariantCulture);
-        LevelCapBox.Text = DefaultLevelCap.ToString("0.###", CultureInfo.InvariantCulture);
+        if (!TryGetInt(WrathDamageMinBox, "WrathDamageMin", 0, 999, out var dmgMin)) return;
+        if (!TryGetInt(WrathDamageMaxBox, "WrathDamageMax", 0, 999, out var dmgMax)) return;
 
-        ShakeChanceBox.Text = DefaultShakeChance.ToString(CultureInfo.InvariantCulture);
-        ShakeDurationBox.Text = DefaultShakeDuration.ToString("0.###", CultureInfo.InvariantCulture);
-        ShakeStrengthBox.Text = DefaultShakeStrength.ToString("0.###", CultureInfo.InvariantCulture);
+        if (!TryGetDouble(WrathFireMultBox, "WrathFireMult", 0.0, 10.0, out var fireMult)) return;
+        if (!TryGetDouble(WrathStormMagBox, "WrathStormMag", 0.0, 1000.0, out var stormMag)) return;
+        if (!TryGetDouble(WrathFrostStaBox, "WrathFrostSta", 0.0, 1000.0, out var frostSta)) return;
+
+        if (!TryGetDouble(WrathLevelScaleBox, "WrathLevelScale", 0.0, 5.0, out var levelScale)) return;
+        if (!TryGetInt(WrathLevelCapBox, "WrathLevelCap", 1, 999, out var levelCap)) return;
+
+        if (!TryGetDouble(WrathShakeChanceBox, "WrathShakeChance", 0.0, 1.0, out var shakeChance)) return;
+        if (!TryGetDouble(WrathShakeStrengthBox, "WrathShakeStrength", 0.0, 15.0, out var shakeStrength)) return;
+        if (!TryGetDouble(WrathShakeDurationBox, "WrathShakeDuration", 0.0, 30.0, out var shakeDuration)) return;
+
+        Directory.CreateDirectory(PluginsFolder);
+
+        var lines = File.Exists(IniPath)
+            ? File.ReadAllLines(IniPath, Encoding.UTF8).ToList()
+            : new List<string>();
+
+        var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["WrathTotalBursts"] = totalBursts.ToString(CultureInfo.InvariantCulture),
+            ["WrathInterval"] = interval.ToString(CultureInfo.InvariantCulture),
+            ["WrathRadius"] = radius.ToString(CultureInfo.InvariantCulture),
+            ["WrathZOffset"] = zOffset.ToString(CultureInfo.InvariantCulture),
+
+            ["WrathDamageMin"] = dmgMin.ToString(CultureInfo.InvariantCulture),
+            ["WrathDamageMax"] = dmgMax.ToString(CultureInfo.InvariantCulture),
+            ["WrathFireMult"] = fireMult.ToString(CultureInfo.InvariantCulture),
+            ["WrathStormMag"] = stormMag.ToString(CultureInfo.InvariantCulture),
+            ["WrathFrostSta"] = frostSta.ToString(CultureInfo.InvariantCulture),
+            ["WrathLevelScale"] = levelScale.ToString(CultureInfo.InvariantCulture),
+            ["WrathLevelCap"] = levelCap.ToString(CultureInfo.InvariantCulture),
+
+            ["WrathShakeChance"] = shakeChance.ToString(CultureInfo.InvariantCulture),
+            ["WrathShakeStrength"] = shakeStrength.ToString(CultureInfo.InvariantCulture),
+            ["WrathShakeDuration"] = shakeDuration.ToString(CultureInfo.InvariantCulture),
+        };
+
+        UpsertSection(lines, SectionName, values);
+
+        File.WriteAllLines(IniPath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        WrathStatusText.Text = $"Сохранено: {DateTime.Now:HH:mm:ss}";
+        ShowInfo("Успешно сохранено");
+    }
+
+    private void DefaultsAll_Click(object sender, RoutedEventArgs e)
+    {
+        ApplyDefaultsToUi();
+        WrathStatusText.Text = "Готово (default).";
+        ShowInfo("Сброшено на значения по умолчанию.");
+    }
+
+    private void DefaultRow_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not WpfButton btn) return;
+
+        var key = btn.Tag?.ToString();
+        if (string.IsNullOrWhiteSpace(key)) return;
+
+        SetDefaultForKey(key);
+        WrathStatusText.Text = $"Default: {key}";
+    }
+
+    private void ApplyDefaultsToUi()
+    {
+        WrathTotalBurstsBox.Text = DefaultWrathTotalBursts.ToString(CultureInfo.InvariantCulture);
+        WrathIntervalBox.Text = DefaultWrathInterval.ToString(CultureInfo.InvariantCulture);
+        WrathRadiusBox.Text = DefaultWrathRadius.ToString(CultureInfo.InvariantCulture);
+        WrathZOffsetBox.Text = DefaultWrathZOffset.ToString(CultureInfo.InvariantCulture);
+
+        WrathDamageMinBox.Text = DefaultWrathDamageMin.ToString(CultureInfo.InvariantCulture);
+        WrathDamageMaxBox.Text = DefaultWrathDamageMax.ToString(CultureInfo.InvariantCulture);
+        WrathFireMultBox.Text = DefaultWrathFireMult.ToString(CultureInfo.InvariantCulture);
+        WrathStormMagBox.Text = DefaultWrathStormMag.ToString(CultureInfo.InvariantCulture);
+        WrathFrostStaBox.Text = DefaultWrathFrostSta.ToString(CultureInfo.InvariantCulture);
+        WrathLevelScaleBox.Text = DefaultWrathLevelScale.ToString(CultureInfo.InvariantCulture);
+        WrathLevelCapBox.Text = DefaultWrathLevelCap.ToString(CultureInfo.InvariantCulture);
+
+        WrathShakeChanceBox.Text = DefaultWrathShakeChance.ToString(CultureInfo.InvariantCulture);
+        WrathShakeStrengthBox.Text = DefaultWrathShakeStrength.ToString(CultureInfo.InvariantCulture);
+        WrathShakeDurationBox.Text = DefaultWrathShakeDuration.ToString(CultureInfo.InvariantCulture);
     }
 
     private void SetDefaultForKey(string key)
     {
         switch (key)
         {
-            case "TotalBursts": TotalBurstsBox.Text = DefaultTotalBursts.ToString(CultureInfo.InvariantCulture); break;
-            case "Interval": IntervalBox.Text = DefaultInterval.ToString("0.###", CultureInfo.InvariantCulture); break;
-            case "Radius": RadiusBox.Text = DefaultRadius.ToString(CultureInfo.InvariantCulture); break;
-            case "ZOffset": ZOffsetBox.Text = DefaultZOffset.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathTotalBursts": WrathTotalBurstsBox.Text = DefaultWrathTotalBursts.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathInterval": WrathIntervalBox.Text = DefaultWrathInterval.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathRadius": WrathRadiusBox.Text = DefaultWrathRadius.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathZOffset": WrathZOffsetBox.Text = DefaultWrathZOffset.ToString(CultureInfo.InvariantCulture); break;
 
-            case "DamageMin": DamageMinBox.Text = DefaultDamageMin.ToString(CultureInfo.InvariantCulture); break;
-            case "DamageMax": DamageMaxBox.Text = DefaultDamageMax.ToString(CultureInfo.InvariantCulture); break;
-            case "FireMult": FireMultBox.Text = DefaultFireMult.ToString("0.###", CultureInfo.InvariantCulture); break;
-            case "StormMag": StormMagBox.Text = DefaultStormMag.ToString("0.###", CultureInfo.InvariantCulture); break;
-            case "FrostSta": FrostStaBox.Text = DefaultFrostSta.ToString("0.###", CultureInfo.InvariantCulture); break;
+            case "WrathDamageMin": WrathDamageMinBox.Text = DefaultWrathDamageMin.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathDamageMax": WrathDamageMaxBox.Text = DefaultWrathDamageMax.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathFireMult": WrathFireMultBox.Text = DefaultWrathFireMult.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathStormMag": WrathStormMagBox.Text = DefaultWrathStormMag.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathFrostSta": WrathFrostStaBox.Text = DefaultWrathFrostSta.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathLevelScale": WrathLevelScaleBox.Text = DefaultWrathLevelScale.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathLevelCap": WrathLevelCapBox.Text = DefaultWrathLevelCap.ToString(CultureInfo.InvariantCulture); break;
 
-            case "LevelScale": LevelScaleBox.Text = DefaultLevelScale.ToString("0.###", CultureInfo.InvariantCulture); break;
-            case "LevelCap": LevelCapBox.Text = DefaultLevelCap.ToString("0.###", CultureInfo.InvariantCulture); break;
-
-            case "ShakeChance": ShakeChanceBox.Text = DefaultShakeChance.ToString(CultureInfo.InvariantCulture); break;
-            case "ShakeDuration": ShakeDurationBox.Text = DefaultShakeDuration.ToString("0.###", CultureInfo.InvariantCulture); break;
-            case "ShakeStrength": ShakeStrengthBox.Text = DefaultShakeStrength.ToString("0.###", CultureInfo.InvariantCulture); break;
+            case "WrathShakeChance": WrathShakeChanceBox.Text = DefaultWrathShakeChance.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathShakeStrength": WrathShakeStrengthBox.Text = DefaultWrathShakeStrength.ToString(CultureInfo.InvariantCulture); break;
+            case "WrathShakeDuration": WrathShakeDurationBox.Text = DefaultWrathShakeDuration.ToString(CultureInfo.InvariantCulture); break;
         }
     }
 
-    private void DefaultsAll_Click(object sender, RoutedEventArgs e)
+    private static void ShowInfo(string text)
     {
-        SetDefaultsFromTemplate();
-        StatusText.Text = $"Сброшено на default ({SafeNow()}).";
-        ShowInfo("Сброшено на значения по умолчанию.");
+        System.Windows.MessageBox.Show(
+            text,
+            "TDL Configurator",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
     }
 
-    private void DefaultRow_Click(object sender, RoutedEventArgs e)
-    {
-        if (sender is not WpfButton btn)
-            return;
-
-        var key = btn.Tag?.ToString();
-        if (string.IsNullOrWhiteSpace(key))
-            return;
-
-        SetDefaultForKey(key);
-        StatusText.Text = $"Default: {key} ({SafeNow()}).";
-    }
-
-    // ---------- Load / Save ----------
-    private void Load_Click(object sender, RoutedEventArgs e)
-    {
-        if (!TryGetIniPath(out var iniPath))
-            return;
-
-        if (!File.Exists(iniPath))
-        {
-            WpfMessageBox.Show(
-                $"INI не найден:\n{iniPath}\n\nСоздай его на вкладке Quick access (кнопка «Создать INI (шаблон)»).",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        var map = ReadSection(iniPath, SectionName);
-
-        // если ключа нет в ini — оставляем текущее (обычно default)
-        TotalBurstsBox.Text = GetOr(map, "TotalBursts", TotalBurstsBox.Text);
-        IntervalBox.Text = GetOr(map, "Interval", IntervalBox.Text);
-        RadiusBox.Text = GetOr(map, "Radius", RadiusBox.Text);
-        ZOffsetBox.Text = GetOr(map, "ZOffset", ZOffsetBox.Text);
-
-        DamageMinBox.Text = GetOr(map, "DamageMin", DamageMinBox.Text);
-        DamageMaxBox.Text = GetOr(map, "DamageMax", DamageMaxBox.Text);
-        FireMultBox.Text = GetOr(map, "FireMult", FireMultBox.Text);
-        StormMagBox.Text = GetOr(map, "StormMag", StormMagBox.Text);
-        FrostStaBox.Text = GetOr(map, "FrostSta", FrostStaBox.Text);
-
-        LevelScaleBox.Text = GetOr(map, "LevelScale", LevelScaleBox.Text);
-        LevelCapBox.Text = GetOr(map, "LevelCap", LevelCapBox.Text);
-
-        ShakeChanceBox.Text = GetOr(map, "ShakeChance", ShakeChanceBox.Text);
-        ShakeDurationBox.Text = GetOr(map, "ShakeDuration", ShakeDurationBox.Text);
-        ShakeStrengthBox.Text = GetOr(map, "ShakeStrength", ShakeStrengthBox.Text);
-
-        StatusText.Text = $"Загружено ({SafeNow()}).";
-        ShowInfo("Успешно загружено.");
-    }
-
-    private void Save_Click(object sender, RoutedEventArgs e)
-    {
-        if (!TryGetIniPath(out var iniPath))
-            return;
-
-        if (!TryGetInt(TotalBurstsBox, "TotalBursts", 1, 50, out var totalBursts)) return;
-        if (!TryGetDouble(IntervalBox, "Interval", 0.05, 2.0, out var interval)) return;
-        if (!TryGetInt(RadiusBox, "Radius", 100, 2000, out var radius)) return;
-        if (!TryGetInt(ZOffsetBox, "ZOffset", 0, 500, out var zOffset)) return;
-
-        if (!TryGetInt(DamageMinBox, "DamageMin", 1, 100, out var damageMin)) return;
-        if (!TryGetInt(DamageMaxBox, "DamageMax", 1, 100, out var damageMax)) return;
-
-        if (damageMin > damageMax)
-        {
-            WpfMessageBox.Show(
-                "DamageMin не может быть больше DamageMax.",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        if (!TryGetDouble(FireMultBox, "FireMult", 0.0, 5.0, out var fireMult)) return;
-        if (!TryGetDouble(StormMagBox, "StormMag", 0.0, 5.0, out var stormMag)) return;
-        if (!TryGetDouble(FrostStaBox, "FrostSta", 0.0, 5.0, out var frostSta)) return;
-
-        if (!TryGetDouble(LevelScaleBox, "LevelScale", 0.0, 0.10, out var levelScale)) return;
-        if (!TryGetDouble(LevelCapBox, "LevelCap", 1.0, 5.0, out var levelCap)) return;
-
-        if (!TryGetInt(ShakeChanceBox, "ShakeChance", 0, 100, out var shakeChance)) return;
-        if (!TryGetDouble(ShakeDurationBox, "ShakeDuration", 0.0, 1.0, out var shakeDuration)) return;
-        if (!TryGetDouble(ShakeStrengthBox, "ShakeStrength", 0.0, 1.0, out var shakeStrength)) return;
-
-        var kv = new List<string>
-        {
-            $"TotalBursts={totalBursts}",
-            $"Interval={interval.ToString("0.###", CultureInfo.InvariantCulture)}",
-            $"Radius={radius}",
-            $"ZOffset={zOffset}",
-
-            $"DamageMin={damageMin}",
-            $"DamageMax={damageMax}",
-            $"FireMult={fireMult.ToString("0.###", CultureInfo.InvariantCulture)}",
-            $"StormMag={stormMag.ToString("0.###", CultureInfo.InvariantCulture)}",
-            $"FrostSta={frostSta.ToString("0.###", CultureInfo.InvariantCulture)}",
-
-            $"LevelScale={levelScale.ToString("0.###", CultureInfo.InvariantCulture)}",
-            $"LevelCap={levelCap.ToString("0.###", CultureInfo.InvariantCulture)}",
-
-            $"ShakeChance={shakeChance}",
-            $"ShakeDuration={shakeDuration.ToString("0.###", CultureInfo.InvariantCulture)}",
-            $"ShakeStrength={shakeStrength.ToString("0.###", CultureInfo.InvariantCulture)}",
-        };
-
-        UpsertSection(iniPath, SectionName, kv);
-
-        StatusText.Text = $"Сохранено ({SafeNow()}).";
-        ShowInfo("Успешно сохранено.");
-    }
-
-    // ---------- INI helpers ----------
     private static string GetOr(Dictionary<string, string> map, string key, string fallback)
         => map.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v.Trim() : fallback;
 
-    private static bool IsSectionHeader(string line)
-    {
-        var t = (line ?? "").Trim();
-        return t.StartsWith("[") && t.EndsWith("]");
-    }
+    // ---------------- INI helpers ----------------
 
-    private static Dictionary<string, string> ReadSection(string filePath, string sectionName)
+    private static Dictionary<string, string> ReadSection(string path, string sectionName)
     {
         var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        var lines = File.ReadAllLines(filePath, Encoding.UTF8);
+        var lines = File.ReadAllLines(path, Encoding.UTF8);
 
         var inSection = false;
-        var wanted = $"[{sectionName}]";
 
         foreach (var raw in lines)
         {
             var line = (raw ?? "").Trim();
-
             if (line.Length == 0) continue;
             if (line.StartsWith(";") || line.StartsWith("#")) continue;
 
-            if (IsSectionHeader(line))
+            if (line.StartsWith("[") && line.EndsWith("]"))
             {
-                inSection = line.Equals(wanted, StringComparison.OrdinalIgnoreCase);
+                inSection = string.Equals(line.Trim('[', ']'), sectionName, StringComparison.OrdinalIgnoreCase);
                 continue;
             }
 
@@ -305,64 +254,103 @@ public partial class WrathPage : WpfUserControl
             var eq = line.IndexOf('=');
             if (eq <= 0) continue;
 
-            var key = line.Substring(0, eq).Trim();
-            var val = line.Substring(eq + 1).Trim();
-            if (key.Length == 0) continue;
+            var k = line.Substring(0, eq).Trim();
+            var v = line.Substring(eq + 1).Trim();
+            if (k.Length == 0) continue;
 
-            result[key] = val;
+            result[k] = v;
         }
 
         return result;
     }
 
-    private static void UpsertSection(string filePath, string sectionName, List<string> keyValueLines)
+    private static void UpsertSection(List<string> lines, string sectionName, Dictionary<string, string> values)
     {
-        var lines = File.Exists(filePath)
-            ? File.ReadAllLines(filePath, Encoding.UTF8).ToList()
-            : new List<string>();
+        var header = $"[{sectionName}]";
 
-        var wanted = $"[{sectionName}]";
         var start = -1;
-        var end = -1;
-
         for (var i = 0; i < lines.Count; i++)
         {
-            var t = (lines[i] ?? "").Trim();
-            if (t.Equals(wanted, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals((lines[i] ?? "").Trim(), header, StringComparison.OrdinalIgnoreCase))
             {
                 start = i;
-                end = i + 1;
-                while (end < lines.Count && !IsSectionHeader(lines[end]))
-                    end++;
                 break;
             }
         }
 
-        var newBlock = new List<string> { wanted };
-        newBlock.AddRange(keyValueLines);
-        newBlock.Add("");
+        var newSection = new List<string> { header };
+        foreach (var kv in values)
+            newSection.Add($"{kv.Key}={kv.Value}");
+        newSection.Add("");
 
         if (start < 0)
         {
             if (lines.Count > 0 && !string.IsNullOrWhiteSpace(lines[^1]))
                 lines.Add("");
-
-            lines.AddRange(newBlock);
+            lines.AddRange(newSection);
+            return;
         }
-        else
+
+        var end = start + 1;
+        while (end < lines.Count)
         {
-            lines.RemoveRange(start, end - start);
-            lines.InsertRange(start, newBlock);
+            var t = (lines[end] ?? "").Trim();
+            if (t.StartsWith("[") && t.EndsWith("]"))
+                break;
+            end++;
         }
 
-        var dir = Path.GetDirectoryName(filePath);
-        if (!string.IsNullOrWhiteSpace(dir))
-            Directory.CreateDirectory(dir);
-
-        File.WriteAllLines(filePath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        lines.RemoveRange(start, end - start);
+        lines.InsertRange(start, newSection);
     }
 
-    // ---------- Parsing helpers ----------
+    // ---------------- Parse helpers (диапазоны) ----------------
+
+    private static bool TryGetInt(WpfTextBox box, string name, int min, int max, out int value)
+    {
+        value = 0;
+        var text = (box.Text ?? "").Trim();
+
+        if (!int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value) &&
+            !int.TryParse(text, NumberStyles.Integer, CultureInfo.CurrentCulture, out value))
+        {
+            System.Windows.MessageBox.Show($"{name} должен быть целым числом.", UiTitle,
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (value < min || value > max)
+        {
+            System.Windows.MessageBox.Show($"{name}: значение должно быть в диапазоне {min}..{max}.", UiTitle,
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool TryGetDouble(WpfTextBox box, string name, double min, double max, out double value)
+    {
+        value = 0;
+        var text = (box.Text ?? "").Trim();
+
+        if (!TryParseDoubleFlexible(text, out value))
+        {
+            System.Windows.MessageBox.Show($"{name} должен быть числом (пример: 0.20).", UiTitle,
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (value < min || value > max)
+        {
+            System.Windows.MessageBox.Show($"{name}: значение должно быть в диапазоне {min}..{max}.", UiTitle,
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        return true;
+    }
+
     private static bool TryParseDoubleFlexible(string s, out double value)
     {
         if (double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
@@ -377,62 +365,5 @@ public partial class WrathPage : WpfUserControl
 
         value = 0;
         return false;
-    }
-
-    private static bool TryGetInt(WpfTextBox box, string name, int min, int max, out int value)
-    {
-        value = 0;
-        var text = (box.Text ?? "").Trim();
-
-        if (!int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value) &&
-            !int.TryParse(text, NumberStyles.Integer, CultureInfo.CurrentCulture, out value))
-        {
-            WpfMessageBox.Show(
-                $"{name} должен быть целым числом.",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return false;
-        }
-
-        if (value < min || value > max)
-        {
-            WpfMessageBox.Show(
-                $"{name}: значение должно быть в диапазоне {min}..{max}.",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return false;
-        }
-
-        return true;
-    }
-
-    private static bool TryGetDouble(WpfTextBox box, string name, double min, double max, out double value)
-    {
-        value = 0;
-        var text = (box.Text ?? "").Trim();
-
-        if (!TryParseDoubleFlexible(text, out value))
-        {
-            WpfMessageBox.Show(
-                $"{name} должен быть числом (пример: 0.40).",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return false;
-        }
-
-        if (value < min || value > max)
-        {
-            WpfMessageBox.Show(
-                $"{name}: значение должно быть в диапазоне {min}..{max}.",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return false;
-        }
-
-        return true;
     }
 }

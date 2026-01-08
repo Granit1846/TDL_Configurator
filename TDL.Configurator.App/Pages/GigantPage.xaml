@@ -2,29 +2,169 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <UserControl.Resources>
+        <Style x:Key="NumericBoxStyle" TargetType="TextBox">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="6,0"/>
+        </Style>
+
+        <Style x:Key="ResetButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Content" Value="↺"/>
+        </Style>
+
+        <Style x:Key="RowLabelStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+    </UserControl.Resources>
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
 
-            <TextBlock Text="Gigant" Style="{StaticResource PageTitleStyle}"/>
-            <TextBlock Text="Редактирование секции [Gigant] в TDL_StreamPlugin.ini"
-                       Style="{StaticResource PageSubtitleStyle}"/>
+            <TextBlock Text="Gigant" FontSize="22" FontWeight="SemiBold"/>
+            <TextBlock Text="Настройки секции [Gigant] в TDL_StreamPlugin.ini"
+                       Opacity="0.7" Margin="0,6,0,16"/>
 
-            <!-- Панель действий: пока отключена (но вид одинаковый) -->
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
-                <Button Content="Загрузить" Style="{StaticResource ActionButtonStyle}" IsEnabled="False"/>
-                <Button Content="Сохранить" Style="{StaticResource ActionButtonStyle}" IsEnabled="False"/>
-                <Button Content="Сбросить всё" Style="{StaticResource ActionButtonWideStyle}" IsEnabled="False"/>
-                <TextBlock x:Name="StatusText" Style="{StaticResource StatusTextStyle}"
-                           Text="Скоро: добавим параметры."/>
+                <Button Content="Загрузить" Width="120" Margin="0,0,8,0" Click="Load_Click"/>
+                <Button Content="Сохранить" Width="120" Margin="0,0,8,0" Click="Save_Click"/>
+                <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
+                <TextBlock x:Name="GigantStatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
 
             <GroupBox Header="Параметры">
                 <StackPanel Margin="10">
-                    <Expander Header="Скоро" IsExpanded="True">
-                        <TextBlock Margin="8"
-                                   TextWrapping="Wrap"
-                                   Text="Эта вкладка пока в режиме шаблона. Здесь появятся параметры и сохранение в INI."/>
+
+                    <Expander Header="РАЗМЕР И УРОН" IsExpanded="True" Margin="0,0,0,12">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="260"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- ScaleBig -->
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Коэф. роста (Гигант)">
+                                <TextBlock.ToolTip>
+                                    <ToolTip MaxWidth="420">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Изменяет масштаб игрока при эффекте «Гигант». "/>
+                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text=" Большие значения могут приводить к проблемам с коллизиями и анимациями." Foreground="Red"/>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="ScaleBigBox" Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="ScaleBig" ToolTip="Сбросить на Default (2.0)" Click="DefaultRow_Click"/>
+
+                            <!-- DamageBig -->
+                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Множитель урона (Гигант)"
+                                       ToolTip="Множитель урона игрока при эффекте «Гигант»."/>
+                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="DamageBigBox" Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="DamageBig" ToolTip="Сбросить на Default (5.0)" Click="DefaultRow_Click"/>
+
+                            <!-- ScaleSmall -->
+                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Коэф. роста (Лилипут)">
+                                <TextBlock.ToolTip>
+                                    <ToolTip MaxWidth="420">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Изменяет масштаб игрока при эффекте «Лилипут». "/>
+                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text=" Слишком малые значения могут ломать коллизии и поведение камеры." Foreground="Red"/>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <TextBox Grid.Row="2" Grid.Column="1" x:Name="ScaleSmallBox" Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="ScaleSmall" ToolTip="Сбросить на Default (0.33)" Click="DefaultRow_Click"/>
+
+                            <!-- DamageSmall -->
+                            <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Множитель урона (Лилипут)"
+                                       ToolTip="Множитель урона игрока при эффекте «Лилипут»."/>
+                            <TextBox Grid.Row="3" Grid.Column="1" x:Name="DamageSmallBox" Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="DamageSmall" ToolTip="Сбросить на Default (0.5)" Click="DefaultRow_Click"/>
+
+                            <!-- SizeDuration -->
+                            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Длительность размера (сек)"
+                                       ToolTip="Длительность эффекта изменения размера (в секундах)."/>
+                            <TextBox Grid.Row="4" Grid.Column="1" x:Name="SizeDurationBox" Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="SizeDuration" ToolTip="Сбросить на Default (60)" Click="DefaultRow_Click"/>
+                        </Grid>
                     </Expander>
+
+                    <Expander Header="СКОРОСТЬ" IsExpanded="True">
+                        <Grid Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="260"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- SpeedFast -->
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Множитель скорости (ускорение)">
+                                <TextBlock.ToolTip>
+                                    <ToolTip MaxWidth="420">
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Множитель скорости передвижения при ускорении. "/>
+                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text=" Слишком большие значения могут приводить к нестабильной физике и анимациям." Foreground="Red"/>
+                                        </TextBlock>
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="SpeedFastBox" Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="SpeedFast" ToolTip="Сбросить на Default (3)" Click="DefaultRow_Click"/>
+
+                            <!-- SpeedSlow -->
+                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Множитель скорости (замедление)"
+                                       ToolTip="Множитель скорости передвижения при замедлении."/>
+                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="SpeedSlowBox" Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="SpeedSlow" ToolTip="Сбросить на Default (0.5)" Click="DefaultRow_Click"/>
+
+                            <!-- SpeedDuration -->
+                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Длительность скорости (сек)"
+                                       ToolTip="Длительность эффекта изменения скорости (в секундах)."/>
+                            <TextBox Grid.Row="2" Grid.Column="1" x:Name="SpeedDurationBox" Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="SpeedDuration" ToolTip="Сбросить на Default (60)" Click="DefaultRow_Click"/>
+                        </Grid>
+                    </Expander>
+
                 </StackPanel>
             </GroupBox>
 

@@ -9,6 +9,8 @@ namespace TDL.Configurator.App.Pages;
 
 public partial class QuickAccessPage : System.Windows.Controls.UserControl
 {
+    private const string UiTitle = "TDL Configurator";
+
     public QuickAccessPage()
     {
         InitializeComponent();
@@ -30,13 +32,16 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
     private string SkseDocsFolder => Path.Combine(DocsRoot, "My Games", "Skyrim Special Edition", "SKSE");
     private string PluginLogPath => Path.Combine(SkseDocsFolder, "TDL_StreamPlugin.log");
 
+    private bool HasGamePath()
+        => !string.IsNullOrWhiteSpace(GamePath) && Directory.Exists(GamePath);
+
     private bool EnsureGamePath()
     {
-        if (string.IsNullOrWhiteSpace(GamePath) || !Directory.Exists(GamePath))
+        if (!HasGamePath())
         {
             System.Windows.MessageBox.Show(
                 "Сначала укажи путь к игре в Настройках (корень Skyrim Special Edition).",
-                "TDL Configurator",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
 
@@ -52,7 +57,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         {
             System.Windows.MessageBox.Show(
                 $"Папка не найдена:\n{folder}",
-                "TDL Configurator",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -67,7 +72,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         {
             System.Windows.MessageBox.Show(
                 $"Файл не найден:\n{file}",
-                "TDL Configurator",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -78,7 +83,8 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
 
     private void UpdateStatus()
     {
-        if (!EnsureGamePath())
+        // ВАЖНО: без MessageBox при старте страницы (как у остальных вкладок)
+        if (!HasGamePath())
         {
             StatusText.Text = "Статус: путь к игре не задан (Настройки).";
             return;
@@ -134,7 +140,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
             {
                 System.Windows.MessageBox.Show(
                     "INI уже существует.",
-                    "TDL Configurator",
+                    UiTitle,
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
                 return;
@@ -197,19 +203,19 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
             sb.AppendLine("[Gigant]");
             sb.AppendLine("SizeDuration=60");
             sb.AppendLine("SpeedDuration=60");
-            sb.AppendLine("ScaleBig=3.0");
-            sb.AppendLine("DamageBig=6.0");
+            sb.AppendLine("ScaleBig=2.0");
+            sb.AppendLine("DamageBig=5.0");
             sb.AppendLine("ScaleSmall=0.33");
             sb.AppendLine("DamageSmall=0.5");
-            sb.AppendLine("SpeedFast=300");
-            sb.AppendLine("SpeedSlow=50");
+            sb.AppendLine("SpeedFast=3.0");
+            sb.AppendLine("SpeedSlow=0.5");
             sb.AppendLine();
 
             File.WriteAllText(IniPath, sb.ToString(), Encoding.UTF8);
 
             System.Windows.MessageBox.Show(
                 "INI создан.",
-                "TDL Configurator",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
 
@@ -219,7 +225,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         {
             System.Windows.MessageBox.Show(
                 $"Не удалось создать INI:\n{ex.Message}",
-                "TDL Configurator",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
