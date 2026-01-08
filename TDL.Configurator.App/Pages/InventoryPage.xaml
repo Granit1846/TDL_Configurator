@@ -1,10 +1,8 @@
-﻿<local:IniPageBase x:Class="TDL.Configurator.App.Pages.InventoryPage"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:local="clr-namespace:TDL.Configurator.App.Pages">
+﻿<UserControl x:Class="TDL.Configurator.App.Pages.InventoryPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <UserControl.Resources>
-        <!-- Как в Chaos: число строго по центру -->
         <Style x:Key="NumericBoxStyle" TargetType="TextBox">
             <Setter Property="Width" Value="120"/>
             <Setter Property="Height" Value="26"/>
@@ -13,7 +11,6 @@
             <Setter Property="Padding" Value="6,0"/>
         </Style>
 
-        <!-- Маленькая кнопка сброса как в Chaos -->
         <Style x:Key="ResetButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="28"/>
             <Setter Property="Height" Value="26"/>
@@ -22,6 +19,8 @@
 
         <Style x:Key="RowLabelStyle" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
         </Style>
     </UserControl.Resources>
 
@@ -29,26 +28,21 @@
         <StackPanel>
 
             <TextBlock Text="Inventory" FontSize="22" FontWeight="SemiBold"/>
-            <TextBlock Text="Редактирование секции [Inventory] в TDL_StreamPlugin.ini"
+            <TextBlock Text="Настройки секции [Inventory] в TDL_StreamPlugin.ini"
                        Opacity="0.7" Margin="0,6,0,16"/>
 
-            <!-- Верхняя панель как в Chaos -->
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
                 <Button Content="Загрузить" Width="120" Margin="0,0,8,0" Click="Load_Click"/>
                 <Button Content="Сохранить" Width="120" Margin="0,0,8,0" Click="Save_Click"/>
                 <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
-                <TextBlock x:Name="StatusText" Opacity="0.7" VerticalAlignment="Center"/>
+                <TextBlock x:Name="InventoryStatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
 
-            <!-- Общая рамка как в Chaos -->
             <GroupBox Header="Параметры">
                 <StackPanel Margin="10">
 
-                    <!-- ДОЖДЬ ПРЕДМЕТОВ -->
                     <Expander Header="ДОЖДЬ ПРЕДМЕТОВ" IsExpanded="True" Margin="0,0,0,12">
                         <Grid Margin="10">
-
-                            <!-- Ровно как в Chaos: 0-имя, 1-поле, 2-кнопка, 3-запас -->
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
                                 <ColumnDefinition Width="120"/>
@@ -63,32 +57,42 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <!-- ScatterExactCount -->
-                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Точное количество (0 — рандом)" ToolTip="0 = использовать Min/Max, иначе ровно указанное число."/>
-                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="ScatterExactCountBox" Style="{StaticResource NumericBoxStyle}"/>
-                            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}" Tag="ScatterExactCount" Click="DefaultRow_Click"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Точное количество (0 — рандом)"
+                                       ToolTip="Если 0 — используется Min/Max. Если >0 — выбрасывается ровно это число."/>
+                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="ScatterExactCountBox"
+                                     Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="ScatterExactCount" ToolTip="Default" Click="DefaultRow_Click"/>
 
-                            <!-- ScatterMinCount -->
-                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Минимум предметов" ToolTip="Минимум предметов при ScatterExactCount=0."/>
-                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="ScatterMinCountBox" Style="{StaticResource NumericBoxStyle}"/>
-                            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}" Tag="ScatterMinCount" Click="DefaultRow_Click"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Минимум предметов"
+                                       ToolTip="Минимум предметов (когда точное количество = 0)."/>
+                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="ScatterMinCountBox"
+                                     Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="ScatterMinCount" ToolTip="Default" Click="DefaultRow_Click"/>
 
-                            <!-- ScatterMaxCount -->
-                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Максимум предметов" ToolTip="Максимум предметов при ScatterExactCount=0."/>
-                            <TextBox Grid.Row="2" Grid.Column="1" x:Name="ScatterMaxCountBox" Style="{StaticResource NumericBoxStyle}"/>
-                            <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}" Tag="ScatterMaxCount" Click="DefaultRow_Click"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Максимум предметов"
+                                       ToolTip="Максимум предметов (когда точное количество = 0)."/>
+                            <TextBox Grid.Row="2" Grid.Column="1" x:Name="ScatterMaxCountBox"
+                                     Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="ScatterMaxCount" ToolTip="Default" Click="DefaultRow_Click"/>
 
-                            <!-- ScatterRadius -->
-                            <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Радиус разброса" ToolTip="Радиус (в игровых единицах), в котором разлетаются предметы."/>
-                            <TextBox Grid.Row="3" Grid.Column="1" x:Name="ScatterRadiusBox" Style="{StaticResource NumericBoxStyle}"/>
-                            <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}" Tag="ScatterRadius" Click="DefaultRow_Click"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Радиус разброса"
+                                       ToolTip="Радиус (в игровых единицах), в котором разлетаются предметы."/>
+                            <TextBox Grid.Row="3" Grid.Column="1" x:Name="ScatterRadiusBox"
+                                     Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="ScatterRadius" ToolTip="Default" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
-                    <!-- РАЗДЕТЬ -->
                     <Expander Header="РАЗДЕТЬ" IsExpanded="True">
                         <Grid Margin="10">
-
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
                                 <ColumnDefinition Width="120"/>
@@ -104,30 +108,45 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <!-- DropBatchSize -->
-                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Размер пачки" ToolTip="Сколько предметов выбрасывать за один цикл."/>
-                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="DropBatchSizeBox" Style="{StaticResource NumericBoxStyle}"/>
-                            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}" Tag="DropBatchSize" Click="DefaultRow_Click"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Размер пачки"
+                                       ToolTip="Сколько предметов выбрасывать за один цикл."/>
+                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="DropBatchSizeBox"
+                                     Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="DropBatchSize" ToolTip="Default" Click="DefaultRow_Click"/>
 
-                            <!-- DropInterval -->
-                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Пауза между выбросами" ToolTip="Задержка (сек) между циклами выбрасывания."/>
-                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="DropIntervalBox" Style="{StaticResource NumericBoxStyle}"/>
-                            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}" Tag="DropInterval" Click="DefaultRow_Click"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Пауза между выбросами"
+                                       ToolTip="Задержка (сек) между циклами выбрасывания."/>
+                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="DropIntervalBox"
+                                     Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="DropInterval" ToolTip="Default" Click="DefaultRow_Click"/>
 
-                            <!-- DropTimeout -->
-                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Таймаут (сек)" ToolTip="Ограничение по времени на операцию (сек)."/>
-                            <TextBox Grid.Row="2" Grid.Column="1" x:Name="DropTimeoutBox" Style="{StaticResource NumericBoxStyle}"/>
-                            <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}" Tag="DropTimeout" Click="DefaultRow_Click"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Таймаут (сек)"
+                                       ToolTip="Ограничение по времени на операцию (сек)."/>
+                            <TextBox Grid.Row="2" Grid.Column="1" x:Name="DropTimeoutBox"
+                                     Style="{StaticResource NumericBoxStyle}"/>
+                            <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="DropTimeout" ToolTip="Default" Click="DefaultRow_Click"/>
 
-                            <!-- ProtectTokensByName -->
-                            <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Защитить важное"  ToolTip="1/0. Если включено — важные токены/предметы не будут выброшены."/>
-                            <CheckBox Grid.Row="3" Grid.Column="1" x:Name="ProtectTokensByNameCheck" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}" Tag="ProtectTokensByName" Click="DefaultRow_Click"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Защитить важное"
+                                       ToolTip="1/0. Если включено — важные токены/предметы не будут выброшены."/>
+                            <CheckBox Grid.Row="3" Grid.Column="1" x:Name="ProtectTokensByNameCheck"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="ProtectTokensByName" ToolTip="Default" Click="DefaultRow_Click"/>
 
-                            <!-- DropShowProgress -->
-                            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Показывать процесс" ToolTip="1/0. Если включено — показывать прогресс/уведомления."/>
-                            <CheckBox Grid.Row="4" Grid.Column="1" x:Name="DropShowProgressCheck" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}" Tag="DropShowProgress" Click="DefaultRow_Click"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="Показывать процесс"
+                                       ToolTip="1/0. Если включено — показывать прогресс/уведомления."/>
+                            <CheckBox Grid.Row="4" Grid.Column="1" x:Name="DropShowProgressCheck"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
+                                    Tag="DropShowProgress" ToolTip="Default" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
@@ -136,4 +155,4 @@
 
         </StackPanel>
     </ScrollViewer>
-</local:IniPageBase>
+</UserControl>

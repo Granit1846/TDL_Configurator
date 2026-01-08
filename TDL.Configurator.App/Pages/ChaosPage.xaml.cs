@@ -7,49 +7,43 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using TDL.Configurator.Core;
-
 using WpfTextBox = System.Windows.Controls.TextBox;
 
 namespace TDL.Configurator.App.Pages;
 
-public partial class ChaosPage : IniPageBase
+public partial class ChaosPage : System.Windows.Controls.UserControl
 {
+    private const string IniRelativePath = @"Data\SKSE\Plugins\TDL_StreamPlugin.ini";
     private const string SectionName = "Chaos";
 
     public ChaosPage()
     {
         InitializeComponent();
         SetDefaultsFromTemplate();
-        SetStatus("Готово (default).");
+        StatusText.Text = "Готово (default).";
     }
 
-    // -----------------------
-    // Paths / Settings
-    // -----------------------
-    private string GamePath
+    private static string SafeNow() => DateTime.Now.ToString("HH:mm:ss");
+
+    private bool TryGetGamePath(out string gamePath)
     {
-        get
+        gamePath = "";
+        try
         {
-            try
-            {
-                return (AppSettings.Load().GamePath ?? "").Trim();
-            }
-            catch
-            {
-                return "";
-            }
+            var s = AppSettings.Load();
+            gamePath = (s?.GamePath ?? "").Trim();
         }
-    }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(
+                "Не удалось прочитать settings.json.\n" + ex.Message,
+                "TDL Configurator",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            return false;
+        }
 
-    private string IniPath =>
-        Path.Combine(GamePath, "Data", "SKSE", "Plugins", "TDL_StreamPlugin.ini");
-
-    private string PluginsFolder =>
-        Path.Combine(GamePath, "Data", "SKSE", "Plugins");
-
-    private bool EnsureGamePath()
-    {
-        if (string.IsNullOrWhiteSpace(GamePath) || !Directory.Exists(GamePath))
+        if (string.IsNullOrWhiteSpace(gamePath) || !Directory.Exists(gamePath))
         {
             System.Windows.MessageBox.Show(
                 "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.",
@@ -62,18 +56,19 @@ public partial class ChaosPage : IniPageBase
         return true;
     }
 
-    private void SetStatus(string text)
+    private bool TryGetIniPath(out string iniPath)
     {
-        if (StatusText != null)
-            StatusText.Text = text;
+        iniPath = "";
+        if (!TryGetGamePath(out var gamePath))
+            return false;
+
+        iniPath = Path.Combine(gamePath, IniRelativePath);
+        return true;
     }
 
-    // -----------------------
-    // Defaults
-    // -----------------------
+    // ---------- Defaults ----------
     private void SetDefaultsFromTemplate()
     {
-        // Дефолты соответствуют твоему шаблону INI
         BackfireChanceBox.Text = "20";
         BackfireDurationBox.Text = "60";
         ShoutPushForceBox.Text = "20";
@@ -94,6 +89,7 @@ public partial class ChaosPage : IniPageBase
             case "BackfireDuration": BackfireDurationBox.Text = "60"; break;
             case "ShoutPushForce": ShoutPushForceBox.Text = "20"; break;
             case "ShoutPushDelay": ShoutPushDelayBox.Text = "0.05"; break;
+
             case "KnockbackForce": KnockbackForceBox.Text = "25"; break;
             case "KnockbackCooldown": KnockbackCooldownBox.Text = "0.35"; break;
             case "KnockbackRadius": KnockbackRadiusBox.Text = "900"; break;
@@ -105,7 +101,7 @@ public partial class ChaosPage : IniPageBase
     private void DefaultsAll_Click(object sender, RoutedEventArgs e)
     {
         SetDefaultsFromTemplate();
-        StatusText.Text = "Сброшено на default.";
+        StatusText.Text = $"Сброшено на default ({SafeNow()}).";
     }
 
     private void DefaultRow_Click(object sender, RoutedEventArgs e)
@@ -118,29 +114,28 @@ public partial class ChaosPage : IniPageBase
             return;
 
         SetDefaultForKey(key);
-        StatusText.Text = $"Default: {key}";
+        StatusText.Text = $"Default: {key} ({SafeNow()}).";
     }
 
-    // -----------------------
-    // Load / Save
-    // -----------------------
+    // ---------- Load / Save ----------
     private void Load_Click(object sender, RoutedEventArgs e)
     {
-        if (!EnsureGamePath())
+        if (!TryGetIniPath(out var iniPath))
             return;
 
-        if (!File.Exists(IniPath))
+        if (!File.Exists(iniPath))
         {
             System.Windows.MessageBox.Show(
-                $"INI не найден:\n{IniPath}\n\nСоздай его на вкладке Quick access (кнопка «Создать INI (шаблон)»).",
+                $"INI не найден:\n{iniPath}\n\nСоздай его на вкладке Quick access (кнопка «Создать INI (шаблон)»).",
                 "TDL Configurator",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
         }
 
-        var map = ReadSection(IniPath, SectionName);
+        var map = ReadSection(iniPath, SectionName);
 
+        // если ключа нет в ini — оставляем текущее (обычно default)
         BackfireChanceBox.Text = GetOr(map, "BackfireChance", BackfireChanceBox.Text);
         BackfireDurationBox.Text = GetOr(map, "BackfireDuration", BackfireDurationBox.Text);
         ShoutPushForceBox.Text = GetOr(map, "ShoutPushForce", ShoutPushForceBox.Text);
@@ -152,73 +147,62 @@ public partial class ChaosPage : IniPageBase
         KnockbackMeleeDelayBox.Text = GetOr(map, "KnockbackMeleeDelay", KnockbackMeleeDelayBox.Text);
         KnockbackBowDelayBox.Text = GetOr(map, "KnockbackBowDelay", KnockbackBowDelayBox.Text);
 
-        SetStatus($"Загружено: {DateTime.Now:HH:mm:ss}");
+        StatusText.Text = $"Загружено ({SafeNow()}).";
     }
 
     private void Save_Click(object sender, RoutedEventArgs e)
     {
-        if (!EnsureGamePath()) return;
-
-        if (!TryBuildValues(out var values))
+        if (!TryGetIniPath(out var iniPath))
             return;
 
-        Directory.CreateDirectory(Path.GetDirectoryName(IniPath)!);
+        // Валидация диапазонов (как договорились)
+        if (!TryGetInt(BackfireChanceBox, "BackfireChance", 0, 100, out var backfireChance)) return;
+        if (!TryGetInt(BackfireDurationBox, "BackfireDuration", 1, 600, out var backfireDuration)) return;
+        if (!TryGetInt(ShoutPushForceBox, "ShoutPushForce", 0, 200, out var shoutPushForce)) return;
+        if (!TryGetDouble(ShoutPushDelayBox, "ShoutPushDelay", 0.0, 0.5, out var shoutPushDelay)) return;
 
-        var lines = IniFile.LoadLines(IniPath);
-        IniFile.UpsertSection(lines, SectionName, values);
-        IniFile.SaveLines(IniPath, lines);
+        if (!TryGetInt(KnockbackForceBox, "KnockbackForce", 0, 200, out var knockbackForce)) return;
+        if (!TryGetDouble(KnockbackCooldownBox, "KnockbackCooldown", 0.0, 2.0, out var knockbackCooldown)) return;
+        if (!TryGetInt(KnockbackRadiusBox, "KnockbackRadius", 0, 20000, out var knockbackRadius)) return;
+        if (!TryGetDouble(KnockbackMeleeDelayBox, "KnockbackMeleeDelay", 0.0, 0.5, out var knockbackMeleeDelay)) return;
+        if (!TryGetDouble(KnockbackBowDelayBox, "KnockbackBowDelay", 0.0, 0.5, out var knockbackBowDelay)) return;
 
-        ShowSaved("Chaos");
+        var kv = new List<string>
+        {
+            $"BackfireChance={backfireChance}",
+            $"BackfireDuration={backfireDuration}",
+            $"ShoutPushForce={shoutPushForce}",
+            $"ShoutPushDelay={shoutPushDelay.ToString("0.##", CultureInfo.InvariantCulture)}",
+
+            $"KnockbackForce={knockbackForce}",
+            $"KnockbackCooldown={knockbackCooldown.ToString("0.##", CultureInfo.InvariantCulture)}",
+            $"KnockbackRadius={knockbackRadius}",
+            $"KnockbackMeleeDelay={knockbackMeleeDelay.ToString("0.##", CultureInfo.InvariantCulture)}",
+            $"KnockbackBowDelay={knockbackBowDelay.ToString("0.##", CultureInfo.InvariantCulture)}",
+        };
+
+        UpsertSection(iniPath, SectionName, kv);
+
+        StatusText.Text = $"Сохранено ({SafeNow()}).";
     }
 
-    private bool TryBuildValues(out Dictionary<string, string> values)
-    {
-        values = new Dictionary<string, string>();
-
-        if (!TryGetInt(BackfireChanceBox, "BackfireChance", 0, 100, out var backfireChance)) return false;
-        if (!TryGetInt(BackfireDurationBox, "BackfireDuration", 1, 600, out var backfireDuration)) return false;
-        if (!TryGetInt(ShoutPushForceBox, "ShoutPushForce", 0, 200, out var shoutPushForce)) return false;
-        if (!TryGetDouble(ShoutPushDelayBox, "ShoutPushDelay", 0.0, 0.5, out var shoutPushDelay)) return false;
-
-        if (!TryGetInt(KnockbackForceBox, "KnockbackForce", 0, 200, out var knockbackForce)) return false;
-        if (!TryGetDouble(KnockbackCooldownBox, "KnockbackCooldown", 0.0, 2.0, out var knockbackCooldown)) return false;
-        if (!TryGetInt(KnockbackRadiusBox, "KnockbackRadius", 0, 20000, out var knockbackRadius)) return false;
-        if (!TryGetDouble(KnockbackMeleeDelayBox, "KnockbackMeleeDelay", 0.0, 0.5, out var knockbackMeleeDelay)) return false;
-        if (!TryGetDouble(KnockbackBowDelayBox, "KnockbackBowDelay", 0.0, 0.5, out var knockbackBowDelay)) return false;
-
-        values["BackfireChance"] = backfireChance.ToString();
-        values["BackfireDuration"] = backfireDuration.ToString();
-        values["ShoutPushForce"] = shoutPushForce.ToString();
-        values["ShoutPushDelay"] = FormatDouble(shoutPushDelay);
-
-        values["KnockbackForce"] = knockbackForce.ToString();
-        values["KnockbackCooldown"] = FormatDouble(knockbackCooldown);
-        values["KnockbackRadius"] = knockbackRadius.ToString();
-        values["KnockbackMeleeDelay"] = FormatDouble(knockbackMeleeDelay);
-        values["KnockbackBowDelay"] = FormatDouble(knockbackBowDelay);
-
-        return true;
-    }
-
-    // -----------------------
-    // INI helpers (local)
-    // -----------------------
+    // ---------- INI helpers ----------
     private static string GetOr(Dictionary<string, string> map, string key, string fallback)
         => map.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v : fallback;
 
     private static bool IsSectionHeader(string line)
     {
         var t = (line ?? "").Trim();
-        return t.StartsWith("[") && t.EndsWith("]") && t.Length >= 3;
+        return t.StartsWith("[") && t.EndsWith("]");
     }
 
     private static Dictionary<string, string> ReadSection(string filePath, string sectionName)
     {
         var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
         var lines = File.ReadAllLines(filePath, Encoding.UTF8);
-        var wanted = $"[{sectionName}]";
+
         var inSection = false;
+        var wanted = $"[{sectionName}]";
 
         foreach (var raw in lines)
         {
@@ -255,29 +239,25 @@ public partial class ChaosPage : IniPageBase
             : new List<string>();
 
         var wanted = $"[{sectionName}]";
+        var start = -1;
+        var end = -1;
 
-        int start = -1;
-        int end = -1;
-
-        for (int i = 0; i < lines.Count; i++)
+        for (var i = 0; i < lines.Count; i++)
         {
             var t = (lines[i] ?? "").Trim();
             if (t.Equals(wanted, StringComparison.OrdinalIgnoreCase))
             {
                 start = i;
                 end = i + 1;
-
                 while (end < lines.Count && !IsSectionHeader(lines[end]))
                     end++;
-
                 break;
             }
         }
 
-        var newBlock = new List<string> { wanted };
+        var newBlock = new List<string>();
+        newBlock.Add(wanted);
         newBlock.AddRange(keyValueLines);
-
-        // пустая строка после секции для читаемости
         newBlock.Add("");
 
         if (start < 0)
@@ -293,26 +273,22 @@ public partial class ChaosPage : IniPageBase
             lines.InsertRange(start, newBlock);
         }
 
+        var dir = Path.GetDirectoryName(filePath);
+        if (!string.IsNullOrWhiteSpace(dir))
+            Directory.CreateDirectory(dir);
+
         File.WriteAllLines(filePath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
     }
 
-    // -----------------------
-    // Parsing helpers
-    // -----------------------
-    private static string FormatDouble(double value)
-        => value.ToString("0.##", CultureInfo.InvariantCulture);
-
+    // ---------- Parsing helpers ----------
     private static bool TryParseDoubleFlexible(string s, out double value)
     {
-        s = (s ?? "").Trim();
-
         if (double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
             return true;
 
         if (double.TryParse(s, NumberStyles.Float, CultureInfo.CurrentCulture, out value))
             return true;
 
-        // попытка заменить разделитель
         var swapped = s.Contains(',') ? s.Replace(',', '.') : s.Replace('.', ',');
         if (double.TryParse(swapped, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
             return true;

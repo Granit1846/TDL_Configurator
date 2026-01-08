@@ -5,37 +5,41 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using TDL.Configurator.Core;
+
+using WpfButton = System.Windows.Controls.Button;
+using WpfTextBox = System.Windows.Controls.TextBox;
 
 namespace TDL.Configurator.App.Pages;
 
-public partial class InventoryPage : IniPageBase
-
+public partial class InventoryPage : System.Windows.Controls.UserControl
 {
+    private const string SectionName = "Inventory";
+
+    // Default значения (как у тебя в шаблоне INI)
+    private const int DefaultScatterExactCount = 0;
+    private const int DefaultScatterMinCount = 150;
+    private const int DefaultScatterMaxCount = 200;
+    private const int DefaultScatterRadius = 800;
+
+    private const int DefaultDropBatchSize = 10;
+    private const double DefaultDropInterval = 0.20;
+    private const int DefaultDropTimeout = 30;
+
+    private const bool DefaultProtectTokensByName = true;
+    private const bool DefaultDropShowProgress = false;
+
     public InventoryPage()
     {
         InitializeComponent();
-        ApplyDefaultsToUi(); // чтобы поля не были пустые при первом открытии
+        ApplyDefaultsToUi();
+        InventoryStatusText.Text = "Готово (default).";
     }
 
     private string GamePath => AppSettings.Load().GamePath.Trim();
-    private string IniPath => Path.Combine(GamePath, "Data", "SKSE", "Plugins", "TDL_StreamPlugin.ini");
-
-    private const string SectionName = "Inventory";
-
-    // Дефолты из шаблона, который создаёт QuickAccessPage. :contentReference[oaicite:2]{index=2}
-    private readonly Dictionary<string, string> _defaults = new()
-    {
-        ["ScatterExactCount"] = "0",
-        ["ScatterMinCount"] = "150",
-        ["ScatterMaxCount"] = "200",
-        ["ScatterRadius"] = "800",
-        ["DropBatchSize"] = "10",
-        ["DropInterval"] = "0.20",
-        ["DropTimeout"] = "30",
-        ["ProtectTokensByName"] = "1",
-        ["DropShowProgress"] = "0",
-    };
+    private string PluginsFolder => Path.Combine(GamePath, "Data", "SKSE", "Plugins");
+    private string IniPath => Path.Combine(PluginsFolder, "TDL_StreamPlugin.ini");
 
     private bool EnsureGamePath()
     {
@@ -58,13 +62,8 @@ public partial class InventoryPage : IniPageBase
 
         if (!File.Exists(IniPath))
         {
-            System.Windows.MessageBox.Show(
-                $"INI не найден:\n{IniPath}\n\nОставляю значения по умолчанию (можно нажать «Сохранить» чтобы создать секцию).",
-                "Inventory",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-
             ApplyDefaultsToUi();
+            InventoryStatusText.Text = "INI не найден (default).";
             return;
         }
 
@@ -72,157 +71,251 @@ public partial class InventoryPage : IniPageBase
         if (map.Count == 0)
         {
             ApplyDefaultsToUi();
+            InventoryStatusText.Text = "Секция [Inventory] не найдена (default).";
             return;
         }
 
-        SetText(ScatterExactCountBox, GetOrDefault(map, "ScatterExactCount"));
-        SetText(ScatterMinCountBox, GetOrDefault(map, "ScatterMinCount"));
-        SetText(ScatterMaxCountBox, GetOrDefault(map, "ScatterMaxCount"));
-        SetText(ScatterRadiusBox, GetOrDefault(map, "ScatterRadius"));
+        ScatterExactCountBox.Text = GetOr(map, "ScatterExactCount", DefaultScatterExactCount.ToString(CultureInfo.InvariantCulture));
+        ScatterMinCountBox.Text = GetOr(map, "ScatterMinCount", DefaultScatterMinCount.ToString(CultureInfo.InvariantCulture));
+        ScatterMaxCountBox.Text = GetOr(map, "ScatterMaxCount", DefaultScatterMaxCount.ToString(CultureInfo.InvariantCulture));
+        ScatterRadiusBox.Text = GetOr(map, "ScatterRadius", DefaultScatterRadius.ToString(CultureInfo.InvariantCulture));
 
-        SetText(DropBatchSizeBox, GetOrDefault(map, "DropBatchSize"));
-        SetText(DropIntervalBox, GetOrDefault(map, "DropInterval"));
-        SetText(DropTimeoutBox, GetOrDefault(map, "DropTimeout"));
+        DropBatchSizeBox.Text = GetOr(map, "DropBatchSize", DefaultDropBatchSize.ToString(CultureInfo.InvariantCulture));
+        DropIntervalBox.Text = GetOr(map, "DropInterval", DefaultDropInterval.ToString("0.##", CultureInfo.InvariantCulture));
+        DropTimeoutBox.Text = GetOr(map, "DropTimeout", DefaultDropTimeout.ToString(CultureInfo.InvariantCulture));
 
-        ProtectTokensByNameCheck.IsChecked = GetOrDefault(map, "ProtectTokensByName") != "0";
-        DropShowProgressCheck.IsChecked = GetOrDefault(map, "DropShowProgress") != "0";
+        ProtectTokensByNameCheck.IsChecked = GetOr(map, "ProtectTokensByName", DefaultProtectTokensByName ? "1" : "0") != "0";
+        DropShowProgressCheck.IsChecked = GetOr(map, "DropShowProgress", DefaultDropShowProgress ? "1" : "0") != "0";
+
+        InventoryStatusText.Text = $"Загружено: {DateTime.Now:HH:mm:ss}";
     }
 
     private void Save_Click(object sender, RoutedEventArgs e)
     {
         if (!EnsureGamePath()) return;
 
-        if (!TryBuildValues(out var values))
+        if (!TryGetInt(ScatterExactCountBox, "ScatterExactCount", 0, 5000, out var scatterExact)) return;
+        if (!TryGetInt(ScatterMinCountBox, "ScatterMinCount", 0, 5000, out var scatterMin)) return;
+        if (!TryGetInt(ScatterMaxCountBox, "ScatterMaxCount", 0, 5000, out var scatterMax)) return;
+        if (!TryGetInt(ScatterRadiusBox, "ScatterRadius", 0, 20000, out var scatterRadius)) return;
+
+        if (scatterExact == 0 && scatterMin > scatterMax)
+        {
+            System.Windows.MessageBox.Show(
+                "ScatterMinCount не может быть больше ScatterMaxCount (когда точное количество = 0).",
+                "Inventory",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
             return;
+        }
 
-        Directory.CreateDirectory(Path.GetDirectoryName(IniPath)!);
+        if (!TryGetInt(DropBatchSizeBox, "DropBatchSize", 1, 200, out var dropBatchSize)) return;
+        if (!TryGetDouble(DropIntervalBox, "DropInterval", 0.01, 10.0, out var dropInterval)) return;
+        if (!TryGetInt(DropTimeoutBox, "DropTimeout", 1, 600, out var dropTimeout)) return;
 
-        var lines = IniFile.LoadLines(IniPath);
-        IniFile.UpsertSection(lines, SectionName, values);
-        IniFile.SaveLines(IniPath, lines);
+        var protectTokens = ProtectTokensByNameCheck.IsChecked == true ? 1 : 0;
+        var showProgress = DropShowProgressCheck.IsChecked == true ? 1 : 0;
 
-        ShowSaved("Inventory");
+        Directory.CreateDirectory(PluginsFolder);
+
+        var lines = File.Exists(IniPath)
+            ? File.ReadAllLines(IniPath, Encoding.UTF8).ToList()
+            : new List<string>();
+
+        var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["ScatterExactCount"] = scatterExact.ToString(CultureInfo.InvariantCulture),
+            ["ScatterMinCount"] = scatterMin.ToString(CultureInfo.InvariantCulture),
+            ["ScatterMaxCount"] = scatterMax.ToString(CultureInfo.InvariantCulture),
+            ["ScatterRadius"] = scatterRadius.ToString(CultureInfo.InvariantCulture),
+
+            ["DropBatchSize"] = dropBatchSize.ToString(CultureInfo.InvariantCulture),
+            ["DropInterval"] = dropInterval.ToString("0.##", CultureInfo.InvariantCulture),
+            ["DropTimeout"] = dropTimeout.ToString(CultureInfo.InvariantCulture),
+
+            ["ProtectTokensByName"] = protectTokens.ToString(CultureInfo.InvariantCulture),
+            ["DropShowProgress"] = showProgress.ToString(CultureInfo.InvariantCulture),
+        };
+
+        UpsertSection(lines, SectionName, values);
+
+        File.WriteAllLines(IniPath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+        InventoryStatusText.Text = $"Сохранено: {DateTime.Now:HH:mm:ss}";
     }
 
-
     private void DefaultsAll_Click(object sender, RoutedEventArgs e)
-        => ApplyDefaultsToUi();
+    {
+        ApplyDefaultsToUi();
+        InventoryStatusText.Text = "Готово (default).";
+    }
 
     private void DefaultRow_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is not System.Windows.Controls.Button b) return;
-        if (b.Tag is not string key) return;
+        if (sender is not WpfButton btn) return;
 
-        if (!_defaults.TryGetValue(key, out var def))
-            return;
+        var key = btn.Tag?.ToString();
+        if (string.IsNullOrWhiteSpace(key)) return;
 
-        ApplyOneDefaultToUi(key, def);
+        SetDefaultForKey(key);
+        InventoryStatusText.Text = $"Default: {key}";
     }
 
     private void ApplyDefaultsToUi()
     {
-        foreach (var kv in _defaults)
-            ApplyOneDefaultToUi(kv.Key, kv.Value);
+        ScatterExactCountBox.Text = DefaultScatterExactCount.ToString(CultureInfo.InvariantCulture);
+        ScatterMinCountBox.Text = DefaultScatterMinCount.ToString(CultureInfo.InvariantCulture);
+        ScatterMaxCountBox.Text = DefaultScatterMaxCount.ToString(CultureInfo.InvariantCulture);
+        ScatterRadiusBox.Text = DefaultScatterRadius.ToString(CultureInfo.InvariantCulture);
+
+        DropBatchSizeBox.Text = DefaultDropBatchSize.ToString(CultureInfo.InvariantCulture);
+        DropIntervalBox.Text = DefaultDropInterval.ToString("0.##", CultureInfo.InvariantCulture);
+        DropTimeoutBox.Text = DefaultDropTimeout.ToString(CultureInfo.InvariantCulture);
+
+        ProtectTokensByNameCheck.IsChecked = DefaultProtectTokensByName;
+        DropShowProgressCheck.IsChecked = DefaultDropShowProgress;
     }
 
-    private void ApplyOneDefaultToUi(string key, string value)
+    private void SetDefaultForKey(string key)
     {
         switch (key)
         {
-            case "ScatterExactCount": SetText(ScatterExactCountBox, value); break;
-            case "ScatterMinCount": SetText(ScatterMinCountBox, value); break;
-            case "ScatterMaxCount": SetText(ScatterMaxCountBox, value); break;
-            case "ScatterRadius": SetText(ScatterRadiusBox, value); break;
+            case "ScatterExactCount": ScatterExactCountBox.Text = DefaultScatterExactCount.ToString(CultureInfo.InvariantCulture); break;
+            case "ScatterMinCount": ScatterMinCountBox.Text = DefaultScatterMinCount.ToString(CultureInfo.InvariantCulture); break;
+            case "ScatterMaxCount": ScatterMaxCountBox.Text = DefaultScatterMaxCount.ToString(CultureInfo.InvariantCulture); break;
+            case "ScatterRadius": ScatterRadiusBox.Text = DefaultScatterRadius.ToString(CultureInfo.InvariantCulture); break;
 
-            case "DropBatchSize": SetText(DropBatchSizeBox, value); break;
-            case "DropInterval": SetText(DropIntervalBox, value); break;
-            case "DropTimeout": SetText(DropTimeoutBox, value); break;
+            case "DropBatchSize": DropBatchSizeBox.Text = DefaultDropBatchSize.ToString(CultureInfo.InvariantCulture); break;
+            case "DropInterval": DropIntervalBox.Text = DefaultDropInterval.ToString("0.##", CultureInfo.InvariantCulture); break;
+            case "DropTimeout": DropTimeoutBox.Text = DefaultDropTimeout.ToString(CultureInfo.InvariantCulture); break;
 
-            case "ProtectTokensByName": ProtectTokensByNameCheck.IsChecked = value != "0"; break;
-            case "DropShowProgress": DropShowProgressCheck.IsChecked = value != "0"; break;
+            case "ProtectTokensByName": ProtectTokensByNameCheck.IsChecked = DefaultProtectTokensByName; break;
+            case "DropShowProgress": DropShowProgressCheck.IsChecked = DefaultDropShowProgress; break;
         }
     }
 
-    private static void SetText(System.Windows.Controls.TextBox tb, string v)
-        => tb.Text = (v ?? "").Trim();
+    private static string GetOr(Dictionary<string, string> map, string key, string fallback)
+        => map.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v.Trim() : fallback;
 
-    private string GetOrDefault(Dictionary<string, string> map, string key)
-        => map.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v.Trim() : _defaults[key];
+    // ---------------- INI helpers ----------------
 
-    private bool TryBuildValues(out Dictionary<string, string> values)
+    private static Dictionary<string, string> ReadSection(string path, string sectionName)
     {
-        values = new Dictionary<string, string>();
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var lines = File.ReadAllLines(path, Encoding.UTF8);
 
-        // Int
-        if (!TryParseIntBox(ScatterExactCountBox, min: 0, max: 5000, out var scatterExact)) return false;
-        if (!TryParseIntBox(ScatterMinCountBox, min: 0, max: 5000, out var scatterMin)) return false;
-        if (!TryParseIntBox(ScatterMaxCountBox, min: 0, max: 5000, out var scatterMax)) return false;
-        if (!TryParseIntBox(ScatterRadiusBox, min: 0, max: 20000, out var scatterRadius)) return false;
+        var inSection = false;
 
-        if (scatterExact == 0 && scatterMin > scatterMax)
+        foreach (var raw in lines)
         {
-            System.Windows.MessageBox.Show("Минимум предметов не может быть больше максимума (когда точное количество = 0).",
-                "Inventory", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return false;
+            var line = (raw ?? "").Trim();
+            if (line.Length == 0) continue;
+            if (line.StartsWith(";") || line.StartsWith("#")) continue;
+
+            if (line.StartsWith("[") && line.EndsWith("]"))
+            {
+                inSection = string.Equals(line.Trim('[', ']'), sectionName, StringComparison.OrdinalIgnoreCase);
+                continue;
+            }
+
+            if (!inSection) continue;
+
+            var eq = line.IndexOf('=');
+            if (eq <= 0) continue;
+
+            var k = line.Substring(0, eq).Trim();
+            var v = line.Substring(eq + 1).Trim();
+            if (k.Length == 0) continue;
+
+            result[k] = v;
         }
 
-        if (!TryParseIntBox(DropBatchSizeBox, min: 1, max: 200, out var dropBatch)) return false;
-        if (!TryParseIntBox(DropTimeoutBox, min: 1, max: 600, out var dropTimeout)) return false;
-
-        // Double
-        if (!TryParseDoubleBox(DropIntervalBox, min: 0.01, max: 10.0, out var dropInterval)) return false;
-
-        values["ScatterExactCount"] = scatterExact.ToString(CultureInfo.InvariantCulture);
-        values["ScatterMinCount"] = scatterMin.ToString(CultureInfo.InvariantCulture);
-        values["ScatterMaxCount"] = scatterMax.ToString(CultureInfo.InvariantCulture);
-        values["ScatterRadius"] = scatterRadius.ToString(CultureInfo.InvariantCulture);
-
-        values["DropBatchSize"] = dropBatch.ToString(CultureInfo.InvariantCulture);
-        values["DropInterval"] = dropInterval.ToString("0.##", CultureInfo.InvariantCulture);
-        values["DropTimeout"] = dropTimeout.ToString(CultureInfo.InvariantCulture);
-
-        values["ProtectTokensByName"] = (ProtectTokensByNameCheck.IsChecked == true) ? "1" : "0";
-        values["DropShowProgress"] = (DropShowProgressCheck.IsChecked == true) ? "1" : "0";
-
-        return true;
+        return result;
     }
 
-    private static bool TryParseIntBox(System.Windows.Controls.TextBox tb, int min, int max, out int value)
+    private static void UpsertSection(List<string> lines, string sectionName, Dictionary<string, string> values)
+    {
+        var header = $"[{sectionName}]";
+
+        var start = -1;
+        for (var i = 0; i < lines.Count; i++)
+        {
+            if (string.Equals((lines[i] ?? "").Trim(), header, StringComparison.OrdinalIgnoreCase))
+            {
+                start = i;
+                break;
+            }
+        }
+
+        var newSection = new List<string> { header };
+        foreach (var kv in values)
+            newSection.Add($"{kv.Key}={kv.Value}");
+        newSection.Add("");
+
+        if (start < 0)
+        {
+            if (lines.Count > 0 && !string.IsNullOrWhiteSpace(lines[^1]))
+                lines.Add("");
+            lines.AddRange(newSection);
+            return;
+        }
+
+        var end = start + 1;
+        while (end < lines.Count)
+        {
+            var t = (lines[end] ?? "").Trim();
+            if (t.StartsWith("[") && t.EndsWith("]"))
+                break;
+            end++;
+        }
+
+        lines.RemoveRange(start, end - start);
+        lines.InsertRange(start, newSection);
+    }
+
+    // ---------------- Parse helpers (диапазоны) ----------------
+
+    private static bool TryGetInt(WpfTextBox box, string name, int min, int max, out int value)
     {
         value = 0;
-        var s = (tb.Text ?? "").Trim();
+        var text = (box.Text ?? "").Trim();
 
-        if (!int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out value) &&
-            !int.TryParse(s, NumberStyles.Integer, CultureInfo.CurrentCulture, out value))
+        if (!int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value) &&
+            !int.TryParse(text, NumberStyles.Integer, CultureInfo.CurrentCulture, out value))
         {
-            System.Windows.MessageBox.Show("Поле должно быть целым числом.", "Inventory",
+            System.Windows.MessageBox.Show($"{name} должен быть целым числом.", "Inventory",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
 
-        if (value < min) value = min;
-        if (value > max) value = max;
-
-        tb.Text = value.ToString(CultureInfo.InvariantCulture);
-        return true;
-    }
-
-    private static bool TryParseDoubleBox(System.Windows.Controls.TextBox tb, double min, double max, out double value)
-    {
-        value = 0;
-        var s = (tb.Text ?? "").Trim();
-
-        if (!TryParseDoubleFlexible(s, out value))
+        if (value < min || value > max)
         {
-            System.Windows.MessageBox.Show("Поле должно быть числом (пример: 0.20).", "Inventory",
+            System.Windows.MessageBox.Show($"{name}: значение должно быть в диапазоне {min}..{max}.", "Inventory",
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
 
-        if (value < min) value = min;
-        if (value > max) value = max;
+        return true;
+    }
 
-        tb.Text = value.ToString("0.##", CultureInfo.InvariantCulture);
+    private static bool TryGetDouble(WpfTextBox box, string name, double min, double max, out double value)
+    {
+        value = 0;
+        var text = (box.Text ?? "").Trim();
+
+        if (!TryParseDoubleFlexible(text, out value))
+        {
+            System.Windows.MessageBox.Show($"{name} должен быть числом (пример: 0.20).", "Inventory",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
+        if (value < min || value > max)
+        {
+            System.Windows.MessageBox.Show($"{name}: значение должно быть в диапазоне {min}..{max}.", "Inventory",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
+
         return true;
     }
 
@@ -240,72 +333,5 @@ public partial class InventoryPage : IniPageBase
 
         value = 0;
         return false;
-    }
-
-    private static Dictionary<string, string> ReadSection(string path, string sectionName)
-    {
-        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-        if (!File.Exists(path))
-            return result;
-
-        var lines = File.ReadAllLines(path, Encoding.UTF8);
-        var inSection = false;
-
-        foreach (var raw in lines)
-        {
-            var line = raw.Trim();
-            if (line.Length == 0) continue;
-            if (line.StartsWith(";") || line.StartsWith("#")) continue;
-
-            if (line.StartsWith("[") && line.EndsWith("]"))
-            {
-                inSection = string.Equals(line.Trim('[', ']'), sectionName, StringComparison.OrdinalIgnoreCase);
-                continue;
-            }
-
-            if (!inSection) continue;
-
-            var eq = line.IndexOf('=');
-            if (eq <= 0) continue;
-
-            var key = line[..eq].Trim();
-            var val = line[(eq + 1)..].Trim();
-            if (key.Length == 0) continue;
-
-            result[key] = val;
-        }
-
-        return result;
-    }
-
-    private static void UpsertSection(List<string> lines, string sectionName, Dictionary<string, string> values)
-    {
-        var header = $"[{sectionName}]";
-        var start = lines.FindIndex(l => string.Equals(l.Trim(), header, StringComparison.OrdinalIgnoreCase));
-
-        var newSection = new List<string> { header };
-        foreach (var kv in values)
-            newSection.Add($"{kv.Key}={kv.Value}");
-
-        if (start < 0)
-        {
-            if (lines.Count > 0 && lines[^1].Trim().Length != 0)
-                lines.Add("");
-            lines.AddRange(newSection);
-            return;
-        }
-
-        var end = start + 1;
-        while (end < lines.Count)
-        {
-            var t = lines[end].Trim();
-            if (t.StartsWith("[") && t.EndsWith("]"))
-                break;
-            end++;
-        }
-
-        lines.RemoveRange(start, end - start);
-        lines.InsertRange(start, newSection);
     }
 }
