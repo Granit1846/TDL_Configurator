@@ -45,6 +45,7 @@ public partial class MainWindow : Window
             "Hunter" => new HunterPage(),
             "Gigant" => new GigantPage(),
             "Comedy" => new ComedyPage(),
+            "Documentation" => new DocumentationPage(),
             _ => new TextBlock
             {
                 Text = $"Страница: {key}\n(контент добавим позже)",

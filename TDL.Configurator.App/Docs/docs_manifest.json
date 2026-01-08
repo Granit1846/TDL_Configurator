@@ -1,0 +1,68 @@
+[
+  {
+    "id": "quickstart",
+    "title": "Быстрый старт",
+    "file": "01_QuickStart.md",
+    "order": 1
+  },
+  {
+    "id": "protocol",
+    "title": "Протокол и режимы",
+    "file": "02_Protocol.md",
+    "order": 2
+  },
+  {
+    "id": "catalog_normal",
+    "title": "Команды NORMAL (обзор)",
+    "file": "03_ActionCatalog_NORMAL.md",
+    "order": 3
+  },
+  {
+    "id": "action_reference",
+    "title": "Action Reference (описания)",
+    "file": "09_ActionReference.md",
+    "order": 4
+  },
+  {
+    "id": "ini_reference",
+    "title": "Справочник INI (параметры)",
+    "file": "10_INI_Settings_Reference.md",
+    "order": 5
+  },
+  {
+    "id": "force_safety",
+    "title": "FORCE и безопасность",
+    "file": "04_FORCE_Safety.md",
+    "order": 6
+  },
+  {
+    "id": "configs",
+    "title": "Конфиги и применение",
+    "file": "05_Configs_Restart.md",
+    "order": 7
+  },
+  {
+    "id": "logs",
+    "title": "Логи и диагностика",
+    "file": "11_Logs_Diagnostics.md",
+    "order": 8
+  },
+  {
+    "id": "faq",
+    "title": "FAQ / Типовые проблемы",
+    "file": "06_FAQ_KnownIssues.md",
+    "order": 9
+  },
+  {
+    "id": "versions",
+    "title": "Версии и совместимость",
+    "file": "07_Versions_Compatibility.md",
+    "order": 10
+  },
+  {
+    "id": "ui_help",
+    "title": "Справка по интерфейсу",
+    "file": "08_UI_Help.md",
+    "order": 11
+  }
+]
