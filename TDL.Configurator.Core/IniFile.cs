@@ -4,145 +4,83 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace TDL.Configurator.Core
+namespace TDL.Configurator.Core;
+
+public static class IniFile
 {
-    public sealed class IniEntry
+    private static readonly Encoding Utf8NoBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+
+    public static List<string> LoadLines(string path)
+        => File.Exists(path)
+            ? File.ReadAllLines(path, Utf8NoBom).ToList()
+            : new List<string>();
+
+    public static void SaveLines(string path, List<string> lines)
+        => File.WriteAllLines(path, lines, Utf8NoBom);
+
+    public static Dictionary<string, string> ReadSection(string path, string sectionName)
     {
-        public string Key { get; set; } = "";
-        public string Value { get; set; } = "";
+        var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        if (!File.Exists(path))
+            return result;
+
+        var lines = File.ReadAllLines(path, Utf8NoBom);
+        var inSection = false;
+
+        foreach (var raw in lines)
+        {
+            var line = raw.Trim();
+            if (line.Length == 0) continue;
+            if (line.StartsWith(";") || line.StartsWith("#")) continue;
+
+            if (line.StartsWith("[") && line.EndsWith("]"))
+            {
+                inSection = string.Equals(line.Trim('[', ']'), sectionName, StringComparison.OrdinalIgnoreCase);
+                continue;
+            }
+
+            if (!inSection) continue;
+
+            var eq = line.IndexOf('=');
+            if (eq <= 0) continue;
+
+            var key = line[..eq].Trim();
+            var val = line[(eq + 1)..].Trim();
+            if (key.Length == 0) continue;
+
+            result[key] = val;
+        }
+
+        return result;
     }
 
-    public static class IniFile
+    public static void UpsertSection(List<string> lines, string sectionName, IDictionary<string, string> values)
     {
-        public static List<IniEntry> ReadSection(string filePath, string sectionName)
+        var header = $"[{sectionName}]";
+        var start = lines.FindIndex(l => string.Equals(l.Trim(), header, StringComparison.OrdinalIgnoreCase));
+
+        var newSection = new List<string> { header };
+        foreach (var kv in values)
+            newSection.Add($"{kv.Key}={kv.Value}");
+
+        if (start < 0)
         {
-            if (!File.Exists(filePath))
-                return new List<IniEntry>();
-
-            var lines = File.ReadAllLines(filePath, Encoding.UTF8);
-            var result = new List<IniEntry>();
-
-            bool inSection = false;
-
-            foreach (var raw in lines)
-            {
-                var line = raw.Trim();
-
-                if (IsSectionHeader(line, out var name))
-                {
-                    inSection = name.Equals(sectionName, StringComparison.OrdinalIgnoreCase);
-                    continue;
-                }
-
-                if (!inSection)
-                    continue;
-
-                if (IsSectionHeader(line, out _))
-                    break;
-
-                if (TryParseKeyValue(line, out var key, out var value))
-                {
-                    result.Add(new IniEntry { Key = key, Value = value });
-                }
-            }
-
-            return result;
+            if (lines.Count > 0 && lines[^1].Trim().Length != 0)
+                lines.Add("");
+            lines.AddRange(newSection);
+            return;
         }
 
-        public static void WriteSection(string filePath, string sectionName, IEnumerable<IniEntry> entries)
+        var end = start + 1;
+        while (end < lines.Count)
         {
-            var safeEntries = entries
-                .Where(e => !string.IsNullOrWhiteSpace(e.Key))
-                .GroupBy(e => e.Key.Trim(), StringComparer.OrdinalIgnoreCase)
-                .Select(g => g.Last())
-                .Select(e => new IniEntry { Key = e.Key.Trim(), Value = e.Value?.Trim() ?? "" })
-                .ToList();
-
-            var newSectionLines = new List<string> { $"[{sectionName}]" };
-            newSectionLines.AddRange(safeEntries.Select(e => $"{e.Key}={e.Value}"));
-
-            List<string> lines;
-            if (File.Exists(filePath))
-                lines = File.ReadAllLines(filePath, Encoding.UTF8).ToList();
-            else
-                lines = new List<string>();
-
-            int start = -1;
-            int end = -1;
-
-            for (int i = 0; i < lines.Count; i++)
-            {
-                var t = lines[i].Trim();
-                if (IsSectionHeader(t, out var name) &&
-                    name.Equals(sectionName, StringComparison.OrdinalIgnoreCase))
-                {
-                    start = i;
-                    end = lines.Count;
-                    for (int j = i + 1; j < lines.Count; j++)
-                    {
-                        if (IsSectionHeader(lines[j].Trim(), out _))
-                        {
-                            end = j;
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-
-            if (start >= 0)
-            {
-                // Replace existing section
-                lines.RemoveRange(start, end - start);
-                lines.InsertRange(start, newSectionLines);
-            }
-            else
-            {
-                // Append new section
-                if (lines.Count > 0 && !string.IsNullOrWhiteSpace(lines.Last()))
-                    lines.Add("");
-
-                lines.AddRange(newSectionLines);
-            }
-
-            var dir = Path.GetDirectoryName(filePath);
-            if (!string.IsNullOrWhiteSpace(dir))
-                Directory.CreateDirectory(dir);
-
-            File.WriteAllLines(filePath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+            var t = lines[end].Trim();
+            if (t.StartsWith("[") && t.EndsWith("]"))
+                break;
+            end++;
         }
 
-        private static bool IsSectionHeader(string line, out string name)
-        {
-            name = "";
-            if (line.Length >= 3 && line.StartsWith("[") && line.EndsWith("]"))
-            {
-                name = line.Substring(1, line.Length - 2).Trim();
-                return name.Length > 0;
-            }
-            return false;
-        }
-
-        private static bool TryParseKeyValue(string line, out string key, out string value)
-        {
-            key = "";
-            value = "";
-
-            if (string.IsNullOrWhiteSpace(line))
-                return false;
-
-            // Comments
-            if (line.StartsWith(";") || line.StartsWith("#"))
-                return false;
-
-            int eq = line.IndexOf('=');
-            if (eq <= 0)
-                return false;
-
-            key = line.Substring(0, eq).Trim();
-            value = line.Substring(eq + 1).Trim();
-
-            return key.Length > 0;
-        }
+        lines.RemoveRange(start, end - start);
+        lines.InsertRange(start, newSection);
     }
 }

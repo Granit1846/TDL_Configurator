@@ -1,10 +1,33 @@
 ﻿<UserControl x:Class="TDL.Configurator.App.Pages.WrathPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
-            <TextBlock Text="Wrath" FontSize="22" FontWeight="SemiBold"/>
-            <TextBlock Text="(контент добавим позже)" Opacity="0.7" Margin="0,8,0,0"/>
+
+            <TextBlock Text="Wrath" Style="{StaticResource PageTitleStyle}"/>
+            <TextBlock Text="Редактирование секции [Wrath] в TDL_StreamPlugin.ini"
+                       Style="{StaticResource PageSubtitleStyle}"/>
+
+            <!-- Панель действий: пока отключена (но вид одинаковый) -->
+            <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
+                <Button Content="Загрузить" Style="{StaticResource ActionButtonStyle}" IsEnabled="False"/>
+                <Button Content="Сохранить" Style="{StaticResource ActionButtonStyle}" IsEnabled="False"/>
+                <Button Content="Сбросить всё" Style="{StaticResource ActionButtonWideStyle}" IsEnabled="False"/>
+                <TextBlock x:Name="StatusText" Style="{StaticResource StatusTextStyle}"
+                           Text="Скоро: добавим параметры."/>
+            </WrapPanel>
+
+            <GroupBox Header="Параметры">
+                <StackPanel Margin="10">
+                    <Expander Header="Скоро" IsExpanded="True">
+                        <TextBlock Margin="8"
+                                   TextWrapping="Wrap"
+                                   Text="Эта вкладка пока в режиме шаблона. Здесь появятся параметры и сохранение в INI."/>
+                    </Expander>
+                </StackPanel>
+            </GroupBox>
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>

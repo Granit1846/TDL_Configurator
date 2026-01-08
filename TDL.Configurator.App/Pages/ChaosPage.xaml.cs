@@ -12,7 +12,7 @@ using WpfTextBox = System.Windows.Controls.TextBox;
 
 namespace TDL.Configurator.App.Pages;
 
-public partial class ChaosPage : System.Windows.Controls.UserControl
+public partial class ChaosPage : IniPageBase
 {
     private const string SectionName = "Chaos";
 
@@ -157,40 +157,47 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
 
     private void Save_Click(object sender, RoutedEventArgs e)
     {
-        if (!EnsureGamePath())
+        if (!EnsureGamePath()) return;
+
+        if (!TryBuildValues(out var values))
             return;
 
-        Directory.CreateDirectory(PluginsFolder);
+        Directory.CreateDirectory(Path.GetDirectoryName(IniPath)!);
 
-        // Валидация + нормализация
-        if (!TryGetInt(BackfireChanceBox, "BackfireChance", out var backfireChance)) return;
-        if (!TryGetInt(BackfireDurationBox, "BackfireDuration", out var backfireDuration)) return;
-        if (!TryGetInt(ShoutPushForceBox, "ShoutPushForce", out var shoutPushForce)) return;
-        if (!TryGetDouble(ShoutPushDelayBox, "ShoutPushDelay", out var shoutPushDelay)) return;
+        var lines = IniFile.LoadLines(IniPath);
+        IniFile.UpsertSection(lines, SectionName, values);
+        IniFile.SaveLines(IniPath, lines);
 
-        if (!TryGetInt(KnockbackForceBox, "KnockbackForce", out var knockbackForce)) return;
-        if (!TryGetDouble(KnockbackCooldownBox, "KnockbackCooldown", out var knockbackCooldown)) return;
-        if (!TryGetInt(KnockbackRadiusBox, "KnockbackRadius", out var knockbackRadius)) return;
-        if (!TryGetDouble(KnockbackMeleeDelayBox, "KnockbackMeleeDelay", out var knockbackMeleeDelay)) return;
-        if (!TryGetDouble(KnockbackBowDelayBox, "KnockbackBowDelay", out var knockbackBowDelay)) return;
+        ShowSaved("Chaos");
+    }
 
-        var lines = new List<string>
-        {
-            $"BackfireChance={backfireChance}",
-            $"BackfireDuration={backfireDuration}",
-            $"ShoutPushForce={shoutPushForce}",
-            $"ShoutPushDelay={FormatDouble(shoutPushDelay)}",
+    private bool TryBuildValues(out Dictionary<string, string> values)
+    {
+        values = new Dictionary<string, string>();
 
-            $"KnockbackForce={knockbackForce}",
-            $"KnockbackCooldown={FormatDouble(knockbackCooldown)}",
-            $"KnockbackRadius={knockbackRadius}",
-            $"KnockbackMeleeDelay={FormatDouble(knockbackMeleeDelay)}",
-            $"KnockbackBowDelay={FormatDouble(knockbackBowDelay)}",
-        };
+        if (!TryGetInt(BackfireChanceBox, "BackfireChance", 0, 100, out var backfireChance)) return false;
+        if (!TryGetInt(BackfireDurationBox, "BackfireDuration", 1, 600, out var backfireDuration)) return false;
+        if (!TryGetInt(ShoutPushForceBox, "ShoutPushForce", 0, 200, out var shoutPushForce)) return false;
+        if (!TryGetDouble(ShoutPushDelayBox, "ShoutPushDelay", 0.0, 0.5, out var shoutPushDelay)) return false;
 
-        UpsertSection(IniPath, SectionName, lines);
+        if (!TryGetInt(KnockbackForceBox, "KnockbackForce", 0, 200, out var knockbackForce)) return false;
+        if (!TryGetDouble(KnockbackCooldownBox, "KnockbackCooldown", 0.0, 2.0, out var knockbackCooldown)) return false;
+        if (!TryGetInt(KnockbackRadiusBox, "KnockbackRadius", 0, 20000, out var knockbackRadius)) return false;
+        if (!TryGetDouble(KnockbackMeleeDelayBox, "KnockbackMeleeDelay", 0.0, 0.5, out var knockbackMeleeDelay)) return false;
+        if (!TryGetDouble(KnockbackBowDelayBox, "KnockbackBowDelay", 0.0, 0.5, out var knockbackBowDelay)) return false;
 
-        SetStatus($"Сохранено: {DateTime.Now:HH:mm:ss}");
+        values["BackfireChance"] = backfireChance.ToString();
+        values["BackfireDuration"] = backfireDuration.ToString();
+        values["ShoutPushForce"] = shoutPushForce.ToString();
+        values["ShoutPushDelay"] = FormatDouble(shoutPushDelay);
+
+        values["KnockbackForce"] = knockbackForce.ToString();
+        values["KnockbackCooldown"] = FormatDouble(knockbackCooldown);
+        values["KnockbackRadius"] = knockbackRadius.ToString();
+        values["KnockbackMeleeDelay"] = FormatDouble(knockbackMeleeDelay);
+        values["KnockbackBowDelay"] = FormatDouble(knockbackBowDelay);
+
+        return true;
     }
 
     // -----------------------
@@ -314,40 +321,60 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         return false;
     }
 
-    private static bool TryGetInt(WpfTextBox box, string name, out int value)
+    private static bool TryGetInt(WpfTextBox box, string name, int min, int max, out int value)
     {
         value = 0;
         var text = (box.Text ?? "").Trim();
 
-        if (int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value) ||
-            int.TryParse(text, NumberStyles.Integer, CultureInfo.CurrentCulture, out value))
-            return true;
+        if (!int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value) &&
+            !int.TryParse(text, NumberStyles.Integer, CultureInfo.CurrentCulture, out value))
+        {
+            System.Windows.MessageBox.Show(
+                $"{name} должен быть целым числом.",
+                "TDL Configurator",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return false;
+        }
 
-        System.Windows.MessageBox.Show(
-            $"{name} должен быть целым числом.",
-            "TDL Configurator",
-            MessageBoxButton.OK,
-            MessageBoxImage.Warning);
+        if (value < min || value > max)
+        {
+            System.Windows.MessageBox.Show(
+                $"{name}: значение должно быть в диапазоне {min}..{max}.",
+                "TDL Configurator",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return false;
+        }
 
-        box.Focus();
-        return false;
+        return true;
     }
 
-    private static bool TryGetDouble(WpfTextBox box, string name, out double value)
+    private static bool TryGetDouble(WpfTextBox box, string name, double min, double max, out double value)
     {
         value = 0;
         var text = (box.Text ?? "").Trim();
 
-        if (TryParseDoubleFlexible(text, out value))
-            return true;
+        if (!TryParseDoubleFlexible(text, out value))
+        {
+            System.Windows.MessageBox.Show(
+                $"{name} должен быть числом (пример: 0.35).",
+                "TDL Configurator",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return false;
+        }
 
-        System.Windows.MessageBox.Show(
-            $"{name} должен быть числом (пример: 0.35).",
-            "TDL Configurator",
-            MessageBoxButton.OK,
-            MessageBoxImage.Warning);
+        if (value < min || value > max)
+        {
+            System.Windows.MessageBox.Show(
+                $"{name}: значение должно быть в диапазоне {min}..{max}.",
+                "TDL Configurator",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return false;
+        }
 
-        box.Focus();
-        return false;
+        return true;
     }
 }
