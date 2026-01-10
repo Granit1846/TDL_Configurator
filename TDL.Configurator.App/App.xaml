@@ -4,12 +4,21 @@
              StartupUri="MainWindow.xaml">
 
     <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Shared control styles (uses DynamicResource brushes) -->
+                <ResourceDictionary Source="/Resources/Themes/Theme.Shared.xaml"/>
 
-        <!-- Заголовки страниц -->
-        <Style x:Key="PageTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="22"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-        </Style>
+                <!-- Defaults: Light theme + RU strings. These are overridden at runtime by Settings. -->
+                <ResourceDictionary Source="/Resources/Themes/Colors.Light.xaml"/>
+                <ResourceDictionary Source="/Resources/Strings/Strings.ru.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Заголовки страниц -->
+            <Style x:Key="PageTitleStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="22"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+            </Style>
 
         <Style x:Key="PageSubtitleStyle" TargetType="TextBlock">
             <Setter Property="Opacity" Value="0.7"/>
@@ -47,11 +56,12 @@
             <Setter Property="Padding" Value="6,0"/>
         </Style>
 
-        <Style x:Key="ResetButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="28"/>
-            <Setter Property="Height" Value="26"/>
-            <Setter Property="Content" Value="↺"/>
-        </Style>
+            <Style x:Key="ResetButtonStyle" TargetType="Button">
+                <Setter Property="Width" Value="28"/>
+                <Setter Property="Height" Value="26"/>
+                <Setter Property="Content" Value="↺"/>
+            </Style>
 
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

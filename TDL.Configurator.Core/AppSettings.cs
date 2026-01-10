@@ -1,12 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace TDL.Configurator.Core;
 
 public sealed class AppSettings
 {
     public string GamePath { get; set; } = "";
+
+    // UI
+    public AppTheme Theme { get; set; } = AppTheme.Light;
+    public AppLanguage Language { get; set; } = AppLanguage.Ru;
 
     public static string SettingsFilePath
     {
@@ -29,7 +34,7 @@ public sealed class AppSettings
                 return new AppSettings();
 
             var json = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
+            return JsonSerializer.Deserialize<AppSettings>(json, SerializerOptions) ?? new AppSettings();
         }
         catch
         {
@@ -39,7 +44,13 @@ public sealed class AppSettings
 
     public void Save()
     {
-        var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+        var json = JsonSerializer.Serialize(this, SerializerOptions);
         File.WriteAllText(SettingsFilePath, json);
     }
+
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        WriteIndented = true,
+        Converters = { new JsonStringEnumConverter() }
+    };
 }

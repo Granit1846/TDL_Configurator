@@ -1,0 +1,46 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- General -->
+    <sys:String x:Key="STR_App_Settings" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings</sys:String>
+    <sys:String x:Key="STR_Settings_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings</sys:String>
+    <sys:String x:Key="STR_Settings_PreviewHint" xmlns:sys="clr-namespace:System;assembly=mscorlib">Preview: theme/language apply immediately. Save commits changes.</sys:String>
+
+    <!-- Settings: Paths -->
+    <sys:String x:Key="STR_Settings_GamePath_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Game folder (Skyrim Special Edition root)</sys:String>
+    <sys:String x:Key="STR_Settings_GamePath_Hint" xmlns:sys="clr-namespace:System;assembly=mscorlib">Example: F:\SteamLibrary\steamapps\common\Skyrim Special Edition</sys:String>
+    <sys:String x:Key="STR_Settings_Browse" xmlns:sys="clr-namespace:System;assembly=mscorlib">Browse...</sys:String>
+
+    <!-- Settings: Theme -->
+    <sys:String x:Key="STR_Settings_Theme_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Theme</sys:String>
+    <sys:String x:Key="STR_Settings_Theme_Light" xmlns:sys="clr-namespace:System;assembly=mscorlib">Light (default)</sys:String>
+    <sys:String x:Key="STR_Settings_Theme_Dark" xmlns:sys="clr-namespace:System;assembly=mscorlib">Dark (default)</sys:String>
+    <sys:String x:Key="STR_Settings_Theme_Nexus" xmlns:sys="clr-namespace:System;assembly=mscorlib">Nexus-style</sys:String>
+
+    <!-- Settings: Language -->
+    <sys:String x:Key="STR_Settings_Language_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Language</sys:String>
+    <sys:String x:Key="STR_Settings_Language_Ru" xmlns:sys="clr-namespace:System;assembly=mscorlib">Russian</sys:String>
+    <sys:String x:Key="STR_Settings_Language_En" xmlns:sys="clr-namespace:System;assembly=mscorlib">English</sys:String>
+
+    <!-- Settings: Updates -->
+    <sys:String x:Key="STR_Settings_Updates_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Updates</sys:String>
+    <sys:String x:Key="STR_Settings_CheckUpdates" xmlns:sys="clr-namespace:System;assembly=mscorlib">Check for updates</sys:String>
+    <sys:String x:Key="STR_Settings_UpdatePlaceholder" xmlns:sys="clr-namespace:System;assembly=mscorlib">(URL not set yet)</sys:String>
+
+    <!-- Buttons -->
+    <sys:String x:Key="STR_Settings_Save" xmlns:sys="clr-namespace:System;assembly=mscorlib">Save</sys:String>
+    <sys:String x:Key="STR_Settings_Cancel" xmlns:sys="clr-namespace:System;assembly=mscorlib">Cancel</sys:String>
+
+    <!-- Links tooltips -->
+    <sys:String x:Key="STR_Link_Nexus" xmlns:sys="clr-namespace:System;assembly=mscorlib">Nexus</sys:String>
+    <sys:String x:Key="STR_Link_GitHub" xmlns:sys="clr-namespace:System;assembly=mscorlib">GitHub</sys:String>
+    <sys:String x:Key="STR_Link_Donation" xmlns:sys="clr-namespace:System;assembly=mscorlib">Donation</sys:String>
+    <sys:String x:Key="STR_Link_Discord" xmlns:sys="clr-namespace:System;assembly=mscorlib">Discord</sys:String>
+
+    <!-- Messages -->
+    <sys:String x:Key="STR_Msg_SelectExistingFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Please select an existing game folder.</sys:String>
+    <sys:String x:Key="STR_Msg_Settings" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings</sys:String>
+    <sys:String x:Key="STR_Msg_LinkNotSet" xmlns:sys="clr-namespace:System;assembly=mscorlib">Link is not set yet.</sys:String>
+    <sys:String x:Key="STR_Msg_UpdateUrlNotSet" xmlns:sys="clr-namespace:System;assembly=mscorlib">Update-check URL is not set yet.</sys:String>
+
+</ResourceDictionary>
