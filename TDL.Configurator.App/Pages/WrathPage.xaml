@@ -35,8 +35,7 @@
                        Opacity="0.7" Margin="0,6,0,16"/>
 
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
-                <Button Content="Загрузить" Width="120" Margin="0,0,8,0" Click="Load_Click"/>
-                <Button Content="Сохранить" Width="120" Margin="0,0,8,0" Click="Save_Click"/>
+                <Button Content="Сохранить + применить" Width="170" Margin="0,0,8,0" Click="SaveApply_Click"/>
                 <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
                 <TextBlock x:Name="WrathStatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
@@ -62,35 +61,35 @@
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Количество вспышек"
-                                       ToolTip="WrathTotalBursts. Диапазон: 1..500. Default: 24."/>
+                                       ToolTip="Сколько раз срабатывает эффект (количество вспышек/волн)."/>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="WrathTotalBurstsBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathTotalBursts" ToolTip="Сбросить на Default (24)" Click="DefaultRow_Click"/>
+                                    Tag="WrathTotalBursts" ToolTip="Сбросить на Default (6)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Интервал"
-                                       ToolTip="WrathInterval. Диапазон: 0.01..1.00. Default: 0.10."/>
+                                       ToolTip="Интервал (сек) между вспышками эффекта."/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="WrathIntervalBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathInterval" ToolTip="Сбросить на Default (0.10)" Click="DefaultRow_Click"/>
+                                    Tag="WrathInterval" ToolTip="Сбросить на Default (0.4)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Радиус"
-                                       ToolTip="WrathRadius. Диапазон: 0..3000. Default: 350."/>
+                                       ToolTip="Радиус действия эффекта."/>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="WrathRadiusBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathRadius" ToolTip="Сбросить на Default (350)" Click="DefaultRow_Click"/>
+                                    Tag="WrathRadius" ToolTip="Сбросить на Default (300)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Смещение по Z"
-                                       ToolTip="WrathZOffset. Диапазон: -500..500. Default: 100."/>
+                                       ToolTip="Смещение точки эффекта по высоте (Z)."/>
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="WrathZOffsetBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathZOffset" ToolTip="Сбросить на Default (100)" Click="DefaultRow_Click"/>
+                                    Tag="WrathZOffset" ToolTip="Сбросить на Default (50)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
@@ -115,23 +114,23 @@
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Мин. урон"
-                                       ToolTip="WrathDamageMin. Диапазон: 0..999. Default: 35."/>
+                                       ToolTip="Минимальный базовый урон эффекта."/>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="WrathDamageMinBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathDamageMin" ToolTip="Сбросить на Default (35)" Click="DefaultRow_Click"/>
+                                    Tag="WrathDamageMin" ToolTip="Сбросить на Default (5)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Макс. урон"
-                                       ToolTip="WrathDamageMax. Диапазон: 0..999. Default: 70."/>
+                                       ToolTip="Максимальный базовый урон эффекта."/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="WrathDamageMaxBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathDamageMax" ToolTip="Сбросить на Default (70)" Click="DefaultRow_Click"/>
+                                    Tag="WrathDamageMax" ToolTip="Сбросить на Default (15)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Множитель огня"
-                                       ToolTip="WrathFireMult. Диапазон: 0..10. Default: 1.0."/>
+                                       ToolTip="Множитель огненной составляющей."/>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="WrathFireMultBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
@@ -139,35 +138,35 @@
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Магия шторма"
-                                       ToolTip="WrathStormMag. Диапазон: 0..1000. Default: 100."/>
+                                       ToolTip="Множитель эффекта на магию (шторм)."/>
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="WrathStormMagBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathStormMag" ToolTip="Сбросить на Default (100)" Click="DefaultRow_Click"/>
+                                    Tag="WrathStormMag" ToolTip="Сбросить на Default (1.0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Стамина мороза"
-                                       ToolTip="WrathFrostSta. Диапазон: 0..1000. Default: 50."/>
+                                       ToolTip="Множитель эффекта на выносливость (холод)."/>
                             <TextBox Grid.Row="4" Grid.Column="1" x:Name="WrathFrostStaBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathFrostSta" ToolTip="Сбросить на Default (50)" Click="DefaultRow_Click"/>
+                                    Tag="WrathFrostSta" ToolTip="Сбросить на Default (1.0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Скалирование по уровню"
-                                       ToolTip="WrathLevelScale. Диапазон: 0..5. Default: 0.5."/>
+                                       ToolTip="Скейл урона от уровня (0 — без скейла)."/>
                             <TextBox Grid.Row="5" Grid.Column="1" x:Name="WrathLevelScaleBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="5" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathLevelScale" ToolTip="Сбросить на Default (0.5)" Click="DefaultRow_Click"/>
+                                    Tag="WrathLevelScale" ToolTip="Сбросить на Default (0.0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="6" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Кап уровня"
-                                       ToolTip="WrathLevelCap. Диапазон: 1..999. Default: 30."/>
+                                       ToolTip="Ограничение (кап) скейла по уровню."/>
                             <TextBox Grid.Row="6" Grid.Column="1" x:Name="WrathLevelCapBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="6" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathLevelCap" ToolTip="Сбросить на Default (30)" Click="DefaultRow_Click"/>
+                                    Tag="WrathLevelCap" ToolTip="Сбросить на Default (3.0)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
@@ -188,27 +187,27 @@
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Шанс тряски"
-                                       ToolTip="WrathShakeChance. Диапазон: 0..1. Default: 0.25."/>
+                                       ToolTip="Шанс тряски камеры (в процентах)."/>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="WrathShakeChanceBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathShakeChance" ToolTip="Сбросить на Default (0.25)" Click="DefaultRow_Click"/>
+                                    Tag="WrathShakeChance" ToolTip="Сбросить на Default (0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Сила тряски"
-                                       ToolTip="WrathShakeStrength. Диапазон: 0..15. Default: 2.0."/>
+                                       ToolTip="Сила тряски камеры."/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="WrathShakeStrengthBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathShakeStrength" ToolTip="Сбросить на Default (2.0)" Click="DefaultRow_Click"/>
+                                    Tag="WrathShakeStrength" ToolTip="Сбросить на Default (0.0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Длительность тряски"
-                                       ToolTip="WrathShakeDuration. Диапазон: 0..30. Default: 0.35."/>
+                                       ToolTip="Длительность тряски камеры (сек)."/>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="WrathShakeDurationBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathShakeDuration" ToolTip="Сбросить на Default (0.35)" Click="DefaultRow_Click"/>
+                                    Tag="WrathShakeDuration" ToolTip="Сбросить на Default (0.0)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 

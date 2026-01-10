@@ -32,8 +32,7 @@
                        Opacity="0.7" Margin="0,6,0,16"/>
 
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
-                <Button Content="Загрузить" Width="120" Margin="0,0,8,0" Click="Load_Click"/>
-                <Button Content="Сохранить" Width="120" Margin="0,0,8,0" Click="Save_Click"/>
+                <Button Content="Сохранить + применить" Width="170" Margin="0,0,8,0" Click="SaveApply_Click"/>
                 <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
                 <TextBlock x:Name="GigantStatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>

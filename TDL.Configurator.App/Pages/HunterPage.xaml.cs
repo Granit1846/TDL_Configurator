@@ -1,11 +1,14 @@
-﻿using System;
+﻿// Auto-generated patch: autoload INI + Save+Apply (SYSTEM_RELOAD_CONFIG)
+// Source of defaults/ranges: TDL_AllRanges.txt
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using TDL.Configurator.Core;
 
 using WpfButton = System.Windows.Controls.Button;
@@ -16,30 +19,23 @@ namespace TDL.Configurator.App.Pages;
 public partial class HunterPage : System.Windows.Controls.UserControl
 {
     private const string IniRelativePath = @"Data\SKSE\Plugins\TDL_StreamPlugin.ini";
+    private const string ToolsRelativePath = @"Data\TDL\Tools\tdl_send.exe";
+
     private const string SectionName = "Hunter";
     private const string UiTitle = "TDL Configurator";
 
-    // Defaults + диапазоны из /mnt/data/TDL_AllRanges.txt (секция HUNTER)
+    // TDL_AllRanges.txt → HUNTER
     private const int DefaultCorpseTime = 20;     // 0..300
     private const int DefaultDuration = 90;       // 5..600
     private const int DefaultMaxDistance = 5500;  // 1500..10000
     private const double DefaultReAggro = 4.0;    // 1.0..10.0
     private const int DefaultSpawnOffset = 1200;  // 300..3000
 
-    private static void ShowInfo(string message)
-    {
-        System.Windows.MessageBox.Show(
-            message,
-            UiTitle,
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
-    }
-
     public HunterPage()
     {
         InitializeComponent();
         ApplyDefaultsToUi();
-        HunterStatusText.Text = "Готово (default).";
+        AutoLoadFromIniSilent();
     }
 
     private static string SafeNow() => DateTime.Now.ToString("HH:mm:ss");
@@ -85,40 +81,37 @@ public partial class HunterPage : System.Windows.Controls.UserControl
         return true;
     }
 
-    private void Load_Click(object sender, RoutedEventArgs e)
+    private void AutoLoadFromIniSilent()
     {
+        ApplyDefaultsToUi();
+
         if (!TryGetIniPath(out var iniPath))
+        {
+            HunterStatusText.Text = "Путь к игре не задан (default).";
             return;
+        }
 
         if (!File.Exists(iniPath))
         {
-            System.Windows.MessageBox.Show(
-                $"INI не найден:\n{iniPath}\n\nСоздай его на вкладке Quick access (кнопка «Создать INI (шаблон)»).",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            HunterStatusText.Text = "INI не найден (default).";
             return;
         }
 
         var map = ReadSection(iniPath, SectionName);
-
-        // если ключа нет — оставляем текущее (обычно default)
         CorpseTimeBox.Text = GetOr(map, "CorpseTime", CorpseTimeBox.Text);
         DurationBox.Text = GetOr(map, "Duration", DurationBox.Text);
         MaxDistanceBox.Text = GetOr(map, "MaxDistance", MaxDistanceBox.Text);
         ReAggroBox.Text = GetOr(map, "ReAggro", ReAggroBox.Text);
         SpawnOffsetBox.Text = GetOr(map, "SpawnOffset", SpawnOffsetBox.Text);
 
-        HunterStatusText.Text = $"Загружено ({SafeNow()}).";
-        ShowInfo("Успешно загружено.");
+        HunterStatusText.Text = $"Загружено из INI ({SafeNow()}).";
     }
 
-    private void Save_Click(object sender, RoutedEventArgs e)
+    private void SaveApply_Click(object sender, RoutedEventArgs e)
     {
         if (!TryGetIniPath(out var iniPath))
             return;
 
-        // Валидация диапазонов (TDL_AllRanges.txt → HUNTER)
         if (!TryGetInt(CorpseTimeBox, "CorpseTime", 0, 300, out var corpseTime)) return;
         if (!TryGetInt(DurationBox, "Duration", 5, 600, out var duration)) return;
         if (!TryGetInt(MaxDistanceBox, "MaxDistance", 1500, 10000, out var maxDistance)) return;
@@ -134,17 +127,101 @@ public partial class HunterPage : System.Windows.Controls.UserControl
             $"SpawnOffset={spawnOffset}",
         };
 
-        UpsertSection(iniPath, SectionName, kv);
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(iniPath)!);
+            UpsertSection(iniPath, SectionName, kv);
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(
+                "Не удалось сохранить INI.\n" + ex.Message,
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            return;
+        }
 
-        HunterStatusText.Text = $"Сохранено ({SafeNow()}).";
-        ShowInfo("Успешно сохранено");
+        if (TryApplyInGame(out var reason))
+        {
+            HunterStatusText.Text = $"Сохранено и применено ({SafeNow()}).";
+        }
+        else
+        {
+            HunterStatusText.Text = $"Сохранено, но не применено ({SafeNow()}).";
+            System.Windows.MessageBox.Show(
+                "INI сохранён, но применить в игре не удалось.\n" + reason,
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+    }
+
+    private bool TryApplyInGame(out string reason)
+    {
+        reason = "";
+        if (!TryGetGamePath(out var gamePath))
+        {
+            reason = "Путь к игре не задан.";
+            return false;
+        }
+
+        var tdlSend = Path.Combine(gamePath, ToolsRelativePath);
+        if (!File.Exists(tdlSend))
+        {
+            reason = $"tdl_send.exe не найден: {tdlSend}";
+            return false;
+        }
+
+        try
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = tdlSend,
+                Arguments = "NORMAL SYSTEM_RELOAD_CONFIG 2",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                WorkingDirectory = Path.GetDirectoryName(tdlSend) ?? gamePath,
+            };
+
+            using var p = Process.Start(psi);
+            if (p == null)
+            {
+                reason = "Не удалось запустить tdl_send.exe.";
+                return false;
+            }
+
+            if (!p.WaitForExit(3500))
+            {
+                try { p.Kill(entireProcessTree: true); } catch { }
+                reason = "tdl_send.exe не завершился по таймауту.";
+                return false;
+            }
+
+            var stdout = p.StandardOutput.ReadToEnd().Trim();
+            var stderr = p.StandardError.ReadToEnd().Trim();
+
+            if (p.ExitCode != 0)
+            {
+                reason = $"Код выхода: {p.ExitCode}\n{(string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)}".Trim();
+                return false;
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            reason = ex.Message;
+            return false;
+        }
     }
 
     private void DefaultsAll_Click(object sender, RoutedEventArgs e)
     {
         ApplyDefaultsToUi();
         HunterStatusText.Text = $"Сброшено на default ({SafeNow()}).";
-        ShowInfo("Сброшено на значения по умолчанию.");
     }
 
     private void DefaultRow_Click(object sender, RoutedEventArgs e)
@@ -167,6 +244,8 @@ public partial class HunterPage : System.Windows.Controls.UserControl
         MaxDistanceBox.Text = DefaultMaxDistance.ToString(CultureInfo.InvariantCulture);
         ReAggroBox.Text = DefaultReAggro.ToString("0.##", CultureInfo.InvariantCulture);
         SpawnOffsetBox.Text = DefaultSpawnOffset.ToString(CultureInfo.InvariantCulture);
+
+        HunterStatusText.Text = "Готово (default).";
     }
 
     private void SetDefaultForKey(string key)
@@ -240,68 +319,52 @@ public partial class HunterPage : System.Windows.Controls.UserControl
         for (var i = 0; i < lines.Count; i++)
         {
             var t = (lines[i] ?? "").Trim();
+            if (!IsSectionHeader(t)) continue;
+
             if (t.Equals(wanted, StringComparison.OrdinalIgnoreCase))
             {
                 start = i;
-                end = i + 1;
-                while (end < lines.Count && !IsSectionHeader(lines[end]))
-                    end++;
+                continue;
+            }
+
+            if (start != -1)
+            {
+                end = i;
                 break;
             }
         }
 
-        var newBlock = new List<string>();
-        newBlock.Add(wanted);
-        newBlock.AddRange(keyValueLines);
-        newBlock.Add("");
-
-        if (start < 0)
+        if (start == -1)
         {
-            if (lines.Count > 0 && !string.IsNullOrWhiteSpace(lines[^1]))
-                lines.Add("");
+            if (lines.Count > 0 && lines[^1].Trim().Length != 0)
+                lines.Add(string.Empty);
 
-            lines.AddRange(newBlock);
+            lines.Add(wanted);
+            lines.AddRange(keyValueLines);
         }
         else
         {
-            lines.RemoveRange(start, end - start);
-            lines.InsertRange(start, newBlock);
-        }
+            if (end == -1)
+                end = lines.Count;
 
-        var dir = Path.GetDirectoryName(filePath);
-        if (!string.IsNullOrWhiteSpace(dir))
-            Directory.CreateDirectory(dir);
+            var removeCount = end - (start + 1);
+            if (removeCount > 0)
+                lines.RemoveRange(start + 1, removeCount);
+
+            lines.InsertRange(start + 1, keyValueLines);
+        }
 
         File.WriteAllLines(filePath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
     }
 
-    // ---------- Parsing helpers ----------
-    private static bool TryParseDoubleFlexible(string s, out double value)
-    {
-        if (double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-            return true;
-
-        if (double.TryParse(s, NumberStyles.Float, CultureInfo.CurrentCulture, out value))
-            return true;
-
-        var swapped = s.Contains(',') ? s.Replace(',', '.') : s.Replace('.', ',');
-        if (double.TryParse(swapped, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-            return true;
-
-        value = 0;
-        return false;
-    }
-
+    // ---------- Validation ----------
     private static bool TryGetInt(WpfTextBox box, string name, int min, int max, out int value)
     {
         value = 0;
-        var text = (box.Text ?? "").Trim();
-
-        if (!int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value) &&
-            !int.TryParse(text, NumberStyles.Integer, CultureInfo.CurrentCulture, out value))
+        if (!int.TryParse((box.Text ?? "").Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name} должен быть целым числом.",
+                $"{name}: введи целое число.",
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -311,7 +374,7 @@ public partial class HunterPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: значение должно быть в диапазоне {min}..{max}.",
+                $"{name}: допустимый диапазон {min}..{max}.",
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -324,12 +387,11 @@ public partial class HunterPage : System.Windows.Controls.UserControl
     private static bool TryGetDouble(WpfTextBox box, string name, double min, double max, out double value)
     {
         value = 0;
-        var text = (box.Text ?? "").Trim();
-
-        if (!TryParseDoubleFlexible(text, out value))
+        var text = (box.Text ?? "").Trim().Replace(',', '.');
+        if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name} должен быть числом (пример: 4.0).",
+                $"{name}: введи число.",
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -339,7 +401,7 @@ public partial class HunterPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: значение должно быть в диапазоне {min}..{max}.",
+                $"{name}: допустимый диапазон {min}..{max}.",
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);

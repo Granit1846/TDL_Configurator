@@ -1,12 +1,17 @@
-﻿using System;
+﻿// Auto-generated patch: autoload INI + Save+Apply (SYSTEM_RELOAD_CONFIG)
+// Source of defaults/ranges: TDL_AllRanges.txt
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using TDL.Configurator.Core;
+
+using WpfButton = System.Windows.Controls.Button;
 using WpfTextBox = System.Windows.Controls.TextBox;
 
 namespace TDL.Configurator.App.Pages;
@@ -14,23 +19,28 @@ namespace TDL.Configurator.App.Pages;
 public partial class ChaosPage : System.Windows.Controls.UserControl
 {
     private const string IniRelativePath = @"Data\SKSE\Plugins\TDL_StreamPlugin.ini";
+    private const string ToolsRelativePath = @"Data\TDL\Tools\tdl_send.exe";
+
     private const string SectionName = "Chaos";
     private const string UiTitle = "TDL Configurator";
 
-    private static void ShowInfo(string message)
-    {
-        System.Windows.MessageBox.Show(
-            message,
-            UiTitle,
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
-    }
+    // TDL_AllRanges.txt → CHAOS
+    private const int DefaultBackfireChance = 20;         // 0..100
+    private const int DefaultBackfireDuration = 60;       // 1..600
+    private const int DefaultShoutPushForce = 20;         // 0..200
+    private const double DefaultShoutPushDelay = 0.05;    // 0.0..0.5
+
+    private const int DefaultKnockbackForce = 25;         // 0..200
+    private const double DefaultKnockbackCooldown = 0.35; // 0.0..2.0
+    private const int DefaultKnockbackRadius = 900;       // 0..20000
+    private const double DefaultKnockbackMeleeDelay = 0.10; // 0.0..0.5
+    private const double DefaultKnockbackBowDelay = 0.10;   // 0.0..0.5
 
     public ChaosPage()
     {
         InitializeComponent();
-        SetDefaultsFromTemplate();
-        StatusText.Text = "Готово (default).";
+        ApplyDefaultsToUi();
+        AutoLoadFromIniSilent();
     }
 
     private static string SafeNow() => DateTime.Now.ToString("HH:mm:ss");
@@ -47,7 +57,7 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         {
             System.Windows.MessageBox.Show(
                 "Не удалось прочитать settings.json.\n" + ex.Message,
-                "TDL Configurator",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             return false;
@@ -57,7 +67,7 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         {
             System.Windows.MessageBox.Show(
                 "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.",
-                "TDL Configurator",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -76,78 +86,23 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         return true;
     }
 
-    // ---------- Defaults ----------
-    private void SetDefaultsFromTemplate()
+    private void AutoLoadFromIniSilent()
     {
-        BackfireChanceBox.Text = "20";
-        BackfireDurationBox.Text = "60";
-        ShoutPushForceBox.Text = "20";
-        ShoutPushDelayBox.Text = "0.05";
+        ApplyDefaultsToUi();
 
-        KnockbackForceBox.Text = "25";
-        KnockbackCooldownBox.Text = "0.35";
-        KnockbackRadiusBox.Text = "900";
-        KnockbackMeleeDelayBox.Text = "0.10";
-        KnockbackBowDelayBox.Text = "0.10";
-    }
-
-    private void SetDefaultForKey(string key)
-    {
-        switch (key)
-        {
-            case "BackfireChance": BackfireChanceBox.Text = "20"; break;
-            case "BackfireDuration": BackfireDurationBox.Text = "60"; break;
-            case "ShoutPushForce": ShoutPushForceBox.Text = "20"; break;
-            case "ShoutPushDelay": ShoutPushDelayBox.Text = "0.05"; break;
-
-            case "KnockbackForce": KnockbackForceBox.Text = "25"; break;
-            case "KnockbackCooldown": KnockbackCooldownBox.Text = "0.35"; break;
-            case "KnockbackRadius": KnockbackRadiusBox.Text = "900"; break;
-            case "KnockbackMeleeDelay": KnockbackMeleeDelayBox.Text = "0.10"; break;
-            case "KnockbackBowDelay": KnockbackBowDelayBox.Text = "0.10"; break;
-        }
-    }
-
-    private void DefaultsAll_Click(object sender, RoutedEventArgs e)
-    {
-        SetDefaultsFromTemplate();
-        StatusText.Text = $"Сброшено на default ({SafeNow()}).";
-        ShowInfo("Сброшено на значения по умолчанию.");
-
-    }
-
-    private void DefaultRow_Click(object sender, RoutedEventArgs e)
-    {
-        if (sender is not System.Windows.Controls.Button btn)
-            return;
-
-        var key = btn.Tag?.ToString();
-        if (string.IsNullOrWhiteSpace(key))
-            return;
-
-        SetDefaultForKey(key);
-        StatusText.Text = $"Default: {key} ({SafeNow()}).";
-    }
-
-    // ---------- Load / Save ----------
-    private void Load_Click(object sender, RoutedEventArgs e)
-    {
         if (!TryGetIniPath(out var iniPath))
+        {
+            StatusText.Text = "Путь к игре не задан (default).";
             return;
+        }
 
         if (!File.Exists(iniPath))
         {
-            System.Windows.MessageBox.Show(
-                $"INI не найден:\n{iniPath}\n\nСоздай его на вкладке Quick access (кнопка «Создать INI (шаблон)»).",
-                "TDL Configurator",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            StatusText.Text = "INI не найден (default).";
             return;
         }
 
         var map = ReadSection(iniPath, SectionName);
-
-        // если ключа нет в ini — оставляем текущее (обычно default)
         BackfireChanceBox.Text = GetOr(map, "BackfireChance", BackfireChanceBox.Text);
         BackfireDurationBox.Text = GetOr(map, "BackfireDuration", BackfireDurationBox.Text);
         ShoutPushForceBox.Text = GetOr(map, "ShoutPushForce", ShoutPushForceBox.Text);
@@ -159,17 +114,15 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         KnockbackMeleeDelayBox.Text = GetOr(map, "KnockbackMeleeDelay", KnockbackMeleeDelayBox.Text);
         KnockbackBowDelayBox.Text = GetOr(map, "KnockbackBowDelay", KnockbackBowDelayBox.Text);
 
-        StatusText.Text = $"Загружено ({SafeNow()}).";
-        ShowInfo("Успешно загружено.");
-
+        StatusText.Text = $"Загружено из INI ({SafeNow()}).";
     }
 
-    private void Save_Click(object sender, RoutedEventArgs e)
+    private void SaveApply_Click(object sender, RoutedEventArgs e)
     {
         if (!TryGetIniPath(out var iniPath))
             return;
 
-        // Валидация диапазонов (как договорились)
+        // Validate (TDL_AllRanges.txt → CHAOS)
         if (!TryGetInt(BackfireChanceBox, "BackfireChance", 0, 100, out var backfireChance)) return;
         if (!TryGetInt(BackfireDurationBox, "BackfireDuration", 1, 600, out var backfireDuration)) return;
         if (!TryGetInt(ShoutPushForceBox, "ShoutPushForce", 0, 200, out var shoutPushForce)) return;
@@ -187,7 +140,6 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
             $"BackfireDuration={backfireDuration}",
             $"ShoutPushForce={shoutPushForce}",
             $"ShoutPushDelay={shoutPushDelay.ToString("0.##", CultureInfo.InvariantCulture)}",
-
             $"KnockbackForce={knockbackForce}",
             $"KnockbackCooldown={knockbackCooldown.ToString("0.##", CultureInfo.InvariantCulture)}",
             $"KnockbackRadius={knockbackRadius}",
@@ -195,11 +147,149 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
             $"KnockbackBowDelay={knockbackBowDelay.ToString("0.##", CultureInfo.InvariantCulture)}",
         };
 
-        UpsertSection(iniPath, SectionName, kv);
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(iniPath)!);
+            UpsertSection(iniPath, SectionName, kv);
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(
+                "Не удалось сохранить INI.\n" + ex.Message,
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            return;
+        }
 
-        StatusText.Text = $"Сохранено ({SafeNow()}).";
-        ShowInfo("Успешно сохранено");
+        // Apply in-game (SYSTEM_RELOAD_CONFIG)
+        if (TryApplyInGame(out var reason))
+        {
+            StatusText.Text = $"Сохранено и применено ({SafeNow()}).";
+        }
+        else
+        {
+            StatusText.Text = $"Сохранено, но не применено ({SafeNow()}).";
+            System.Windows.MessageBox.Show(
+                "INI сохранён, но применить в игре не удалось.\n" + reason,
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+    }
 
+    private bool TryApplyInGame(out string reason)
+    {
+        reason = "";
+        if (!TryGetGamePath(out var gamePath))
+        {
+            reason = "Путь к игре не задан.";
+            return false;
+        }
+
+        var tdlSend = Path.Combine(gamePath, ToolsRelativePath);
+        if (!File.Exists(tdlSend))
+        {
+            reason = $"tdl_send.exe не найден: {tdlSend}";
+            return false;
+        }
+
+        try
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = tdlSend,
+                Arguments = "NORMAL SYSTEM_RELOAD_CONFIG 2",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                WorkingDirectory = Path.GetDirectoryName(tdlSend) ?? gamePath,
+            };
+
+            using var p = Process.Start(psi);
+            if (p == null)
+            {
+                reason = "Не удалось запустить tdl_send.exe.";
+                return false;
+            }
+
+            if (!p.WaitForExit(3500))
+            {
+                try { p.Kill(entireProcessTree: true); } catch { }
+                reason = "tdl_send.exe не завершился по таймауту.";
+                return false;
+            }
+
+            var stdout = p.StandardOutput.ReadToEnd().Trim();
+            var stderr = p.StandardError.ReadToEnd().Trim();
+
+            if (p.ExitCode != 0)
+            {
+                reason = $"Код выхода: {p.ExitCode}\n{(string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)}".Trim();
+                return false;
+            }
+
+            // Даже при ExitCode=0 сервер может быть недоступен — но это лучше, чем ничего.
+            // stdout/stderr оставляем только на случай будущей диагностики.
+            return true;
+        }
+        catch (Exception ex)
+        {
+            reason = ex.Message;
+            return false;
+        }
+    }
+
+    private void DefaultsAll_Click(object sender, RoutedEventArgs e)
+    {
+        ApplyDefaultsToUi();
+        StatusText.Text = $"Сброшено на default ({SafeNow()}).";
+    }
+
+    private void DefaultRow_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not WpfButton btn)
+            return;
+
+        var key = btn.Tag?.ToString();
+        if (string.IsNullOrWhiteSpace(key))
+            return;
+
+        SetDefaultForKey(key);
+        StatusText.Text = $"Default: {key} ({SafeNow()}).";
+    }
+
+    private void ApplyDefaultsToUi()
+    {
+        BackfireChanceBox.Text = DefaultBackfireChance.ToString(CultureInfo.InvariantCulture);
+        BackfireDurationBox.Text = DefaultBackfireDuration.ToString(CultureInfo.InvariantCulture);
+        ShoutPushForceBox.Text = DefaultShoutPushForce.ToString(CultureInfo.InvariantCulture);
+        ShoutPushDelayBox.Text = DefaultShoutPushDelay.ToString("0.##", CultureInfo.InvariantCulture);
+
+        KnockbackForceBox.Text = DefaultKnockbackForce.ToString(CultureInfo.InvariantCulture);
+        KnockbackCooldownBox.Text = DefaultKnockbackCooldown.ToString("0.##", CultureInfo.InvariantCulture);
+        KnockbackRadiusBox.Text = DefaultKnockbackRadius.ToString(CultureInfo.InvariantCulture);
+        KnockbackMeleeDelayBox.Text = DefaultKnockbackMeleeDelay.ToString("0.##", CultureInfo.InvariantCulture);
+        KnockbackBowDelayBox.Text = DefaultKnockbackBowDelay.ToString("0.##", CultureInfo.InvariantCulture);
+
+        StatusText.Text = "Готово (default).";
+    }
+
+    private void SetDefaultForKey(string key)
+    {
+        switch (key)
+        {
+            case "BackfireChance": BackfireChanceBox.Text = DefaultBackfireChance.ToString(CultureInfo.InvariantCulture); break;
+            case "BackfireDuration": BackfireDurationBox.Text = DefaultBackfireDuration.ToString(CultureInfo.InvariantCulture); break;
+            case "ShoutPushForce": ShoutPushForceBox.Text = DefaultShoutPushForce.ToString(CultureInfo.InvariantCulture); break;
+            case "ShoutPushDelay": ShoutPushDelayBox.Text = DefaultShoutPushDelay.ToString("0.##", CultureInfo.InvariantCulture); break;
+            case "KnockbackForce": KnockbackForceBox.Text = DefaultKnockbackForce.ToString(CultureInfo.InvariantCulture); break;
+            case "KnockbackCooldown": KnockbackCooldownBox.Text = DefaultKnockbackCooldown.ToString("0.##", CultureInfo.InvariantCulture); break;
+            case "KnockbackRadius": KnockbackRadiusBox.Text = DefaultKnockbackRadius.ToString(CultureInfo.InvariantCulture); break;
+            case "KnockbackMeleeDelay": KnockbackMeleeDelayBox.Text = DefaultKnockbackMeleeDelay.ToString("0.##", CultureInfo.InvariantCulture); break;
+            case "KnockbackBowDelay": KnockbackBowDelayBox.Text = DefaultKnockbackBowDelay.ToString("0.##", CultureInfo.InvariantCulture); break;
+        }
     }
 
     // ---------- INI helpers ----------
@@ -261,69 +351,55 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         for (var i = 0; i < lines.Count; i++)
         {
             var t = (lines[i] ?? "").Trim();
+            if (!IsSectionHeader(t)) continue;
+
             if (t.Equals(wanted, StringComparison.OrdinalIgnoreCase))
             {
                 start = i;
-                end = i + 1;
-                while (end < lines.Count && !IsSectionHeader(lines[end]))
-                    end++;
+                continue;
+            }
+
+            if (start != -1)
+            {
+                end = i;
                 break;
             }
         }
 
-        var newBlock = new List<string>();
-        newBlock.Add(wanted);
-        newBlock.AddRange(keyValueLines);
-        newBlock.Add("");
-
-        if (start < 0)
+        if (start == -1)
         {
-            if (lines.Count > 0 && !string.IsNullOrWhiteSpace(lines[^1]))
-                lines.Add("");
+            if (lines.Count > 0 && lines[^1].Trim().Length != 0)
+                lines.Add(string.Empty);
 
-            lines.AddRange(newBlock);
+            lines.Add(wanted);
+            lines.AddRange(keyValueLines);
         }
         else
         {
-            lines.RemoveRange(start, end - start);
-            lines.InsertRange(start, newBlock);
-        }
+            if (end == -1)
+                end = lines.Count;
 
-        var dir = Path.GetDirectoryName(filePath);
-        if (!string.IsNullOrWhiteSpace(dir))
-            Directory.CreateDirectory(dir);
+            // Remove old section content
+            var removeCount = end - (start + 1);
+            if (removeCount > 0)
+                lines.RemoveRange(start + 1, removeCount);
+
+            // Insert new content
+            lines.InsertRange(start + 1, keyValueLines);
+        }
 
         File.WriteAllLines(filePath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
     }
 
-    // ---------- Parsing helpers ----------
-    private static bool TryParseDoubleFlexible(string s, out double value)
-    {
-        if (double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-            return true;
-
-        if (double.TryParse(s, NumberStyles.Float, CultureInfo.CurrentCulture, out value))
-            return true;
-
-        var swapped = s.Contains(',') ? s.Replace(',', '.') : s.Replace('.', ',');
-        if (double.TryParse(swapped, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-            return true;
-
-        value = 0;
-        return false;
-    }
-
+    // ---------- Validation ----------
     private static bool TryGetInt(WpfTextBox box, string name, int min, int max, out int value)
     {
         value = 0;
-        var text = (box.Text ?? "").Trim();
-
-        if (!int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value) &&
-            !int.TryParse(text, NumberStyles.Integer, CultureInfo.CurrentCulture, out value))
+        if (!int.TryParse((box.Text ?? "").Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name} должен быть целым числом.",
-                "TDL Configurator",
+                $"{name}: введи целое число.",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -332,8 +408,8 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: значение должно быть в диапазоне {min}..{max}.",
-                "TDL Configurator",
+                $"{name}: допустимый диапазон {min}..{max}.",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -345,13 +421,12 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
     private static bool TryGetDouble(WpfTextBox box, string name, double min, double max, out double value)
     {
         value = 0;
-        var text = (box.Text ?? "").Trim();
-
-        if (!TryParseDoubleFlexible(text, out value))
+        var text = (box.Text ?? "").Trim().Replace(',', '.');
+        if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name} должен быть числом (пример: 0.35).",
-                "TDL Configurator",
+                $"{name}: введи число.",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -360,8 +435,8 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: значение должно быть в диапазоне {min}..{max}.",
-                "TDL Configurator",
+                $"{name}: допустимый диапазон {min}..{max}.",
+                UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;

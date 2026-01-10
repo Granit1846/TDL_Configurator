@@ -1,17 +1,17 @@
-﻿using System;
+﻿// Auto-generated patch: autoload INI + Save+Apply (SYSTEM_RELOAD_CONFIG)
+// Source of defaults/ranges: TDL_AllRanges.txt
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
 using TDL.Configurator.Core;
-using System.Diagnostics;
 
 namespace TDL.Configurator.App.Pages;
 
 public partial class QuickAccessPage : System.Windows.Controls.UserControl
 {
-    private const string UiTitle = "TDL Configurator";
-
     public QuickAccessPage()
     {
         InitializeComponent();
@@ -33,16 +33,13 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
     private string SkseDocsFolder => Path.Combine(DocsRoot, "My Games", "Skyrim Special Edition", "SKSE");
     private string PluginLogPath => Path.Combine(SkseDocsFolder, "TDL_StreamPlugin.log");
 
-    private bool HasGamePath()
-        => !string.IsNullOrWhiteSpace(GamePath) && Directory.Exists(GamePath);
-
     private bool EnsureGamePath()
     {
-        if (!HasGamePath())
+        if (string.IsNullOrWhiteSpace(GamePath) || !Directory.Exists(GamePath))
         {
             System.Windows.MessageBox.Show(
                 "Сначала укажи путь к игре в Настройках (корень Skyrim Special Edition).",
-                UiTitle,
+                "TDL Configurator",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
 
@@ -58,7 +55,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         {
             System.Windows.MessageBox.Show(
                 $"Папка не найдена:\n{folder}",
-                UiTitle,
+                "TDL Configurator",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -73,7 +70,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         {
             System.Windows.MessageBox.Show(
                 $"Файл не найден:\n{file}",
-                UiTitle,
+                "TDL Configurator",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -84,8 +81,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
 
     private void UpdateStatus()
     {
-        // ВАЖНО: без MessageBox при старте страницы (как у остальных вкладок)
-        if (!HasGamePath())
+        if (!EnsureGamePath())
         {
             StatusText.Text = "Статус: путь к игре не задан (Настройки).";
             return;
@@ -97,67 +93,6 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
 
         StatusText.Text =
             $"Статус: INI={(okIni ? "OK" : "нет")} | TDL.0.log={(okLog ? "OK" : "нет")} | Tools={(okTools ? "OK" : "нет")}";
-    }
-
-    private void ApplyConfig_Click(object sender, RoutedEventArgs e)
-    {
-        if (!EnsureGamePath()) return;
-
-        var tdlSend = Path.Combine(GamePath, "Data", "TDL", "Tools", "tdl_send.exe");
-        if (!File.Exists(tdlSend))
-        {
-            System.Windows.MessageBox.Show(
-                $"Не найден tdl_send.exe:\n{tdlSend}\n\nПроверь, что Tools установлен в папку Data\\TDL\\Tools.",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        try
-        {
-            var psi = new ProcessStartInfo
-            {
-                FileName = tdlSend,
-                Arguments = "NORMAL SYSTEM_RELOAD_CONFIG 2",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            };
-
-            using var p = Process.Start(psi);
-            var stdout = p!.StandardOutput.ReadToEnd();
-            var stderr = p.StandardError.ReadToEnd();
-            p.WaitForExit();
-
-            if (p.ExitCode == 0)
-            {
-                System.Windows.MessageBox.Show(
-                    string.IsNullOrWhiteSpace(stdout) ? "Настройки применены (OK)." : stdout,
-                    UiTitle,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-            }
-            else
-            {
-                System.Windows.MessageBox.Show(
-                    $"Не удалось применить настройки.\nExitCode: {p.ExitCode}\n\n{(string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)}",
-                    UiTitle,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
-
-            UpdateStatus();
-        }
-        catch (Exception ex)
-        {
-            System.Windows.MessageBox.Show(
-                $"Ошибка запуска tdl_send.exe:\n{ex.Message}",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-        }
     }
 
     private void OpenPluginsFolder_Click(object sender, RoutedEventArgs e)
@@ -202,7 +137,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
             {
                 System.Windows.MessageBox.Show(
                     "INI уже существует.",
-                    UiTitle,
+                    "TDL Configurator",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
                 return;
@@ -213,6 +148,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
             sb.AppendLine("; Generated by TDL Configurator");
             sb.AppendLine();
 
+            // Defaults from TDL_AllRanges.txt
             sb.AppendLine("[Chaos]");
             sb.AppendLine("BackfireChance=20");
             sb.AppendLine("BackfireDuration=60");
@@ -237,29 +173,48 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
             sb.AppendLine("DropShowProgress=0");
             sb.AppendLine();
 
-            sb.AppendLine("[Wrath]");
-            sb.AppendLine("TotalBursts=6");
-            sb.AppendLine("Interval=0.4");
-            sb.AppendLine("Radius=300");
-            sb.AppendLine("ZOffset=50");
-            sb.AppendLine("DamageMin=5");
-            sb.AppendLine("DamageMax=15");
-            sb.AppendLine("FireDamageMult=1.0");
-            sb.AppendLine("StormMagickaMult=1.0");
-            sb.AppendLine("FrostStaminaMult=1.0");
-            sb.AppendLine("LevelScale=0.0");
-            sb.AppendLine("LevelCap=3.0");
-            sb.AppendLine("ShakeChance=0");
-            sb.AppendLine("ShakeStrength=0.0");
-            sb.AppendLine("ShakeDuration=0.0");
+            sb.AppendLine("[Comedy]");
+            sb.AppendLine("FakeHeroDuration=120");
+            sb.AppendLine("FakeHeroActionInterval=3.0");
+            sb.AppendLine("FakeHeroDamageMult=1.0");
+            sb.AppendLine("FakeHeroPushForce=5");
+            sb.AppendLine("FakeHeroShoutChance=30");
+            sb.AppendLine("FakeHeroSpellChance=30");
+            sb.AppendLine("HorrorDuration=120");
+            sb.AppendLine("HorrorSpawn=800");
+            sb.AppendLine("HorrorTeleport=600");
+            sb.AppendLine("HorrorMaxDist=3000");
+            sb.AppendLine("HorrorHealth=300");
+            sb.AppendLine("ArenaWaves=3");
+            sb.AppendLine("ArenaPerWave=3");
+            sb.AppendLine("ArenaInterval=3.0");
+            sb.AppendLine("ArenaRadius=800");
+            sb.AppendLine("EscortDuration=120");
             sb.AppendLine();
 
             sb.AppendLine("[Hunter]");
+            sb.AppendLine("CorpseTime=20");
             sb.AppendLine("Duration=90");
-            sb.AppendLine("ReAggroInterval=4.0");
             sb.AppendLine("MaxDistance=5500");
+            sb.AppendLine("ReAggro=4.0");
             sb.AppendLine("SpawnOffset=1200");
-            sb.AppendLine("CorpseLifetime=20");
+            sb.AppendLine();
+
+            sb.AppendLine("[Wrath]");
+            sb.AppendLine("WrathTotalBursts=6");
+            sb.AppendLine("WrathInterval=0.4");
+            sb.AppendLine("WrathRadius=300");
+            sb.AppendLine("WrathZOffset=50");
+            sb.AppendLine("WrathDamageMin=5");
+            sb.AppendLine("WrathDamageMax=15");
+            sb.AppendLine("WrathFireMult=1.0");
+            sb.AppendLine("WrathStormMag=1.0");
+            sb.AppendLine("WrathFrostSta=1.0");
+            sb.AppendLine("WrathLevelScale=0.0");
+            sb.AppendLine("WrathLevelCap=3.0");
+            sb.AppendLine("WrathShakeChance=0");
+            sb.AppendLine("WrathShakeStrength=0.0");
+            sb.AppendLine("WrathShakeDuration=0.0");
             sb.AppendLine();
 
             sb.AppendLine("[Gigant]");
@@ -277,7 +232,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
 
             System.Windows.MessageBox.Show(
                 "INI создан.",
-                UiTitle,
+                "TDL Configurator",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
 
@@ -287,7 +242,7 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         {
             System.Windows.MessageBox.Show(
                 $"Не удалось создать INI:\n{ex.Message}",
-                UiTitle,
+                "TDL Configurator",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }

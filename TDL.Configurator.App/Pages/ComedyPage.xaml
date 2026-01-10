@@ -32,8 +32,7 @@
                        Opacity="0.7" Margin="0,6,0,16"/>
 
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
-                <Button Content="Загрузить" Width="120" Margin="0,0,8,0" Click="Load_Click"/>
-                <Button Content="Сохранить" Width="120" Margin="0,0,8,0" Click="Save_Click"/>
+                <Button Content="Сохранить + применить" Width="170" Margin="0,0,8,0" Click="SaveApply_Click"/>
                 <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
                 <TextBlock x:Name="StatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
@@ -66,7 +65,7 @@
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="FakeHeroDurationBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroDuration" ToolTip="Сбросить на Default (60)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroDuration" ToolTip="Сбросить на Default (120)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Частота действий (сек)"
@@ -74,7 +73,7 @@
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="FakeHeroActionIntervalBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroActionInterval" ToolTip="Сбросить на Default (1.5)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroActionInterval" ToolTip="Сбросить на Default (3.0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Множитель урона"
@@ -82,7 +81,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="FakeHeroDamageMultBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroDamageMult" ToolTip="Сбросить на Default (1.5)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroDamageMult" ToolTip="Сбросить на Default (1.0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0"
                                        Style="{StaticResource RowLabelStyle}"
@@ -101,7 +100,7 @@
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="FakeHeroPushForceBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroPushForce" ToolTip="Сбросить на Default (20)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroPushForce" ToolTip="Сбросить на Default (5)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Вероятность толчка (%)"
@@ -109,7 +108,7 @@
                             <TextBox Grid.Row="4" Grid.Column="1" x:Name="FakeHeroShoutChanceBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroShoutChance" ToolTip="Сбросить на Default (25)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroShoutChance" ToolTip="Сбросить на Default (30)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Вероятность заклинания (%)"
@@ -117,7 +116,7 @@
                             <TextBox Grid.Row="5" Grid.Column="1" x:Name="FakeHeroSpellChanceBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="5" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroSpellChance" ToolTip="Сбросить на Default (25)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroSpellChance" ToolTip="Сбросить на Default (30)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
@@ -145,7 +144,7 @@
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="HorrorDurationBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorDuration" ToolTip="Сбросить на Default (60)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorDuration" ToolTip="Сбросить на Default (120)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Дистанция появления"
@@ -153,7 +152,7 @@
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="HorrorSpawnBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorSpawn" ToolTip="Сбросить на Default (1200)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorSpawn" ToolTip="Сбросить на Default (800)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Дистанция телепорта"
@@ -161,7 +160,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="HorrorTeleportBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorTeleport" ToolTip="Сбросить на Default (2500)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorTeleport" ToolTip="Сбросить на Default (600)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Предел преследования"
@@ -169,7 +168,7 @@
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="HorrorMaxDistBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorMaxDist" ToolTip="Сбросить на Default (4500)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorMaxDist" ToolTip="Сбросить на Default (3000)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Живучесть охотника"
@@ -177,7 +176,7 @@
                             <TextBox Grid.Row="4" Grid.Column="1" x:Name="HorrorHealthBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorHealth" ToolTip="Сбросить на Default (600)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorHealth" ToolTip="Сбросить на Default (300)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
@@ -228,7 +227,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="ArenaIntervalBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ArenaInterval" ToolTip="Сбросить на Default (4)" Click="DefaultRow_Click"/>
+                                    Tag="ArenaInterval" ToolTip="Сбросить на Default (3.0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Размер арены"
@@ -236,7 +235,7 @@
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="ArenaRadiusBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ArenaRadius" ToolTip="Сбросить на Default (2500)" Click="DefaultRow_Click"/>
+                                    Tag="ArenaRadius" ToolTip="Сбросить на Default (800)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
@@ -260,7 +259,7 @@
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="EscortDurationBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="EscortDuration" ToolTip="Сбросить на Default (60)" Click="DefaultRow_Click"/>
+                                    Tag="EscortDuration" ToolTip="Сбросить на Default (120)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 

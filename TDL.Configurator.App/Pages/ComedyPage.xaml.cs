@@ -1,11 +1,14 @@
-﻿using System;
+﻿// Auto-generated patch: autoload INI + Save+Apply (SYSTEM_RELOAD_CONFIG)
+// Source of defaults/ranges: TDL_AllRanges.txt
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using TDL.Configurator.Core;
 
 using WpfButton = System.Windows.Controls.Button;
@@ -15,56 +18,64 @@ namespace TDL.Configurator.App.Pages;
 
 public partial class ComedyPage : System.Windows.Controls.UserControl
 {
+    private const string IniRelativePath = @"Data\SKSE\Plugins\TDL_StreamPlugin.ini";
+    private const string ToolsRelativePath = @"Data\TDL\Tools\tdl_send.exe";
+
     private const string SectionName = "Comedy";
     private const string UiTitle = "TDL Configurator";
 
-    // Default значения (как в MCM)
-    private const int DefaultFakeHeroDuration = 120;
-    private const double DefaultFakeHeroActionInterval = 3.0;
-    private const double DefaultFakeHeroDamageMult = 1.0;
-    private const int DefaultFakeHeroPushForce = 5;
-    private const int DefaultFakeHeroShoutChance = 30;
-    private const int DefaultFakeHeroSpellChance = 30;
+    // TDL_AllRanges.txt → COMEDY
+    private const int DefaultFakeHeroDuration = 120;           // 10..600
+    private const double DefaultFakeHeroActionInterval = 3.0;  // 0.5..10.0
+    private const double DefaultFakeHeroDamageMult = 1.0;      // 0.2..5.0
+    private const int DefaultFakeHeroPushForce = 5;            // 0..50
+    private const int DefaultFakeHeroShoutChance = 30;         // 0..100
+    private const int DefaultFakeHeroSpellChance = 30;         // 0..100
 
-    private const int DefaultHorrorDuration = 120;
-    private const int DefaultHorrorSpawn = 800;        // MCM: HorrorSpawnDist
-    private const int DefaultHorrorTeleport = 600;     // MCM: HorrorTeleportDist
-    private const int DefaultHorrorMaxDist = 3000;
-    private const int DefaultHorrorHealth = 300;
+    private const int DefaultHorrorDuration = 120;             // 10..600
+    private const int DefaultHorrorSpawn = 800;                // 200..3000
+    private const int DefaultHorrorTeleport = 600;             // 200..2000
+    private const int DefaultHorrorMaxDist = 3000;             // 1000..6000
+    private const int DefaultHorrorHealth = 300;               // 50..5000
 
-    private const int DefaultArenaWaves = 3;
-    private const int DefaultArenaPerWave = 3;
-    private const double DefaultArenaInterval = 3.0;   // MCM: ArenaWaveInterval
-    private const int DefaultArenaRadius = 800;        // MCM: ArenaSpawnRadius
+    private const int DefaultArenaWaves = 3;                   // 1..10
+    private const int DefaultArenaPerWave = 3;                // 1..20
+    private const double DefaultArenaInterval = 3.0;           // 0.5..10.0
+    private const int DefaultArenaRadius = 800;                // 200..3000
 
-    private const int DefaultEscortDuration = 120;
+    private const int DefaultEscortDuration = 120;             // 30..600
 
     public ComedyPage()
     {
         InitializeComponent();
         ApplyDefaultsToUi();
-        StatusText.Text = "Готово (default).";
+        AutoLoadFromIniSilent();
     }
 
-    private static void ShowInfo(string message)
-    {
-        System.Windows.MessageBox.Show(
-            message,
-            UiTitle,
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
-    }
+    private static string SafeNow() => DateTime.Now.ToString("HH:mm:ss");
 
-    private string GamePath => AppSettings.Load().GamePath.Trim();
-    private string PluginsFolder => Path.Combine(GamePath, "Data", "SKSE", "Plugins");
-    private string IniPath => Path.Combine(PluginsFolder, "TDL_StreamPlugin.ini");
-
-    private bool EnsureGamePath()
+    private bool TryGetGamePath(out string gamePath)
     {
-        if (string.IsNullOrWhiteSpace(GamePath) || !Directory.Exists(GamePath))
+        gamePath = "";
+        try
+        {
+            var s = AppSettings.Load();
+            gamePath = (s?.GamePath ?? "").Trim();
+        }
+        catch (Exception ex)
         {
             System.Windows.MessageBox.Show(
-                "Сначала укажи путь к игре в Настройках (корень Skyrim Special Edition).",
+                "Не удалось прочитать settings.json.\n" + ex.Message,
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(gamePath) || !Directory.Exists(gamePath))
+        {
+            System.Windows.MessageBox.Show(
+                "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.",
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -74,64 +85,62 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         return true;
     }
 
-    private void Load_Click(object sender, RoutedEventArgs e)
+    private bool TryGetIniPath(out string iniPath)
     {
-        if (!EnsureGamePath()) return;
+        iniPath = "";
+        if (!TryGetGamePath(out var gamePath))
+            return false;
 
-        if (!File.Exists(IniPath))
-        {
-            ApplyDefaultsToUi();
-            StatusText.Text = "INI не найден (default).";
-            System.Windows.MessageBox.Show(
-                "INI не найден. Применены значения по умолчанию.",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        var map = ReadSection(IniPath, SectionName);
-        if (map.Count == 0)
-        {
-            ApplyDefaultsToUi();
-            StatusText.Text = "Секция [Comedy] не найдена (default).";
-            System.Windows.MessageBox.Show(
-                "Секция [Comedy] не найдена. Применены значения по умолчанию.",
-                UiTitle,
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        FakeHeroDurationBox.Text = GetOr(map, "FakeHeroDuration", DefaultFakeHeroDuration.ToString(CultureInfo.InvariantCulture));
-        FakeHeroActionIntervalBox.Text = GetOr(map, "FakeHeroActionInterval", DefaultFakeHeroActionInterval.ToString("0.##", CultureInfo.InvariantCulture));
-        FakeHeroDamageMultBox.Text = GetOr(map, "FakeHeroDamageMult", DefaultFakeHeroDamageMult.ToString("0.##", CultureInfo.InvariantCulture));
-        FakeHeroPushForceBox.Text = GetOr(map, "FakeHeroPushForce", DefaultFakeHeroPushForce.ToString(CultureInfo.InvariantCulture));
-        FakeHeroShoutChanceBox.Text = GetOr(map, "FakeHeroShoutChance", DefaultFakeHeroShoutChance.ToString(CultureInfo.InvariantCulture));
-        FakeHeroSpellChanceBox.Text = GetOr(map, "FakeHeroSpellChance", DefaultFakeHeroSpellChance.ToString(CultureInfo.InvariantCulture));
-
-        HorrorDurationBox.Text = GetOr(map, "HorrorDuration", DefaultHorrorDuration.ToString(CultureInfo.InvariantCulture));
-        HorrorSpawnBox.Text = GetOr(map, "HorrorSpawn", DefaultHorrorSpawn.ToString(CultureInfo.InvariantCulture));
-        HorrorTeleportBox.Text = GetOr(map, "HorrorTeleport", DefaultHorrorTeleport.ToString(CultureInfo.InvariantCulture));
-        HorrorMaxDistBox.Text = GetOr(map, "HorrorMaxDist", DefaultHorrorMaxDist.ToString(CultureInfo.InvariantCulture));
-        HorrorHealthBox.Text = GetOr(map, "HorrorHealth", DefaultHorrorHealth.ToString(CultureInfo.InvariantCulture));
-
-        ArenaWavesBox.Text = GetOr(map, "ArenaWaves", DefaultArenaWaves.ToString(CultureInfo.InvariantCulture));
-        ArenaPerWaveBox.Text = GetOr(map, "ArenaPerWave", DefaultArenaPerWave.ToString(CultureInfo.InvariantCulture));
-        ArenaIntervalBox.Text = GetOr(map, "ArenaInterval", DefaultArenaInterval.ToString("0.##", CultureInfo.InvariantCulture));
-        ArenaRadiusBox.Text = GetOr(map, "ArenaRadius", DefaultArenaRadius.ToString(CultureInfo.InvariantCulture));
-
-        EscortDurationBox.Text = GetOr(map, "EscortDuration", DefaultEscortDuration.ToString(CultureInfo.InvariantCulture));
-
-        StatusText.Text = $"Загружено: {DateTime.Now:HH:mm:ss}";
-        ShowInfo("Успешно загружено.");
+        iniPath = Path.Combine(gamePath, IniRelativePath);
+        return true;
     }
 
-    private void Save_Click(object sender, RoutedEventArgs e)
+    private void AutoLoadFromIniSilent()
     {
-        if (!EnsureGamePath()) return;
+        ApplyDefaultsToUi();
 
-        // FakeHero
+        if (!TryGetIniPath(out var iniPath))
+        {
+            StatusText.Text = "Путь к игре не задан (default).";
+            return;
+        }
+
+        if (!File.Exists(iniPath))
+        {
+            StatusText.Text = "INI не найден (default).";
+            return;
+        }
+
+        var map = ReadSection(iniPath, SectionName);
+
+        FakeHeroDurationBox.Text = GetOr(map, "FakeHeroDuration", FakeHeroDurationBox.Text);
+        FakeHeroActionIntervalBox.Text = GetOr(map, "FakeHeroActionInterval", FakeHeroActionIntervalBox.Text);
+        FakeHeroDamageMultBox.Text = GetOr(map, "FakeHeroDamageMult", FakeHeroDamageMultBox.Text);
+        FakeHeroPushForceBox.Text = GetOr(map, "FakeHeroPushForce", FakeHeroPushForceBox.Text);
+        FakeHeroShoutChanceBox.Text = GetOr(map, "FakeHeroShoutChance", FakeHeroShoutChanceBox.Text);
+        FakeHeroSpellChanceBox.Text = GetOr(map, "FakeHeroSpellChance", FakeHeroSpellChanceBox.Text);
+
+        HorrorDurationBox.Text = GetOr(map, "HorrorDuration", HorrorDurationBox.Text);
+        HorrorSpawnBox.Text = GetOr(map, "HorrorSpawn", HorrorSpawnBox.Text);
+        HorrorTeleportBox.Text = GetOr(map, "HorrorTeleport", HorrorTeleportBox.Text);
+        HorrorMaxDistBox.Text = GetOr(map, "HorrorMaxDist", HorrorMaxDistBox.Text);
+        HorrorHealthBox.Text = GetOr(map, "HorrorHealth", HorrorHealthBox.Text);
+
+        ArenaWavesBox.Text = GetOr(map, "ArenaWaves", ArenaWavesBox.Text);
+        ArenaPerWaveBox.Text = GetOr(map, "ArenaPerWave", ArenaPerWaveBox.Text);
+        ArenaIntervalBox.Text = GetOr(map, "ArenaInterval", ArenaIntervalBox.Text);
+        ArenaRadiusBox.Text = GetOr(map, "ArenaRadius", ArenaRadiusBox.Text);
+
+        EscortDurationBox.Text = GetOr(map, "EscortDuration", EscortDurationBox.Text);
+
+        StatusText.Text = $"Загружено из INI ({SafeNow()}).";
+    }
+
+    private void SaveApply_Click(object sender, RoutedEventArgs e)
+    {
+        if (!TryGetIniPath(out var iniPath))
+            return;
+
         if (!TryGetInt(FakeHeroDurationBox, "FakeHeroDuration", 10, 600, out var fakeHeroDuration)) return;
         if (!TryGetDouble(FakeHeroActionIntervalBox, "FakeHeroActionInterval", 0.5, 10.0, out var fakeHeroActionInterval)) return;
         if (!TryGetDouble(FakeHeroDamageMultBox, "FakeHeroDamageMult", 0.2, 5.0, out var fakeHeroDamageMult)) return;
@@ -139,74 +148,150 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         if (!TryGetInt(FakeHeroShoutChanceBox, "FakeHeroShoutChance", 0, 100, out var fakeHeroShoutChance)) return;
         if (!TryGetInt(FakeHeroSpellChanceBox, "FakeHeroSpellChance", 0, 100, out var fakeHeroSpellChance)) return;
 
-        // Horror
         if (!TryGetInt(HorrorDurationBox, "HorrorDuration", 10, 600, out var horrorDuration)) return;
         if (!TryGetInt(HorrorSpawnBox, "HorrorSpawn", 200, 3000, out var horrorSpawn)) return;
         if (!TryGetInt(HorrorTeleportBox, "HorrorTeleport", 200, 2000, out var horrorTeleport)) return;
         if (!TryGetInt(HorrorMaxDistBox, "HorrorMaxDist", 1000, 6000, out var horrorMaxDist)) return;
         if (!TryGetInt(HorrorHealthBox, "HorrorHealth", 50, 5000, out var horrorHealth)) return;
 
-        // Arena
         if (!TryGetInt(ArenaWavesBox, "ArenaWaves", 1, 10, out var arenaWaves)) return;
         if (!TryGetInt(ArenaPerWaveBox, "ArenaPerWave", 1, 20, out var arenaPerWave)) return;
         if (!TryGetDouble(ArenaIntervalBox, "ArenaInterval", 0.5, 10.0, out var arenaInterval)) return;
         if (!TryGetInt(ArenaRadiusBox, "ArenaRadius", 200, 3000, out var arenaRadius)) return;
 
-        // Escort
         if (!TryGetInt(EscortDurationBox, "EscortDuration", 30, 600, out var escortDuration)) return;
 
-        Directory.CreateDirectory(PluginsFolder);
-
-        var lines = File.Exists(IniPath)
-            ? File.ReadAllLines(IniPath, Encoding.UTF8).ToList()
-            : new List<string>();
-
-        var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        var kv = new List<string>
         {
-            ["FakeHeroDuration"] = fakeHeroDuration.ToString(CultureInfo.InvariantCulture),
-            ["FakeHeroActionInterval"] = fakeHeroActionInterval.ToString("0.##", CultureInfo.InvariantCulture),
-            ["FakeHeroDamageMult"] = fakeHeroDamageMult.ToString("0.##", CultureInfo.InvariantCulture),
-            ["FakeHeroPushForce"] = fakeHeroPushForce.ToString(CultureInfo.InvariantCulture),
-            ["FakeHeroShoutChance"] = fakeHeroShoutChance.ToString(CultureInfo.InvariantCulture),
-            ["FakeHeroSpellChance"] = fakeHeroSpellChance.ToString(CultureInfo.InvariantCulture),
+            $"FakeHeroDuration={fakeHeroDuration}",
+            $"FakeHeroActionInterval={fakeHeroActionInterval.ToString("0.##", CultureInfo.InvariantCulture)}",
+            $"FakeHeroDamageMult={fakeHeroDamageMult.ToString("0.##", CultureInfo.InvariantCulture)}",
+            $"FakeHeroPushForce={fakeHeroPushForce}",
+            $"FakeHeroShoutChance={fakeHeroShoutChance}",
+            $"FakeHeroSpellChance={fakeHeroSpellChance}",
 
-            ["HorrorDuration"] = horrorDuration.ToString(CultureInfo.InvariantCulture),
-            ["HorrorSpawn"] = horrorSpawn.ToString(CultureInfo.InvariantCulture),
-            ["HorrorTeleport"] = horrorTeleport.ToString(CultureInfo.InvariantCulture),
-            ["HorrorMaxDist"] = horrorMaxDist.ToString(CultureInfo.InvariantCulture),
-            ["HorrorHealth"] = horrorHealth.ToString(CultureInfo.InvariantCulture),
+            $"HorrorDuration={horrorDuration}",
+            $"HorrorSpawn={horrorSpawn}",
+            $"HorrorTeleport={horrorTeleport}",
+            $"HorrorMaxDist={horrorMaxDist}",
+            $"HorrorHealth={horrorHealth}",
 
-            ["ArenaWaves"] = arenaWaves.ToString(CultureInfo.InvariantCulture),
-            ["ArenaPerWave"] = arenaPerWave.ToString(CultureInfo.InvariantCulture),
-            ["ArenaInterval"] = arenaInterval.ToString("0.##", CultureInfo.InvariantCulture),
-            ["ArenaRadius"] = arenaRadius.ToString(CultureInfo.InvariantCulture),
+            $"ArenaWaves={arenaWaves}",
+            $"ArenaPerWave={arenaPerWave}",
+            $"ArenaInterval={arenaInterval.ToString("0.##", CultureInfo.InvariantCulture)}",
+            $"ArenaRadius={arenaRadius}",
 
-            ["EscortDuration"] = escortDuration.ToString(CultureInfo.InvariantCulture),
+            $"EscortDuration={escortDuration}",
         };
 
-        UpsertSection(lines, SectionName, values);
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(iniPath)!);
+            UpsertSection(iniPath, SectionName, kv);
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(
+                "Не удалось сохранить INI.\n" + ex.Message,
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            return;
+        }
 
-        File.WriteAllLines(IniPath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
-        StatusText.Text = $"Сохранено: {DateTime.Now:HH:mm:ss}";
-        ShowInfo("Успешно сохранено");
+        if (TryApplyInGame(out var reason))
+        {
+            StatusText.Text = $"Сохранено и применено ({SafeNow()}).";
+        }
+        else
+        {
+            StatusText.Text = $"Сохранено, но не применено ({SafeNow()}).";
+            System.Windows.MessageBox.Show(
+                "INI сохранён, но применить в игре не удалось.\n" + reason,
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+    }
+
+    private bool TryApplyInGame(out string reason)
+    {
+        reason = "";
+        if (!TryGetGamePath(out var gamePath))
+        {
+            reason = "Путь к игре не задан.";
+            return false;
+        }
+
+        var tdlSend = Path.Combine(gamePath, ToolsRelativePath);
+        if (!File.Exists(tdlSend))
+        {
+            reason = $"tdl_send.exe не найден: {tdlSend}";
+            return false;
+        }
+
+        try
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = tdlSend,
+                Arguments = "NORMAL SYSTEM_RELOAD_CONFIG 2",
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                WorkingDirectory = Path.GetDirectoryName(tdlSend) ?? gamePath,
+            };
+
+            using var p = Process.Start(psi);
+            if (p == null)
+            {
+                reason = "Не удалось запустить tdl_send.exe.";
+                return false;
+            }
+
+            if (!p.WaitForExit(3500))
+            {
+                try { p.Kill(entireProcessTree: true); } catch { }
+                reason = "tdl_send.exe не завершился по таймауту.";
+                return false;
+            }
+
+            var stdout = p.StandardOutput.ReadToEnd().Trim();
+            var stderr = p.StandardError.ReadToEnd().Trim();
+
+            if (p.ExitCode != 0)
+            {
+                reason = $"Код выхода: {p.ExitCode}\n{(string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)}".Trim();
+                return false;
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            reason = ex.Message;
+            return false;
+        }
     }
 
     private void DefaultsAll_Click(object sender, RoutedEventArgs e)
     {
         ApplyDefaultsToUi();
-        StatusText.Text = "Готово (default).";
-        ShowInfo("Сброшено на значения по умолчанию.");
+        StatusText.Text = $"Сброшено на default ({SafeNow()}).";
     }
 
     private void DefaultRow_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is not WpfButton btn) return;
+        if (sender is not WpfButton btn)
+            return;
 
         var key = btn.Tag?.ToString();
-        if (string.IsNullOrWhiteSpace(key)) return;
+        if (string.IsNullOrWhiteSpace(key))
+            return;
 
         SetDefaultForKey(key);
-        StatusText.Text = $"Default: {key}";
+        StatusText.Text = $"Default: {key} ({SafeNow()}).";
     }
 
     private void ApplyDefaultsToUi()
@@ -230,6 +315,8 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         ArenaRadiusBox.Text = DefaultArenaRadius.ToString(CultureInfo.InvariantCulture);
 
         EscortDurationBox.Text = DefaultEscortDuration.ToString(CultureInfo.InvariantCulture);
+
+        StatusText.Text = "Готово (default).";
     }
 
     private void SetDefaultForKey(string key)
@@ -258,26 +345,34 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         }
     }
 
+    // ---------- INI helpers ----------
     private static string GetOr(Dictionary<string, string> map, string key, string fallback)
-        => map.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v.Trim() : fallback;
+        => map.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v : fallback;
 
-    // ---------------- INI helpers ----------------
-    private static Dictionary<string, string> ReadSection(string path, string sectionName)
+    private static bool IsSectionHeader(string line)
+    {
+        var t = (line ?? "").Trim();
+        return t.StartsWith("[") && t.EndsWith("]");
+    }
+
+    private static Dictionary<string, string> ReadSection(string filePath, string sectionName)
     {
         var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        var lines = File.ReadAllLines(path, Encoding.UTF8);
+        var lines = File.ReadAllLines(filePath, Encoding.UTF8);
 
         var inSection = false;
+        var wanted = $"[{sectionName}]";
 
         foreach (var raw in lines)
         {
             var line = (raw ?? "").Trim();
+
             if (line.Length == 0) continue;
             if (line.StartsWith(";") || line.StartsWith("#")) continue;
 
-            if (line.StartsWith("[") && line.EndsWith("]"))
+            if (IsSectionHeader(line))
             {
-                inSection = string.Equals(line.Trim('[', ']'), sectionName, StringComparison.OrdinalIgnoreCase);
+                inSection = line.Equals(wanted, StringComparison.OrdinalIgnoreCase);
                 continue;
             }
 
@@ -286,74 +381,88 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
             var eq = line.IndexOf('=');
             if (eq <= 0) continue;
 
-            var k = line.Substring(0, eq).Trim();
-            var v = line.Substring(eq + 1).Trim();
-            if (k.Length == 0) continue;
+            var key = line.Substring(0, eq).Trim();
+            var val = line.Substring(eq + 1).Trim();
+            if (key.Length == 0) continue;
 
-            result[k] = v;
+            result[key] = val;
         }
 
         return result;
     }
 
-    private static void UpsertSection(List<string> lines, string sectionName, Dictionary<string, string> values)
+    private static void UpsertSection(string filePath, string sectionName, List<string> keyValueLines)
     {
-        var header = $"[{sectionName}]";
+        var lines = File.Exists(filePath)
+            ? File.ReadAllLines(filePath, Encoding.UTF8).ToList()
+            : new List<string>();
 
+        var wanted = $"[{sectionName}]";
         var start = -1;
+        var end = -1;
+
         for (var i = 0; i < lines.Count; i++)
         {
-            if (string.Equals((lines[i] ?? "").Trim(), header, StringComparison.OrdinalIgnoreCase))
+            var t = (lines[i] ?? "").Trim();
+            if (!IsSectionHeader(t)) continue;
+
+            if (t.Equals(wanted, StringComparison.OrdinalIgnoreCase))
             {
                 start = i;
+                continue;
+            }
+
+            if (start != -1)
+            {
+                end = i;
                 break;
             }
         }
 
-        var newSection = new List<string> { header };
-        foreach (var kv in values)
-            newSection.Add($"{kv.Key}={kv.Value}");
-        newSection.Add("");
-
-        if (start < 0)
+        if (start == -1)
         {
-            if (lines.Count > 0 && !string.IsNullOrWhiteSpace(lines[^1]))
-                lines.Add("");
-            lines.AddRange(newSection);
-            return;
+            if (lines.Count > 0 && lines[^1].Trim().Length != 0)
+                lines.Add(string.Empty);
+
+            lines.Add(wanted);
+            lines.AddRange(keyValueLines);
+        }
+        else
+        {
+            if (end == -1)
+                end = lines.Count;
+
+            var removeCount = end - (start + 1);
+            if (removeCount > 0)
+                lines.RemoveRange(start + 1, removeCount);
+
+            lines.InsertRange(start + 1, keyValueLines);
         }
 
-        var end = start + 1;
-        while (end < lines.Count)
-        {
-            var t = (lines[end] ?? "").Trim();
-            if (t.StartsWith("[") && t.EndsWith("]"))
-                break;
-            end++;
-        }
-
-        lines.RemoveRange(start, end - start);
-        lines.InsertRange(start, newSection);
+        File.WriteAllLines(filePath, lines, new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
     }
 
-    // ---------------- Parse helpers ----------------
+    // ---------- Validation ----------
     private static bool TryGetInt(WpfTextBox box, string name, int min, int max, out int value)
     {
         value = 0;
-        var text = (box.Text ?? "").Trim();
-
-        if (!int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value) &&
-            !int.TryParse(text, NumberStyles.Integer, CultureInfo.CurrentCulture, out value))
+        if (!int.TryParse((box.Text ?? "").Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
         {
-            System.Windows.MessageBox.Show($"{name} должен быть целым числом.", "Comedy",
-                MessageBoxButton.OK, MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show(
+                $"{name}: введи целое число.",
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
             return false;
         }
 
         if (value < min || value > max)
         {
-            System.Windows.MessageBox.Show($"{name}: значение должно быть в диапазоне {min}..{max}.", "Comedy",
-                MessageBoxButton.OK, MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show(
+                $"{name}: допустимый диапазон {min}..{max}.",
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
             return false;
         }
 
@@ -363,38 +472,27 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
     private static bool TryGetDouble(WpfTextBox box, string name, double min, double max, out double value)
     {
         value = 0;
-        var text = (box.Text ?? "").Trim();
-
-        if (!TryParseDoubleFlexible(text, out value))
+        var text = (box.Text ?? "").Trim().Replace(',', '.');
+        if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
         {
-            System.Windows.MessageBox.Show($"{name} должен быть числом (пример: 1.50).", "Comedy",
-                MessageBoxButton.OK, MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show(
+                $"{name}: введи число.",
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
             return false;
         }
 
         if (value < min || value > max)
         {
-            System.Windows.MessageBox.Show($"{name}: значение должно быть в диапазоне {min}..{max}.", "Comedy",
-                MessageBoxButton.OK, MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show(
+                $"{name}: допустимый диапазон {min}..{max}.",
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
             return false;
         }
 
         return true;
-    }
-
-    private static bool TryParseDoubleFlexible(string s, out double value)
-    {
-        if (double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-            return true;
-
-        if (double.TryParse(s, NumberStyles.Float, CultureInfo.CurrentCulture, out value))
-            return true;
-
-        var swapped = s.Contains(',') ? s.Replace(',', '.') : s.Replace('.', ',');
-        if (double.TryParse(swapped, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
-            return true;
-
-        value = 0;
-        return false;
     }
 }

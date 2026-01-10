@@ -47,7 +47,7 @@
 
                     <!-- Логотип прямо над вкладками -->
                     <Border Grid.Row="0" BorderBrush="#22000000" BorderThickness="0,0,0,1" Padding="10">
-                        <Image Source="/Assets/logo.png"
+                        <Image Source="/Assets/logo3.png"
                                Height="144"
                                Stretch="Uniform"
                                HorizontalAlignment="Center"
