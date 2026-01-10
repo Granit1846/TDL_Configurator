@@ -6,33 +6,33 @@
     "order": 1
   },
   {
+    "id": "ui_help",
+    "title": "Справка по интерфейсу",
+    "file": "08_UI_Help.md",
+    "order": 2
+  },
+  {
     "id": "protocol",
     "title": "Протокол и режимы",
     "file": "02_Protocol.md",
-    "order": 2
+    "order": 3
   },
   {
     "id": "catalog_normal",
     "title": "Команды NORMAL (обзор)",
     "file": "03_ActionCatalog_NORMAL.md",
-    "order": 3
+    "order": 4
   },
   {
     "id": "action_reference",
     "title": "Action Reference (описания)",
     "file": "09_ActionReference.md",
-    "order": 4
+    "order": 5
   },
   {
     "id": "ini_reference",
     "title": "Справочник INI (параметры)",
     "file": "10_INI_Settings_Reference.md",
-    "order": 5
-  },
-  {
-    "id": "force_safety",
-    "title": "FORCE и безопасность",
-    "file": "04_FORCE_Safety.md",
     "order": 6
   },
   {
@@ -42,27 +42,51 @@
     "order": 7
   },
   {
+    "id": "stages_description",
+    "title": "Описание стадий",
+    "file": "15_TDL_Stages_Description.md",
+    "order": 8
+  },
+  {
+    "id": "force_safety",
+    "title": "FORCE и безопасность",
+    "file": "04_FORCE_Safety.md",
+    "order": 9
+  },
+  {
+    "id": "stream_rules",
+    "title": "Правила стрим-интеграции",
+    "file": "12_TDL_Stream_Rules.md",
+    "order": 10
+  },
+  {
+    "id": "architecture_overview",
+    "title": "Архитектура мода (обзор)",
+    "file": "13_TDL_Architecture_Overview.md",
+    "order": 11
+  },
+  {
     "id": "logs",
     "title": "Логи и диагностика",
     "file": "11_Logs_Diagnostics.md",
-    "order": 8
+    "order": 12
   },
   {
     "id": "faq",
     "title": "FAQ / Типовые проблемы",
     "file": "06_FAQ_KnownIssues.md",
-    "order": 9
+    "order": 13
+  },
+  {
+    "id": "faq_stream",
+    "title": "FAQ (стрим/архитектура)",
+    "file": "14_TDL_FAQ.md",
+    "order": 14
   },
   {
     "id": "versions",
     "title": "Версии и совместимость",
     "file": "07_Versions_Compatibility.md",
-    "order": 10
-  },
-  {
-    "id": "ui_help",
-    "title": "Справка по интерфейсу",
-    "file": "08_UI_Help.md",
-    "order": 11
+    "order": 15
   }
 ]

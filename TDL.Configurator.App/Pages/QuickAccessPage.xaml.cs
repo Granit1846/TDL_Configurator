@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using TDL.Configurator.Core;
+using System.Diagnostics;
 
 namespace TDL.Configurator.App.Pages;
 
@@ -96,6 +97,67 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
 
         StatusText.Text =
             $"Статус: INI={(okIni ? "OK" : "нет")} | TDL.0.log={(okLog ? "OK" : "нет")} | Tools={(okTools ? "OK" : "нет")}";
+    }
+
+    private void ApplyConfig_Click(object sender, RoutedEventArgs e)
+    {
+        if (!EnsureGamePath()) return;
+
+        var tdlSend = Path.Combine(GamePath, "Data", "TDL", "Tools", "tdl_send.exe");
+        if (!File.Exists(tdlSend))
+        {
+            System.Windows.MessageBox.Show(
+                $"Не найден tdl_send.exe:\n{tdlSend}\n\nПроверь, что Tools установлен в папку Data\\TDL\\Tools.",
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        try
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = tdlSend,
+                Arguments = "NORMAL SYSTEM_RELOAD_CONFIG 2",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            using var p = Process.Start(psi);
+            var stdout = p!.StandardOutput.ReadToEnd();
+            var stderr = p.StandardError.ReadToEnd();
+            p.WaitForExit();
+
+            if (p.ExitCode == 0)
+            {
+                System.Windows.MessageBox.Show(
+                    string.IsNullOrWhiteSpace(stdout) ? "Настройки применены (OK)." : stdout,
+                    UiTitle,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            else
+            {
+                System.Windows.MessageBox.Show(
+                    $"Не удалось применить настройки.\nExitCode: {p.ExitCode}\n\n{(string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)}",
+                    UiTitle,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
+            UpdateStatus();
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(
+                $"Ошибка запуска tdl_send.exe:\n{ex.Message}",
+                UiTitle,
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
     }
 
     private void OpenPluginsFolder_Click(object sender, RoutedEventArgs e)

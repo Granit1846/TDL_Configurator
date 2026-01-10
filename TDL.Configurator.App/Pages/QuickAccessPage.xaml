@@ -17,6 +17,7 @@
                     <WrapPanel>
                         <Button Width="220" Margin="0,0,8,0" Content="Открыть папку Tools (tdl_send.exe)" Click="OpenToolsFolder_Click"/>
                         <Button Width="220" Content="Открыть папку Data\TDL" Click="OpenTdlDataFolder_Click"/>
+                        <Button Content="Применить настройки в игре" Width="220" Margin="0,0,8,0" Click="ApplyConfig_Click" ToolTip="Отправляет в игру команду SYSTEM_RELOAD_CONFIG (игра должна быть запущена)"/>
                     </WrapPanel>
                 </StackPanel>
             </GroupBox>
