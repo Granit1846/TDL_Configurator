@@ -62,7 +62,7 @@
                     <TextBox Grid.Row="0" Grid.Column="1" x:Name="CorpseTimeBox"
                              Style="{StaticResource NumericBoxStyle}"/>
                     <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                            Tag="CorpseTime" ToolTip="Сбросить на Default (20)" Click="DefaultRow_Click"/>
+                            Tag="CorpseTime" ToolTip="Сбросить на Default (30)" Click="DefaultRow_Click"/>
 
                     <!-- Duration -->
                     <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"

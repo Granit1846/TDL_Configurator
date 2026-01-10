@@ -28,13 +28,13 @@ public partial class ChaosPage : System.Windows.Controls.UserControl
     private const int DefaultBackfireChance = 20;         // 0..100
     private const int DefaultBackfireDuration = 60;       // 1..600
     private const int DefaultShoutPushForce = 20;         // 0..200
-    private const double DefaultShoutPushDelay = 0.05;    // 0.0..0.5
+    private const double DefaultShoutPushDelay = 0.1;    // 0.0..0.5
 
     private const int DefaultKnockbackForce = 25;         // 0..200
     private const double DefaultKnockbackCooldown = 0.35; // 0.0..2.0
     private const int DefaultKnockbackRadius = 900;       // 0..20000
-    private const double DefaultKnockbackMeleeDelay = 0.10; // 0.0..0.5
-    private const double DefaultKnockbackBowDelay = 0.10;   // 0.0..0.5
+    private const double DefaultKnockbackMeleeDelay = 0.12; // 0.0..0.5
+    private const double DefaultKnockbackBowDelay = 0.14;   // 0.0..0.5
 
     public ChaosPage()
     {

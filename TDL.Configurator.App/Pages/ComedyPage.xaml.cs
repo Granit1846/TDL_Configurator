@@ -27,21 +27,21 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
     // TDL_AllRanges.txt → COMEDY
     private const int DefaultFakeHeroDuration = 120;           // 10..600
     private const double DefaultFakeHeroActionInterval = 3.0;  // 0.5..10.0
-    private const double DefaultFakeHeroDamageMult = 1.0;      // 0.2..5.0
-    private const int DefaultFakeHeroPushForce = 5;            // 0..50
+    private const double DefaultFakeHeroDamageMult = 0.8;      // 0.2..5.0
+    private const int DefaultFakeHeroPushForce = 15;            // 0..50
     private const int DefaultFakeHeroShoutChance = 30;         // 0..100
     private const int DefaultFakeHeroSpellChance = 30;         // 0..100
 
     private const int DefaultHorrorDuration = 120;             // 10..600
-    private const int DefaultHorrorSpawn = 800;                // 200..3000
-    private const int DefaultHorrorTeleport = 600;             // 200..2000
+    private const int DefaultHorrorSpawn = 1200;                // 200..3000
+    private const int DefaultHorrorTeleport = 1000;             // 200..2000
     private const int DefaultHorrorMaxDist = 3000;             // 1000..6000
-    private const int DefaultHorrorHealth = 300;               // 50..5000
+    private const int DefaultHorrorHealth = 1000;               // 50..5000
 
     private const int DefaultArenaWaves = 3;                   // 1..10
     private const int DefaultArenaPerWave = 3;                // 1..20
-    private const double DefaultArenaInterval = 3.0;           // 0.5..10.0
-    private const int DefaultArenaRadius = 800;                // 200..3000
+    private const double DefaultArenaInterval = 5.0;           // 0.5..10.0
+    private const int DefaultArenaRadius = 1200;                // 200..3000
 
     private const int DefaultEscortDuration = 120;             // 30..600
 

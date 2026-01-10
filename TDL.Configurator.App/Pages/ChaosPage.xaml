@@ -123,7 +123,7 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="ShoutPushDelay"
-                            ToolTip="Сбросить на default (0.05)"
+                            ToolTip="Сбросить на default (0.1)"
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackForce -->
@@ -216,7 +216,7 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="KnockbackMeleeDelay"
-                            ToolTip="Сбросить на default (0.10)"
+                            ToolTip="Сбросить на default (0.12)"
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackBowDelay -->
@@ -242,7 +242,7 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="KnockbackBowDelay"
-                            ToolTip="Сбросить на default (0.10)"
+                            ToolTip="Сбросить на default (0.14)"
                             Click="DefaultRow_Click"/>
 
                 </Grid>

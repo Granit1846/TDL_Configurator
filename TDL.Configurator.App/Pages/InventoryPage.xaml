@@ -86,7 +86,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="ScatterMaxCountBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterMaxCount" ToolTip="Сбросить на Default (250)" Click="DefaultRow_Click"/>
+                                    Tag="ScatterMaxCount" ToolTip="Сбросить на Default (200)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Радиус разброса"
@@ -94,7 +94,7 @@
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="ScatterRadiusBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterRadius" ToolTip="Сбросить на Default (800)" Click="DefaultRow_Click"/>
+                                    Tag="ScatterRadius" ToolTip="Сбросить на Default (1200)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 

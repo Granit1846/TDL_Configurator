@@ -25,7 +25,7 @@ public partial class HunterPage : System.Windows.Controls.UserControl
     private const string UiTitle = "TDL Configurator";
 
     // TDL_AllRanges.txt → HUNTER
-    private const int DefaultCorpseTime = 20;     // 0..300
+    private const int DefaultCorpseTime = 30;     // 0..300
     private const int DefaultDuration = 90;       // 5..600
     private const int DefaultMaxDistance = 5500;  // 1500..10000
     private const double DefaultReAggro = 4.0;    // 1.0..10.0

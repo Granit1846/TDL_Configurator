@@ -25,9 +25,9 @@ public partial class WrathPage : System.Windows.Controls.UserControl
     private const string UiTitle = "TDL Configurator";
 
     // TDL_AllRanges.txt → WRATH
-    private const int DefaultWrathTotalBursts = 6;   // 1..50
+    private const int DefaultWrathTotalBursts = 10;   // 1..50
     private const double DefaultWrathInterval = 0.4; // 0.05..2.0
-    private const int DefaultWrathRadius = 300;      // 100..2000
+    private const int DefaultWrathRadius = 800;      // 100..2000
     private const int DefaultWrathZOffset = 50;      // 0..500
 
     private const int DefaultWrathDamageMin = 5;     // 1..100
@@ -38,9 +38,9 @@ public partial class WrathPage : System.Windows.Controls.UserControl
     private const double DefaultWrathLevelScale = 0.0; // 0.0..0.10
     private const double DefaultWrathLevelCap = 3.0;   // 1.0..5.0
 
-    private const int DefaultWrathShakeChance = 0;      // 0..100 (percent)
-    private const double DefaultWrathShakeStrength = 0.0; // 0.0..1.0
-    private const double DefaultWrathShakeDuration = 0.0; // 0.0..1.0
+    private const int DefaultWrathShakeChance = 20;      // 0..100 (percent)
+    private const double DefaultWrathShakeStrength = 0.1; // 0.0..1.0
+    private const double DefaultWrathShakeDuration = 0.2; // 0.0..1.0
 
     public WrathPage()
     {

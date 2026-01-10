@@ -28,7 +28,7 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
     private const int DefaultScatterExactCount = 0;  // 0..2000
     private const int DefaultScatterMinCount = 150;  // 1..2000
     private const int DefaultScatterMaxCount = 200;  // 1..2000
-    private const int DefaultScatterRadius = 800;    // 100..5000
+    private const int DefaultScatterRadius = 1200;    // 100..5000
 
     private const int DefaultDropBatchSize = 10;     // 1..100
     private const double DefaultDropInterval = 0.20; // 0.05..1.0

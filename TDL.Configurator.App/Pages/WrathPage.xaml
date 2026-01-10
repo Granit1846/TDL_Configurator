@@ -65,7 +65,7 @@
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="WrathTotalBurstsBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathTotalBursts" ToolTip="Сбросить на Default (6)" Click="DefaultRow_Click"/>
+                                    Tag="WrathTotalBursts" ToolTip="Сбросить на Default (10)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Интервал"
@@ -81,7 +81,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="WrathRadiusBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathRadius" ToolTip="Сбросить на Default (300)" Click="DefaultRow_Click"/>
+                                    Tag="WrathRadius" ToolTip="Сбросить на Default (800)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Смещение по Z"
@@ -191,7 +191,7 @@
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="WrathShakeChanceBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathShakeChance" ToolTip="Сбросить на Default (0)" Click="DefaultRow_Click"/>
+                                    Tag="WrathShakeChance" ToolTip="Сбросить на Default (20)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Сила тряски"
@@ -199,7 +199,7 @@
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="WrathShakeStrengthBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathShakeStrength" ToolTip="Сбросить на Default (0.0)" Click="DefaultRow_Click"/>
+                                    Tag="WrathShakeStrength" ToolTip="Сбросить на Default (0.1)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Длительность тряски"
@@ -207,7 +207,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="WrathShakeDurationBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="WrathShakeDuration" ToolTip="Сбросить на Default (0.0)" Click="DefaultRow_Click"/>
+                                    Tag="WrathShakeDuration" ToolTip="Сбросить на Default (0.2)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 

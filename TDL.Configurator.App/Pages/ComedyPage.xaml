@@ -81,7 +81,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="FakeHeroDamageMultBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroDamageMult" ToolTip="Сбросить на Default (1.0)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroDamageMult" ToolTip="Сбросить на Default (0.8)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0"
                                        Style="{StaticResource RowLabelStyle}"
@@ -100,7 +100,7 @@
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="FakeHeroPushForceBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroPushForce" ToolTip="Сбросить на Default (5)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroPushForce" ToolTip="Сбросить на Default (15)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Вероятность толчка (%)"
@@ -152,7 +152,7 @@
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="HorrorSpawnBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorSpawn" ToolTip="Сбросить на Default (800)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorSpawn" ToolTip="Сбросить на Default (1200)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Дистанция телепорта"
@@ -160,7 +160,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="HorrorTeleportBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorTeleport" ToolTip="Сбросить на Default (600)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorTeleport" ToolTip="Сбросить на Default (1000)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Предел преследования"
@@ -176,7 +176,7 @@
                             <TextBox Grid.Row="4" Grid.Column="1" x:Name="HorrorHealthBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorHealth" ToolTip="Сбросить на Default (300)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorHealth" ToolTip="Сбросить на Default (1000)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
@@ -227,7 +227,7 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="ArenaIntervalBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ArenaInterval" ToolTip="Сбросить на Default (3.0)" Click="DefaultRow_Click"/>
+                                    Tag="ArenaInterval" ToolTip="Сбросить на Default (5.0)" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
                                        Text="Размер арены"
@@ -235,7 +235,7 @@
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="ArenaRadiusBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ArenaRadius" ToolTip="Сбросить на Default (800)" Click="DefaultRow_Click"/>
+                                    Tag="ArenaRadius" ToolTip="Сбросить на Default (1200)" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
