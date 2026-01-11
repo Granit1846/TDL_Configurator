@@ -62,18 +62,18 @@
                     <!-- Вкладки -->
                     <ListBox Grid.Row="1"
                          x:Name="NavList"
-                         Margin="16"
+                         Margin="8"
                          SelectionChanged="NavList_SelectionChanged"
                          ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <ListBoxItem Content="Chaos" Height="30" FontSize="16"/>
-                        <ListBoxItem Content="Hunter" Height="30" FontSize="16"/>
-                        <ListBoxItem Content="Inventory" Height="30" FontSize="16"/>
-                        <ListBoxItem Content="Wrath" Height="30" FontSize="16"/>
-                        <ListBoxItem Content="Gigant" Height="30" FontSize="16"/>
-                        <ListBoxItem Content="Comedy" Height="30" FontSize="16"/>
-                        <ListBoxItem Content="Documentation" Height="30" FontSize="16"/>
-                        <ListBoxItem Content="Quick access" Height="30" FontSize="16"/>
-                        <ListBoxItem Content="Test" Height="30" FontSize="16"/>
+                        <ListBoxItem Content="Chaos" Height="30"/>
+                        <ListBoxItem Content="Hunter" Height="30"/>
+                        <ListBoxItem Content="Inventory" Height="30"/>
+                        <ListBoxItem Content="Wrath" Height="30"/>
+                        <ListBoxItem Content="Gigant" Height="30"/>
+                        <ListBoxItem Content="Comedy" Height="30"/>
+                        <ListBoxItem Content="Documentation" Height="30"/>
+                        <ListBoxItem Content="Quick access" Height="30"/>
+                        <ListBoxItem Content="Test" Height="30"/>
                     </ListBox>
                 </Grid>
             </Border>

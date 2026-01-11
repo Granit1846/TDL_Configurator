@@ -17,6 +17,14 @@
     <SolidColorBrush x:Key="TDL.Brush.ControlBackgroundHover" Color="#FF2A3240"/>
     <SolidColorBrush x:Key="TDL.Brush.ControlBackgroundPressed" Color="#FF313B4B"/>
 
+    <!-- Documentation page panes -->
+    <SolidColorBrush x:Key="TDL.Brush.DocListBackground" Color="#FF1C212A"/>
+    <SolidColorBrush x:Key="TDL.Brush.DocContentBackground" Color="#FF232A35"/>
+    <!-- Slightly translucent accent border so inner panes don't scream -->
+    <SolidColorBrush x:Key="TDL.Brush.PaneBorder" Color="#66D16820"/>
+    <SolidColorBrush x:Key="TDL.Brush.DocCodeBackground" Color="#FF111418"/>
+    <SolidColorBrush x:Key="TDL.Brush.DocCodeBorder" Color="#66D16820"/>
+
     <SolidColorBrush x:Key="TDL.Brush.Accent"        Color="#FFD16820"/>
     <SolidColorBrush x:Key="TDL.Brush.AccentHover"   Color="#FFE57C20"/>
     <SolidColorBrush x:Key="TDL.Brush.AccentPressed" Color="#FFB85A1A"/>

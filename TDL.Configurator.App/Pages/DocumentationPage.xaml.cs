@@ -334,8 +334,30 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         return Regex.Replace(s, @"[ \t]{2,}", " ").Trim();
     }
 
+    private static System.Windows.Media.Brush TryFindBrush(string key, System.Windows.Media.Brush fallback)
+    {
+        try
+        {
+                    return (System.Windows.Application.Current?.TryFindResource(key) as System.Windows.Media.Brush) ?? fallback;
+        }
+        catch
+        {
+            return fallback;
+        }
+    }
+
     private static FlowDocument MarkdownToFlowDocument(string md)
     {
+        var codeBlockBg = TryFindBrush(
+            "TDL.Brush.DocCodeBackground",
+            new SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 245, 245)));
+        var codeBlockBorder = TryFindBrush(
+            "TDL.Brush.DocCodeBorder",
+            System.Windows.Media.Brushes.Transparent);
+        var codeBlockFg = TryFindBrush(
+            "TDL.Brush.Text",
+            System.Windows.Media.Brushes.Black);
+
         var doc = new FlowDocument
         {
             PagePadding = new Thickness(8),
@@ -370,22 +392,19 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             var codeText = string.Join("\n", codeBuf);
             codeBuf.Clear();
 
-            var p = new Paragraph(new Run(codeText))
-            {
-                Margin = new Thickness(0, 0, 0, 10),
-                FontFamily = new System.Windows.Media.FontFamily("Consolas"),
-                Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 245, 245))
-            };
-
             // Padding для Paragraph напрямую недоступен — используем Block UI через Border
             var container = new BlockUIContainer(
                 new Border
                 {
-                    Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 245, 245)),
+                    Background = codeBlockBg,
+                    BorderBrush = codeBlockBorder,
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(6),
                     Padding = new Thickness(8),
                     Child = new TextBlock
                     {
                         FontFamily = new System.Windows.Media.FontFamily("Consolas"),
+                        Foreground = codeBlockFg,
                         Text = codeText,
                         TextWrapping = TextWrapping.NoWrap
                     }
@@ -535,6 +554,11 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         if (string.IsNullOrEmpty(s))
             return;
 
+        // Inline `code` is used heavily for paths/names in our docs.
+        // In dark themes the default "light code background" looks like a bright highlight,
+        // so we render it as subtle italic emphasis instead.
+        var inlineCodeFg = TryFindBrush("TDL.Brush.TextDim", System.Windows.Media.Brushes.Gray);
+
         var i = 0;
         while (i < s.Length)
         {
@@ -545,12 +569,8 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
                 if (j > i)
                 {
                     var code = s.Substring(i + 1, j - i - 1);
-                    var run = new Run(code)
-                    {
-                        FontFamily = new System.Windows.Media.FontFamily("Consolas"),
-                        Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 245, 245))
-                    };
-                    inlines.Add(run);
+                    var run = new Run(code) { Foreground = inlineCodeFg };
+                    inlines.Add(new Italic(run));
                     i = j + 1;
                     continue;
                 }
