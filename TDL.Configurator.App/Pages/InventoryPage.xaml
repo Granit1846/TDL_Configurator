@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <UserControl.Resources>
-        <Style x:Key="NumericBoxStyle" TargetType="TextBox">
+        <Style x:Key="NumericBoxStyle"
+           TargetType="TextBox"
+           BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Width" Value="120"/>
             <Setter Property="Height" Value="26"/>
             <Setter Property="TextAlignment" Value="Center"/>
@@ -11,13 +13,20 @@
             <Setter Property="Padding" Value="6,0"/>
         </Style>
 
-        <Style x:Key="ResetButtonStyle" TargetType="Button">
+        <Style x:Key="ResetButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Width" Value="28"/>
             <Setter Property="Height" Value="26"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Content" Value="↺"/>
         </Style>
 
-        <Style x:Key="RowLabelStyle" TargetType="TextBlock">
+        <Style x:Key="RowLabelStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource {x:Type TextBlock}}">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextWrapping" Value="NoWrap"/>
             <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
@@ -32,7 +41,7 @@
                        Opacity="0.7" Margin="0,6,0,16"/>
 
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
-                <Button Content="Сохранить + применить" Width="170" Margin="0,0,8,0" Click="SaveApply_Click"/>
+                <Button Content="Сохранить + применить" Width="170" Height="22" Margin="0,0,8,0" Click="SaveApply_Click"/>
                 <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
                 <TextBlock x:Name="InventoryStatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
@@ -134,9 +143,6 @@
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                             </TextBlock>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Пауза между выбросами"
-                                       ToolTip="Задержка (сек) между циклами выбрасывания."/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="DropIntervalBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"

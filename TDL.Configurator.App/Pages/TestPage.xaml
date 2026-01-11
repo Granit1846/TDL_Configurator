@@ -53,7 +53,7 @@
 
                     <TextBlock VerticalAlignment="Center" Text="SYSTEM_PING" />
 
-                    <Button Grid.Column="1" Width="90" Margin="8,0,0,0" Content="NORMAL" Click="PingNormal_Click"/>
+                    <Button Grid.Column="1" Width="90" Height="22" Margin="8,0,0,0" Content="NORMAL" Click="PingNormal_Click"/>
                     <Button Grid.Column="2" Width="90" Margin="8,0,0,0" Content="FORCE1" IsEnabled="False"/>
                     <Button Grid.Column="3" Width="90" Margin="8,0,0,0" Content="FORCE" IsEnabled="False"/>
                 </Grid>
@@ -71,7 +71,7 @@
 
                     <TextBlock VerticalAlignment="Center" Text="SYSTEM_HEALING" />
 
-                    <Button Grid.Column="1" Width="90" Margin="8,0,0,0" Content="NORMAL" Click="HealingNormal_Click"/>
+                    <Button Grid.Column="1" Width="90" Height="22" Margin="8,0,0,0" Content="NORMAL" Click="HealingNormal_Click"/>
                     <Button Grid.Column="2" Width="90" Margin="8,0,0,0" Content="FORCE1" Click="HealingForce1_Click"/>
                     <Button Grid.Column="3" Width="90" Margin="8,0,0,0" Content="FORCE" IsEnabled="False"/>
                 </Grid>
@@ -89,7 +89,7 @@
 
                     <TextBlock VerticalAlignment="Center" Text="INVENTORY_SCATTER" />
 
-                    <Button Grid.Column="1" Width="90" Margin="8,0,0,0" Content="NORMAL" Click="ScatterNormal_Click"/>
+                    <Button Grid.Column="1" Width="90" Height="22" Margin="8,0,0,0" Content="NORMAL" Click="ScatterNormal_Click"/>
                     <Button Grid.Column="2" Width="90" Margin="8,0,0,0" Content="FORCE1" IsEnabled="False"/>
                     <Button Grid.Column="3" Width="90" Margin="8,0,0,0" Content="FORCE" Click="ScatterForce_Click"/>
                 </Grid>
@@ -105,7 +105,7 @@
 
                     <TextBlock VerticalAlignment="Center" Text="TELEPORT_RANDOM" />
 
-                    <Button Content="City" Grid.Column="1" Width="139" Margin="8,0,0,0" Click="TeleportRandomCity_Click"/>
+                    <Button Content="City" Grid.Column="1" Width="139" Height="22" Margin="8,0,0,0" Click="TeleportRandomCity_Click"/>
                     <Button Content="Danger" Grid.Column="2" Width="139" Margin="8,0,0,0" Click="TeleportRandomDanger_Click"/>
                 </Grid>
             </Expander>
@@ -120,12 +120,12 @@
 
                     <TextBlock Text="VIRUS_DISEASE" VerticalAlignment="Center"/>
 
-                    <Button Content="Random Disease" Grid.Column="2" Width="286" Margin="8,0,0,0" Click="VirusDisease_Click"/>
+                    <Button Content="Random Disease" Grid.Column="2" Width="286" Height="22" Margin="8,0,0,0" Click="VirusDisease_Click"/>
                 </Grid>
             </Expander>
 
             <!-- SUMMON -->
-            <Expander Header="Summon" Margin="0,0,0,24">
+            <Expander Header="Summon" Margin="0,0,0,12">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -149,13 +149,13 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <!-- 1-я строка: Any -->
-                        <Button Content="Any" Grid.Row="0" Margin="8,0,0,8" Click="SummonForceAny_Click" Grid.ColumnSpan="3"/>
+                        <Button Content="Any" Grid.Row="0" Height="22" Margin="8,0,0,8" Click="SummonForceAny_Click" Grid.ColumnSpan="3"/>
                         <!-- 2-я строка: 3 кнопки -->
-                        <Button Content="Skeleton" Grid.Row="1" Grid.Column="0" Width="90" Margin="8,0,0,8" Click="SummonForceSkeleton_Click"/>
+                        <Button Content="Skeleton" Grid.Row="1" Grid.Column="0" Width="90" Height="22" Margin="8,0,0,8" Click="SummonForceSkeleton_Click"/>
                         <Button Content="Animal" Grid.Row="1" Grid.Column="1" Width="90" Margin="8,0,0,8" Click="SummonForceAnimal_Click"/>
                         <Button Content="Humanoid" Grid.Row="1" Grid.Column="2" Width="90" Margin="8,0,0,8" Click="SummonForceHumanoid_Click"/>
                         <!-- 3-я строка: 3 кнопки -->
-                        <Button Content="Undead" Grid.Row="2" Grid.Column="0" Width="90" Margin="8,0,0,0" Click="SummonForceUndead_Click"/>
+                        <Button Content="Undead" Grid.Row="2" Grid.Column="0" Width="90" Height="22" Margin="8,0,0,0" Click="SummonForceUndead_Click"/>
                         <Button Content="Strong" Grid.Row="2" Grid.Column="1" Width="90" Margin="8,0,0,0" Click="SummonForceStrong_Click"/>
                         <Button Content="Dragon" Grid.Row="2" Grid.Column="2" Width="90" Margin="8,0,0,0" Click="SummonForceDragon_Click"/>
                     </Grid>

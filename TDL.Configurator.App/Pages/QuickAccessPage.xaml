@@ -9,13 +9,13 @@
             <GroupBox Header="Игра / мод" Margin="0,0,0,12">
                 <StackPanel Margin="10">
                     <WrapPanel Margin="0,0,0,8">
-                        <Button Width="220" Margin="0,0,8,0" Content="Открыть папку Plugins" Click="OpenPluginsFolder_Click"/>
-                        <Button Width="220" Content="Открыть INI (TDL_StreamPlugin.ini)" Click="OpenIni_Click"/>
+                        <Button Width="220" Height="22" Margin="0,0,8,0" Content="Открыть папку Plugins" Click="OpenPluginsFolder_Click"/>
+                        <Button Width="220" Margin="0,0,8,0" Content="Открыть INI (TDL_StreamPlugin.ini)" Click="OpenIni_Click"/>
                         <Button Width="220" Content="Создать INI (шаблон)" Click="CreateIni_Click"/>
                     </WrapPanel>
 
                     <WrapPanel>
-                        <Button Width="220" Margin="0,0,8,0" Content="Открыть папку Tools (tdl_send.exe)" Click="OpenToolsFolder_Click"/>
+                        <Button Width="220" Height="22" Margin="0,0,8,0" Content="Открыть папку Tools (tdl_send.exe)" Click="OpenToolsFolder_Click"/>
                         <Button Width="220" Content="Открыть папку Data\TDL" Click="OpenTdlDataFolder_Click"/>
                     </WrapPanel>
                 </StackPanel>
@@ -24,12 +24,12 @@
             <GroupBox Header="Логи" Margin="0,0,0,12">
                 <StackPanel Margin="10">
                     <WrapPanel Margin="0,0,0,8">
-                        <Button Width="220" Margin="0,0,8,0" Content="Открыть TDL.0.log" Click="OpenTdlLog_Click"/>
+                        <Button Width="220" Height="22" Margin="0,0,8,0" Content="Открыть TDL.0.log" Click="OpenTdlLog_Click"/>
                         <Button Width="220" Content="Открыть папку логов TDL" Click="OpenTdlLogFolder_Click"/>
                     </WrapPanel>
 
                     <WrapPanel>
-                        <Button Width="220" Margin="0,0,8,0" Content="Открыть папку SKSE (Documents)" Click="OpenSkseDocsFolder_Click"/>
+                        <Button Width="220" Height="22" Margin="0,0,8,0" Content="Открыть папку SKSE (Documents)" Click="OpenSkseDocsFolder_Click"/>
                         <Button Width="220" Content="Открыть TDL_StreamPlugin.log (если есть)" Click="OpenPluginLog_Click"/>
                     </WrapPanel>
                 </StackPanel>

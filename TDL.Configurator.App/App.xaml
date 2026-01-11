@@ -42,23 +42,33 @@
         </Style>
 
         <!-- Строка параметра: имя / поле / сброс -->
-        <Style x:Key="RowLabelStyle" TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="TextWrapping" Value="NoWrap"/>
-            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-        </Style>
+            <!-- Строка параметра: имя / поле / сброс -->
+            <Style x:Key="RowLabelStyle"
+       TargetType="TextBlock"
+       BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="TextWrapping" Value="NoWrap"/>
+                <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+            </Style>
 
-        <Style x:Key="NumericBoxStyle" TargetType="TextBox">
-            <Setter Property="Width" Value="120"/>
-            <Setter Property="Height" Value="26"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="6,0"/>
-        </Style>
+            <Style x:Key="NumericBoxStyle"
+       TargetType="TextBox"
+       BasedOn="{StaticResource {x:Type TextBox}}">
+                <Setter Property="Width" Value="120"/>
+                <Setter Property="Height" Value="26"/>
+                <Setter Property="TextAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="6,0"/>
+            </Style>
 
-            <Style x:Key="ResetButtonStyle" TargetType="Button">
+            <Style x:Key="ResetButtonStyle"
+       TargetType="Button"
+       BasedOn="{StaticResource {x:Type Button}}">
                 <Setter Property="Width" Value="28"/>
                 <Setter Property="Height" Value="26"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
                 <Setter Property="Content" Value="↺"/>
             </Style>
 

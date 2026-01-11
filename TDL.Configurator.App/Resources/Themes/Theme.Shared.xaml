@@ -134,5 +134,40 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!-- GroupBox (Parameters frame) -->
+    <!-- GroupBox (Parameters frame) -->
+    <Style TargetType="GroupBox">
+        <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
+        <Setter Property="Padding" Value="12,10,12,12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Border SnapsToDevicePixels="True"
+                            CornerRadius="6"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid Margin="{TemplateBinding Padding}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
+                            <ContentPresenter Grid.Row="0"
+                                              ContentSource="Header"
+                                              RecognizesAccessKey="True"
+                                              Margin="0,0,0,8"
+                                              VerticalAlignment="Center"/>
+
+                            <ContentPresenter Grid.Row="1"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

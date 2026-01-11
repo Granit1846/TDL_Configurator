@@ -7,11 +7,18 @@
     <SolidColorBrush x:Key="TDL.Brush.HeaderBackground" Color="#FF1C1C1C"/>
     <SolidColorBrush x:Key="TDL.Brush.SidebarBackground" Color="#FF202020"/>
 
-    <SolidColorBrush x:Key="TDL.Brush.Text" Color="#FFF0F0F0"/>
-    <SolidColorBrush x:Key="TDL.Brush.TextDim" Color="#FFB0B0B0"/>
+    <!-- Text: softer than pure white -->
+    <!-- Requirements: headings #D1D1D1, other text #DEDEDE -->
+    <SolidColorBrush x:Key="TDL.Brush.Text" Color="#FFDEDEDE"/>
+    <SolidColorBrush x:Key="TDL.Brush.TextDim" Color="#FFB8B8B8"/>
 
-    <SolidColorBrush x:Key="TDL.Brush.Border" Color="#33FFFFFF"/>
-    <SolidColorBrush x:Key="TDL.Brush.ControlBorder" Color="#55FFFFFF"/>
+    <!-- Optional header brush (will be wired in later file: App.xaml / header styles) -->
+    <SolidColorBrush x:Key="TDL.Brush.TextHeader" Color="#FFD1D1D1"/>
+
+    <!-- Lines / separators: slightly gray (#DEDEDE) instead of white -->
+    <!-- Use alpha to keep them subtle -->
+    <SolidColorBrush x:Key="TDL.Brush.Border" Color="#33DEDEDE"/>
+    <SolidColorBrush x:Key="TDL.Brush.ControlBorder" Color="#55DEDEDE"/>
 
     <SolidColorBrush x:Key="TDL.Brush.ControlBackground" Color="#FF2B2B2B"/>
     <SolidColorBrush x:Key="TDL.Brush.ControlBackgroundHover" Color="#FF303030"/>

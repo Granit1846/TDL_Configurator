@@ -16,7 +16,7 @@
         <TextBlock Grid.Row="1"
                    Text="Встроенная справка (Markdown) из папки docs\"
                    Opacity="0.7"
-                   Margin="0,6,0,12"/>
+                   Margin="0,6,0,16"/>
 
         <!-- Toolbar (без WrapPanel — стабильнее на ресайзе) -->
         <Grid Grid.Row="2" Margin="0,0,0,12">
@@ -31,13 +31,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Обновить" Width="120" Margin="0,0,8,0" Click="Refresh_Click"/>
-            <Button Grid.Column="1" Content="Открыть папку docs" Width="180" Margin="0,0,8,0" Click="OpenDocsFolder_Click"/>
-            <Button Grid.Column="2" Content="Открыть файл" Width="140" Margin="0,0,8,0" Click="OpenSelectedFile_Click"/>
-            <Button Grid.Column="3" Content="Копировать Markdown" Width="170" Margin="0,0,8,0" Click="CopyMarkdown_Click"/>
+            <Button Grid.Column="0" Content="Обновить" Width="120" Height="22" Margin="0,0,8,0" Click="Refresh_Click"/>
+            <Button Grid.Column="1" Content="Открыть папку docs" Width="180" Height="22" Margin="0,0,8,0" Click="OpenDocsFolder_Click"/>
+            <Button Grid.Column="2" Content="Открыть файл" Width="140" Height="22" Margin="0,0,8,0" Click="OpenSelectedFile_Click"/>
+            <Button Grid.Column="3" Content="Копировать Markdown" Width="170" Height="22" Margin="0,0,8,0" Click="CopyMarkdown_Click"/>
 
             <TextBlock Grid.Column="5" Text="Поиск:" VerticalAlignment="Center" Opacity="0.7" Margin="0,0,6,0"/>
-            <TextBox Grid.Column="6" x:Name="SearchBox" Width="260" Height="28"
+            <TextBox Grid.Column="6" x:Name="SearchBox" Width="260" Height="22"
                      VerticalContentAlignment="Center"
                      TextChanged="SearchBox_TextChanged"/>
 
