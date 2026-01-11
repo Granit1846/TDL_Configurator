@@ -6,21 +6,21 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
 
-            <TextBlock Text="Comedy" FontSize="22" FontWeight="SemiBold"/>
-            <TextBlock Text="Настройки секции [Comedy] в TDL_StreamPlugin.ini"
+            <TextBlock Text="{DynamicResource STR_Show_Title}" FontSize="22" FontWeight="SemiBold"/>
+            <TextBlock Text="{DynamicResource STR_Show_Subtitle}"
                        Opacity="0.7" Margin="0,6,0,16"/>
 
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
-                <Button Content="Сохранить + применить" Width="170" Height="22" Margin="0,0,8,0" Click="SaveApply_Click"/>
-                <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
+                <Button Content="{DynamicResource STR_Common_SaveApply}" Width="170" Height="22" Margin="0,0,8,0" Click="SaveApply_Click"/>
+                <Button Content="{DynamicResource STR_Common_ResetAll}" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
                 <TextBlock x:Name="StatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
 
-            <GroupBox Header="Параметры">
+            <GroupBox Header="{DynamicResource STR_Common_Parameters}">
                 <StackPanel Margin="10">
 
                     <!-- FAKE HERO -->
-                    <Expander Header="ЛОЖНЫЙ ГЕРОЙ" IsExpanded="True" Margin="0,0,0,12">
+                    <Expander Header="{DynamicResource STR_Show_Section_FakeHero}" IsExpanded="True" Margin="0,0,0,12">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
@@ -39,38 +39,38 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Длительность (сек)"
-                                       ToolTip="Сколько секунд длится эффект."/>
+                                       Text="{DynamicResource STR_Show_FakeHero_Duration_Label}"
+                                       ToolTip="{DynamicResource STR_Show_FakeHero_Duration_TT}"/>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="FakeHeroDurationBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroDuration" ToolTip="Сбросить на Default (120)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroDuration" ToolTip="{DynamicResource STR_Show_Reset_FakeHeroDuration}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Частота действий (сек)"
-                                       ToolTip="Пауза (сек) между действиями героя."/>
+                                       Text="{DynamicResource STR_Show_FakeHero_ActionInterval_Label}"
+                                       ToolTip="{DynamicResource STR_Show_FakeHero_ActionInterval_TT}"/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="FakeHeroActionIntervalBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroActionInterval" ToolTip="Сбросить на Default (3.0)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroActionInterval" ToolTip="{DynamicResource STR_Show_Reset_FakeHeroActionInterval}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Множитель урона"
-                                       ToolTip="Множитель урона героя."/>
+                                       Text="{DynamicResource STR_Show_FakeHero_DamageMult_Label}"
+                                       ToolTip="{DynamicResource STR_Show_FakeHero_DamageMult_TT}"/>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="FakeHeroDamageMultBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroDamageMult" ToolTip="Сбросить на Default (0.8)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroDamageMult" ToolTip="{DynamicResource STR_Show_Reset_FakeHeroDamageMult}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0"
                                        Style="{StaticResource RowLabelStyle}"
-                                       Text="Сила толчка">
+                                       Text="{DynamicResource STR_Show_FakeHero_PushForce_Label}">
                                 <TextBlock.ToolTip>
                                     <ToolTip MaxWidth="420">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Сила отбрасывания/толчка. "/>
-                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                            <Run Text=" Установка большого значения может привести к полету через всю карту и попаданию в текстуру."
+                                            <Run Text="{DynamicResource STR_Show_FakeHero_PushForce_TT_Prefix}"/>
+                                            <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text="{DynamicResource STR_Show_FakeHero_PushForce_TT_Warn}"
                                                  Foreground="Red"/>
                                         </TextBlock>
                                     </ToolTip>
@@ -79,28 +79,28 @@
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="FakeHeroPushForceBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroPushForce" ToolTip="Сбросить на Default (15)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroPushForce" ToolTip="{DynamicResource STR_Show_Reset_FakeHeroPushForce}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Вероятность толчка (%)"
-                                       ToolTip="Шанс (0–100) выполнить толчок/крик."/>
+                                       Text="{DynamicResource STR_Show_FakeHero_ShoutChance_Label}"
+                                       ToolTip="{DynamicResource STR_Show_FakeHero_ShoutChance_TT}"/>
                             <TextBox Grid.Row="4" Grid.Column="1" x:Name="FakeHeroShoutChanceBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroShoutChance" ToolTip="Сбросить на Default (30)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroShoutChance" ToolTip="{DynamicResource STR_Show_Reset_FakeHeroShoutChance}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Вероятность заклинания (%)"
-                                       ToolTip="Шанс (0–100) использовать заклинание."/>
+                                       Text="{DynamicResource STR_Show_FakeHero_SpellChance_Label}"
+                                       ToolTip="{DynamicResource STR_Show_FakeHero_SpellChance_TT}"/>
                             <TextBox Grid.Row="5" Grid.Column="1" x:Name="FakeHeroSpellChanceBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="5" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="FakeHeroSpellChance" ToolTip="Сбросить на Default (30)" Click="DefaultRow_Click"/>
+                                    Tag="FakeHeroSpellChance" ToolTip="{DynamicResource STR_Show_Reset_FakeHeroSpellChance}" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
                     <!-- HORROR -->
-                    <Expander Header="ХОРРОР МОД" IsExpanded="True" Margin="0,0,0,12">
+                    <Expander Header="{DynamicResource STR_Show_Section_Horror}" IsExpanded="True" Margin="0,0,0,12">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
@@ -118,49 +118,49 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Длительность кошмара (сек)"
-                                       ToolTip="Сколько секунд длится охота/кошмар."/>
+                                       Text="{DynamicResource STR_Show_Horror_Duration_Label}"
+                                       ToolTip="{DynamicResource STR_Show_Horror_Duration_TT}"/>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="HorrorDurationBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorDuration" ToolTip="Сбросить на Default (120)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorDuration" ToolTip="{DynamicResource STR_Show_Reset_HorrorDuration}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Дистанция появления"
-                                       ToolTip="Расстояние появления охотника от игрока (в игровых единицах)."/>
+                                       Text="{DynamicResource STR_Show_Horror_Spawn_Label}"
+                                       ToolTip="{DynamicResource STR_Show_Horror_Spawn_TT}"/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="HorrorSpawnBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorSpawn" ToolTip="Сбросить на Default (1200)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorSpawn" ToolTip="{DynamicResource STR_Show_Reset_HorrorSpawn}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Дистанция телепорта"
-                                       ToolTip="На каком расстоянии охотник может телепортироваться к игроку (units)."/>
+                                       Text="{DynamicResource STR_Show_Horror_Teleport_Label}"
+                                       ToolTip="{DynamicResource STR_Show_Horror_Teleport_TT}"/>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="HorrorTeleportBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorTeleport" ToolTip="Сбросить на Default (1000)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorTeleport" ToolTip="{DynamicResource STR_Show_Reset_HorrorTeleport}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Предел преследования"
-                                       ToolTip="Максимальная дистанция преследования (units)."/>
+                                       Text="{DynamicResource STR_Show_Horror_MaxDist_Label}"
+                                       ToolTip="{DynamicResource STR_Show_Horror_MaxDist_TT}"/>
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="HorrorMaxDistBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorMaxDist" ToolTip="Сбросить на Default (3000)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorMaxDist" ToolTip="{DynamicResource STR_Show_Reset_HorrorMaxDist}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Живучесть охотника"
-                                       ToolTip="Запас здоровья охотника."/>
+                                       Text="{DynamicResource STR_Show_Horror_Health_Label}"
+                                       ToolTip="{DynamicResource STR_Show_Horror_Health_TT}"/>
                             <TextBox Grid.Row="4" Grid.Column="1" x:Name="HorrorHealthBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="HorrorHealth" ToolTip="Сбросить на Default (1000)" Click="DefaultRow_Click"/>
+                                    Tag="HorrorHealth" ToolTip="{DynamicResource STR_Show_Reset_HorrorHealth}" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
                     <!-- ARENA -->
-                    <Expander Header="ВОЛНА ВРАГОВ" IsExpanded="True" Margin="0,0,0,12">
+                    <Expander Header="{DynamicResource STR_Show_Section_Arena}" IsExpanded="True" Margin="0,0,0,12">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
@@ -177,20 +177,20 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Количество волн"
-                                       ToolTip="Сколько волн врагов будет создано."/>
+                                       Text="{DynamicResource STR_Show_Arena_Waves_Label}"
+                                       ToolTip="{DynamicResource STR_Show_Arena_Waves_TT}"/>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="ArenaWavesBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ArenaWaves" ToolTip="Сбросить на Default (3)" Click="DefaultRow_Click"/>
+                                    Tag="ArenaWaves" ToolTip="{DynamicResource STR_Show_Reset_ArenaWaves}" Click="DefaultRow_Click"/>
 
-                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Врагов в волне">
+                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="{DynamicResource STR_Show_Arena_PerWave_Label}">
                                 <TextBlock.ToolTip>
                                     <ToolTip MaxWidth="420">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Сколько врагов появляется в одной волне. "/>
-                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                            <Run Text=" Установка большого значения может привести к падения FPS и вылетам игры" Foreground="Red"/>
+                                            <Run Text="{DynamicResource STR_Show_Arena_PerWave_TT_Prefix}"/>
+                                            <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text="{DynamicResource STR_Show_Arena_PerWave_TT_Warn}" Foreground="Red"/>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -198,28 +198,28 @@
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="ArenaPerWaveBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ArenaPerWave" ToolTip="Сбросить на Default (3)" Click="DefaultRow_Click"/>
+                                    Tag="ArenaPerWave" ToolTip="{DynamicResource STR_Show_Reset_ArenaPerWave}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Пауза между волнами (сек)"
-                                       ToolTip="Задержка (сек) между волнами."/>
+                                       Text="{DynamicResource STR_Show_Arena_Interval_Label}"
+                                       ToolTip="{DynamicResource STR_Show_Arena_Interval_TT}"/>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="ArenaIntervalBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ArenaInterval" ToolTip="Сбросить на Default (5.0)" Click="DefaultRow_Click"/>
+                                    Tag="ArenaInterval" ToolTip="{DynamicResource STR_Show_Reset_ArenaInterval}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Размер арены"
-                                       ToolTip="Радиус арены/спавна вокруг игрока (units)."/>
+                                       Text="{DynamicResource STR_Show_Arena_Radius_Label}"
+                                       ToolTip="{DynamicResource STR_Show_Arena_Radius_TT}"/>
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="ArenaRadiusBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ArenaRadius" ToolTip="Сбросить на Default (1200)" Click="DefaultRow_Click"/>
+                                    Tag="ArenaRadius" ToolTip="{DynamicResource STR_Show_Reset_ArenaRadius}" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
                     <!-- ESCORT -->
-                    <Expander Header="СОПРОВОЖДЕНИЕ" IsExpanded="True">
+                    <Expander Header="{DynamicResource STR_Show_Section_Escort}" IsExpanded="True">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
@@ -233,12 +233,12 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Время сопровождения (сек)"
-                                       ToolTip="Сколько секунд длится режим сопровождения."/>
+                                       Text="{DynamicResource STR_Show_Escort_Duration_Label}"
+                                       ToolTip="{DynamicResource STR_Show_Escort_Duration_TT}"/>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="EscortDurationBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="EscortDuration" ToolTip="Сбросить на Default (120)" Click="DefaultRow_Click"/>
+                                    Tag="EscortDuration" ToolTip="{DynamicResource STR_Show_Reset_EscortDuration}" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 

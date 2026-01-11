@@ -18,18 +18,18 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
 
-            <TextBlock Text="Chaos" FontSize="22" FontWeight="SemiBold"/>
-            <TextBlock Text="Настройки секции [Chaos] в TDL_StreamPlugin.ini"
+            <TextBlock Text="{DynamicResource STR_Chaos_Title}" FontSize="22" FontWeight="SemiBold"/>
+            <TextBlock Text="{DynamicResource STR_Chaos_Subtitle}"
                        Opacity="0.7" Margin="0,6,0,16"/>
 
             <!-- Верхние кнопки -->
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
-                <Button Content="Сохранить + применить" Width="170" Height="22" Margin="0,0,8,0" Click="SaveApply_Click"/>
-                <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
+                <Button Content="{DynamicResource STR_Common_SaveApply}" Width="170" Height="22" Margin="0,0,8,0" Click="SaveApply_Click"/>
+                <Button Content="{DynamicResource STR_Common_ResetAll}" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
                 <TextBlock x:Name="StatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
 
-            <GroupBox Header="Параметры">
+            <GroupBox Header="{DynamicResource STR_Common_Parameters}">
                 <Grid Margin="10">
 
                     <!-- 0: Название, 1: поле, 2: кнопка default -->
@@ -54,9 +54,9 @@
 
                     <!-- BackfireChance -->
                     <TextBlock Grid.Row="0" Grid.Column="0"
-                               Text="Вероятность Backfire (%)"
+                               Text="{DynamicResource STR_Chaos_BackfireChance_Label}"
                                VerticalAlignment="Center"
-                               ToolTip="Изменяет вероятность поражения игрока его же магией."/>
+                               ToolTip="{DynamicResource STR_Chaos_BackfireChance_Tip}"/>
                     <TextBox x:Name="BackfireChanceBox"
                              Grid.Row="0" Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>
@@ -64,14 +64,14 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="BackfireChance"
-                            ToolTip="Сбросить на default (20)"
+                            ToolTip="{DynamicResource STR_Chaos_Reset_BackfireChance}"
                             Click="DefaultRow_Click"/>
 
                     <!-- BackfireDuration -->
                     <TextBlock Grid.Row="1" Grid.Column="0"
-                               Text="Длительность Backfire (сек)"
+                               Text="{DynamicResource STR_Chaos_BackfireDuration_Label}"
                                VerticalAlignment="Center"
-                               ToolTip="Изменяет длительность эффекта Backfire (в секундах)."/>
+                               ToolTip="{DynamicResource STR_Chaos_BackfireDuration_Tip}"/>
                     <TextBox x:Name="BackfireDurationBox"
                              Grid.Row="1" Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>
@@ -79,20 +79,20 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="BackfireDuration"
-                            ToolTip="Сбросить на default (60)"
+                            ToolTip="{DynamicResource STR_Chaos_Reset_BackfireDuration}"
                             Click="DefaultRow_Click"/>
 
                     <!-- ShoutPushForce -->
                     <TextBlock Grid.Row="2"
                                Grid.Column="0"
-                               Text="Сила отталкивания игрока при крике"
+                               Text="{DynamicResource STR_Chaos_ShoutPushForce_Label}"
                                VerticalAlignment="Center">
                         <TextBlock.ToolTip>
                             <ToolTip MaxWidth="520">
                                 <TextBlock TextWrapping="Wrap">
-                                    <Run Text="Изменяет силу отталкивания игрока при Backfire на крике. "/>
-                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                    <Run Text=" Установка большого значения может привести к полету через всю карту и попаданию в текстуру."
+                                    <Run Text="{DynamicResource STR_Chaos_ShoutPushForce_Tip1}"/>
+                                    <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text="{DynamicResource STR_Chaos_ShoutPushForce_Tip2}"
                                          Foreground="Red"/>
                                 </TextBlock>
                             </ToolTip>
@@ -110,14 +110,14 @@
                             Height="26"
                             Content="↺"
                             Tag="ShoutPushForce"
-                            ToolTip="Сбросить на default (20)"
+                            ToolTip="{DynamicResource STR_Chaos_Reset_BackfireChance}"
                             Click="DefaultRow_Click"/>
 
                     <!-- ShoutPushDelay -->
                     <TextBlock Grid.Row="3" Grid.Column="0"
-                               Text="Задержка перед отталкиванием при крике (сек)"
+                               Text="{DynamicResource STR_Chaos_ShoutPushDelay_Label}"
                                VerticalAlignment="Center"
-                               ToolTip="Задержка перед применением отталкивания при Backfire на крике."/>
+                               ToolTip="{DynamicResource STR_Chaos_ShoutPushDelay_Tip}"/>
                     <TextBox x:Name="ShoutPushDelayBox"
                              Grid.Row="3" Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>
@@ -125,20 +125,20 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="ShoutPushDelay"
-                            ToolTip="Сбросить на default (0.1)"
+                            ToolTip="{DynamicResource STR_Chaos_Reset_ShoutPushDelay}"
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackForce -->
                     <TextBlock Grid.Row="4"
                                Grid.Column="0"
-                               Text="Сила отталкивания врагов"
+                               Text="{DynamicResource STR_Chaos_KnockbackForce_Label}"
                                VerticalAlignment="Center">
                         <TextBlock.ToolTip>
                             <ToolTip MaxWidth="520">
                                 <TextBlock TextWrapping="Wrap">
-                                    <Run Text="Изменяет силу отталкивания врагов при срабатывании эффекта. "/>
-                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                    <Run Text=" Установка большого значения может привести к полету врага через всю карту и попаданию в текстуру."
+                                    <Run Text="{DynamicResource STR_Chaos_KnockbackForce_Tip1}"/>
+                                    <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text="{DynamicResource STR_Chaos_KnockbackForce_Tip2}"
                                          Foreground="Red"/>
                                 </TextBlock>
                             </ToolTip>
@@ -151,20 +151,20 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="KnockbackForce"
-                            ToolTip="Сбросить на default (25)"
+                            ToolTip="{DynamicResource STR_Chaos_Reset_KnockbackForce}"
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackCooldown -->
                     <TextBlock Grid.Row="6"
                                Grid.Column="0"
-                               Text="Задержка отталкивания магией (сек)"
+                               Text="{DynamicResource STR_Chaos_KnockbackCooldown_Label}"
                                VerticalAlignment="Center">
                         <TextBlock.ToolTip>
                             <ToolTip MaxWidth="520">
                                 <TextBlock TextWrapping="Wrap">
-                                    <Run Text="Задержка перед отталкиванием при попаданием магией. "/>
-                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                    <Run Text=" При установке маленького значения урон противнику не успевает нанестись."
+                                    <Run Text="{DynamicResource STR_Chaos_KnockbackCooldown_Tip1}"/>
+                                    <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text="{DynamicResource STR_Chaos_KnockbackCooldown_Tip2}"
                                          Foreground="Red"/>
                                 </TextBlock>
                             </ToolTip>
@@ -177,14 +177,14 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="KnockbackCooldown"
-                            ToolTip="Сбросить на default (0.35)"
+                            ToolTip="{DynamicResource STR_Chaos_Reset_KnockbackCooldown}"
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackRadius -->
                     <TextBlock Grid.Row="5" Grid.Column="0"
-                               Text="Радиус поиска цели (units)"
+                               Text="{DynamicResource STR_Chaos_KnockbackRadius_Label}"
                                VerticalAlignment="Center"
-                               ToolTip="Максимальная дистанция, в которой ищется цель для отталкивания."/>
+                               ToolTip="{DynamicResource STR_Chaos_KnockbackRadius_Tip}"/>
                     <TextBox x:Name="KnockbackRadiusBox"
                              Grid.Row="5" Grid.Column="1"
                              Style="{StaticResource NumericBoxStyle}"/>
@@ -192,20 +192,20 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="KnockbackRadius"
-                            ToolTip="Сбросить на default (900)"
+                            ToolTip="{DynamicResource STR_Chaos_Reset_KnockbackRadius}"
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackMeleeDelay -->
                     <TextBlock Grid.Row="7"
                                Grid.Column="0"
-                               Text="Задержка отталкивания при мили (сек)"
+                               Text="{DynamicResource STR_Chaos_KnockbackMeleeDelay_Label}"
                                VerticalAlignment="Center">
                         <TextBlock.ToolTip>
                             <ToolTip MaxWidth="520">
                                 <TextBlock TextWrapping="Wrap">
-                                    <Run Text="Задержка перед отталкиванием при ударе в ближнем бою. "/>
-                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                    <Run Text=" При установке маленького значения урон противнику не успевает нанестись."
+                                    <Run Text="{DynamicResource STR_Chaos_KnockbackMeleeDelay_Tip1}"/>
+                                    <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text="{DynamicResource STR_Chaos_KnockbackCooldown_Tip2}"
                                          Foreground="Red"/>
                                 </TextBlock>
                             </ToolTip>
@@ -218,20 +218,20 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="KnockbackMeleeDelay"
-                            ToolTip="Сбросить на default (0.12)"
+                            ToolTip="{DynamicResource STR_Chaos_Reset_KnockbackMeleeDelay}"
                             Click="DefaultRow_Click"/>
 
                     <!-- KnockbackBowDelay -->
                     <TextBlock Grid.Row="8"
                                Grid.Column="0"
-                               Text="Задержка отталкивания при луке (сек)"
+                               Text="{DynamicResource STR_Chaos_KnockbackBowDelay_Label}"
                                VerticalAlignment="Center">
                         <TextBlock.ToolTip>
                             <ToolTip MaxWidth="520">
                                 <TextBlock TextWrapping="Wrap">
-                                    <Run Text="Задержка перед отталкиванием при выстреле из лука/арбалета. "/>
-                                    <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                    <Run Text=" При установке маленького значения урон противнику не успевает нанестись."
+                                    <Run Text="{DynamicResource STR_Chaos_KnockbackBowDelay_Tip1}"/>
+                                    <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                    <Run Text="{DynamicResource STR_Chaos_KnockbackCooldown_Tip2}"
                                          Foreground="Red"/>
                                 </TextBlock>
                             </ToolTip>
@@ -244,7 +244,7 @@
                             Width="28" Height="26"
                             Content="↺"
                             Tag="KnockbackBowDelay"
-                            ToolTip="Сбросить на default (0.14)"
+                            ToolTip="{DynamicResource STR_Chaos_Reset_KnockbackBowDelay}"
                             Click="DefaultRow_Click"/>
 
                 </Grid>

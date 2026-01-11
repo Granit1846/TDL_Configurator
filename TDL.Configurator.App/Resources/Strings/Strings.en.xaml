@@ -100,4 +100,139 @@
     <sys:String x:Key="STR_Common_No" xmlns:sys="clr-namespace:System;assembly=mscorlib">No</sys:String>
     <sys:String x:Key="STR_Common_Status" xmlns:sys="clr-namespace:System;assembly=mscorlib">Status</sys:String>
 
+    <!-- Common (shared across pages) -->
+    <sys:String x:Key="STR_Common_SaveApply" xmlns:sys="clr-namespace:System;assembly=mscorlib">Save + apply</sys:String>
+    <sys:String x:Key="STR_Common_ResetAll" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset all</sys:String>
+    <sys:String x:Key="STR_Common_Parameters" xmlns:sys="clr-namespace:System;assembly=mscorlib">Parameters</sys:String>
+    <sys:String x:Key="STR_Common_Warning" xmlns:sys="clr-namespace:System;assembly=mscorlib">WARNING!</sys:String>
+
+    <!-- Chaos page -->
+    
+    <sys:String x:Key="STR_Chaos_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Chaos</sys:String>
+    <sys:String x:Key="STR_Chaos_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings for [Chaos] section in TDL_StreamPlugin.ini</sys:String>
+
+    <sys:String x:Key="STR_Chaos_BackfireChance_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Backfire chance (%)</sys:String>
+    <sys:String x:Key="STR_Chaos_BackfireChance_Tip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Changes the chance that the player is hit by their own magic.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_BackfireChance" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to default (20)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_BackfireDuration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Backfire duration (sec)</sys:String>
+    <sys:String x:Key="STR_Chaos_BackfireDuration_Tip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Changes Backfire effect duration (seconds).</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_BackfireDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to default (60)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_ShoutPushForce_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Shout push force (player)</sys:String>
+    <sys:String x:Key="STR_Chaos_ShoutPushForce_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Changes the player's push force when Backfire triggers on a shout.</sys:String>
+    <sys:String x:Key="STR_Chaos_ShoutPushForce_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Setting a high value can launch you across the map and into geometry.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_ShoutPushForce" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to default (20)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_ShoutPushDelay_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Shout push delay (sec)</sys:String>
+    <sys:String x:Key="STR_Chaos_ShoutPushDelay_Tip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Delay before applying the push when Backfire triggers on a shout.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_ShoutPushDelay" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to default (0.1)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackForce_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Enemy knockback force</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackForce_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Changes the enemy knockback force when the effect triggers.</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackForce_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Setting a high value can launch an enemy across the map and into geometry.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackForce" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to default (25)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackRadius_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Target search radius (units)</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackRadius_Tip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Maximum distance for searching a target to knock back.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackRadius" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to default (900)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackCooldown_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Magic knockback delay (sec)</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackCooldown_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Delay before knockback when a spell hits.</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackCooldown_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">If set too low, the enemy may not take damage in time.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackCooldown" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to default (0.35)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackMeleeDelay_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Melee knockback delay (sec)</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackMeleeDelay_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Delay before knockback on a melee hit.</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackMeleeDelay_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">If set too low, the enemy may not take damage in time.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackMeleeDelay" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to default (0.12)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackBowDelay_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Bow/Crossbow knockback delay (sec)</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackBowDelay_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Delay before knockback when firing a bow/crossbow.</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackBowDelay_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">If set too low, the enemy may not take damage in time.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackBowDelay" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to default (0.14)</sys:String>
+
+
+    <!-- Show / Comedy -->
+    
+    <sys:String x:Key="STR_Show_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Show</sys:String>
+    <sys:String x:Key="STR_Show_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings for [Comedy] section in TDL_StreamPlugin.ini</sys:String>
+    <sys:String x:Key="STR_Show_Section_FakeHero" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAKE HERO</sys:String>
+    <sys:String x:Key="STR_Show_Section_Horror" xmlns:sys="clr-namespace:System;assembly=mscorlib">HORROR MOD</sys:String>
+    <sys:String x:Key="STR_Show_Section_Arena" xmlns:sys="clr-namespace:System;assembly=mscorlib">ENEMY WAVE</sys:String>
+    <sys:String x:Key="STR_Show_Section_Escort" xmlns:sys="clr-namespace:System;assembly=mscorlib">ESCORT</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_Duration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Duration (sec)</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_Duration_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">How many seconds the effect lasts.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_ActionInterval_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Action interval (sec)</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_ActionInterval_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Pause (sec) between hero actions.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_DamageMult_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Damage multiplier</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_DamageMult_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Hero damage multiplier.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_PushForce_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Push force</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_PushForce_TT_Prefix" xmlns:sys="clr-namespace:System;assembly=mscorlib">Knockback/push force.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_PushForce_TT_Warn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Setting a high value may launch the target across the map and into geometry.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_ShoutChance_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Push chance (%)</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_ShoutChance_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Chance (0-100) to perform a push/shout.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_SpellChance_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Spell chance (%)</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_SpellChance_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Chance (0-100) to cast a spell.</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Duration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Nightmare duration (sec)</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Duration_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">How many seconds the hunt/nightmare lasts.</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Spawn_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Spawn distance</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Spawn_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Hunter spawn distance from the player (game units).</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Teleport_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Teleport distance</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Teleport_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">At what distance the hunter can teleport to the player (units).</sys:String>
+    <sys:String x:Key="STR_Show_Horror_MaxDist_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Pursuit limit</sys:String>
+    <sys:String x:Key="STR_Show_Horror_MaxDist_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Maximum pursuit distance (units).</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Health_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Hunter health</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Health_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Hunter health pool.</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Waves_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Number of waves</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Waves_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">How many enemy waves will be spawned.</sys:String>
+    <sys:String x:Key="STR_Show_Arena_PerWave_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Enemies per wave</sys:String>
+    <sys:String x:Key="STR_Show_Arena_PerWave_TT_Prefix" xmlns:sys="clr-namespace:System;assembly=mscorlib">How many enemies spawn in one wave.</sys:String>
+    <sys:String x:Key="STR_Show_Arena_PerWave_TT_Warn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Setting a high value may cause FPS drops and game crashes.</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Interval_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Wave interval (sec)</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Interval_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Delay (sec) between waves.</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Radius_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Arena size</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Radius_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Arena/spawn radius around the player (units).</sys:String>
+    <sys:String x:Key="STR_Show_Escort_Duration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Escort duration (sec)</sys:String>
+    <sys:String x:Key="STR_Show_Escort_Duration_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">How many seconds escort mode lasts.</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (120)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroActionInterval" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (3.0)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroDamageMult" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (0.8)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroPushForce" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (15)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroShoutChance" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (30)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroSpellChance" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (30)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (120)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorSpawn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (1200)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorTeleport" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (1000)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorMaxDist" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (3000)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorHealth" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (1000)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_ArenaWaves" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (3)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_ArenaPerWave" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (3)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_ArenaInterval" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (5.0)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_ArenaRadius" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (1200)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_EscortDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (120)</sys:String>
+
+    <!-- Information (Documentation page) -->
+    <sys:String x:Key="STR_Info_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Information</sys:String>
+    <sys:String x:Key="STR_Info_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Built-in help (Markdown) from the docs\ folder (next to the app).</sys:String>
+    <sys:String x:Key="STR_Info_Group_GameMod" xmlns:sys="clr-namespace:System;assembly=mscorlib">Game / mod</sys:String>
+    <sys:String x:Key="STR_Info_Btn_Refresh" xmlns:sys="clr-namespace:System;assembly=mscorlib">Refresh</sys:String>
+    <sys:String x:Key="STR_Info_Btn_OpenDocsFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Open docs folder</sys:String>
+    <sys:String x:Key="STR_Info_Btn_OpenFile" xmlns:sys="clr-namespace:System;assembly=mscorlib">Open file</sys:String>
+    <sys:String x:Key="STR_Info_Btn_CopyMarkdown" xmlns:sys="clr-namespace:System;assembly=mscorlib">Copy Markdown</sys:String>
+    <sys:String x:Key="STR_Info_Group_Documents" xmlns:sys="clr-namespace:System;assembly=mscorlib">Documents</sys:String>
+    <sys:String x:Key="STR_Info_Msg_DocsFolderNotFound" xmlns:sys="clr-namespace:System;assembly=mscorlib">Docs folder was not found next to the application.</sys:String>
+    <sys:String x:Key="STR_Info_Msg_FileNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">File not found:
+{0}</sys:String>
+    <sys:String x:Key="STR_Info_Status_Copied_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Copied to clipboard ({0})</sys:String>
+    <sys:String x:Key="STR_Info_Placeholder_SelectDoc" xmlns:sys="clr-namespace:System;assembly=mscorlib">Select a document from the list on the left.</sys:String>
+    <sys:String x:Key="STR_Info_Status_DocsMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">docs folder not found (place docs\ next to the .exe).</sys:String>
+    <sys:String x:Key="STR_Info_Status_FoundCount_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Documents found: {0}</sys:String>
+    <sys:String x:Key="STR_Info_Placeholder_NoDocs" xmlns:sys="clr-namespace:System;assembly=mscorlib">No documents found (no .md files).</sys:String>
+    <sys:String x:Key="STR_Info_Status_NotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Not found: {0}</sys:String>
+    <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Failed to read file:
+{0}</sys:String>
+    <sys:String x:Key="STR_Info_Status_ReadError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Read error</sys:String>
+    <sys:String x:Key="STR_Info_Status_Opened_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Opened: {0} ({1})</sys:String>
+
 </ResourceDictionary>

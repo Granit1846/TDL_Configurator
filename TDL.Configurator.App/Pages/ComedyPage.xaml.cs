@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using TDL.Configurator.App.Services;
 using TDL.Configurator.Core;
 
 using WpfButton = System.Windows.Controls.Button;
@@ -22,8 +23,6 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
     private const string ToolsRelativePath = @"Data\TDL\Tools\tdl_send.exe";
 
     private const string SectionName = "Comedy";
-    private const string UiTitle = "TDL Configurator";
-
     // TDL_AllRanges.txt → COMEDY
     private const int DefaultFakeHeroDuration = 120;           // 10..600
     private const double DefaultFakeHeroActionInterval = 3.0;  // 0.5..10.0
@@ -45,9 +44,85 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
 
     private const int DefaultEscortDuration = 120;             // 30..600
 
+    // ---- Localization helpers (code-behind) ----
+    private bool _langHooked;
+    private string? _lastStatusKey;
+    private string? _lastStatusRu;
+    private string? _lastStatusEn;
+    private object[]? _lastStatusArgs;
+
+    private static string Title => L("STR_App_Title", "TDL Конфигуратор", "TDL Configurator");
+
+    private static string L(string key, string ruFallback, string enFallback)
+    {
+        var s = System.Windows.Application.Current?.TryFindResource(key) as string;
+        if (!string.IsNullOrWhiteSpace(s))
+            return s;
+
+        return LocalizationManager.CurrentLanguage == AppLanguage.En ? enFallback : ruFallback;
+    }
+
+    private static string LF(string key, string ruFormat, string enFormat, params object[] args)
+    {
+        var fmt = L(key, ruFormat, enFormat);
+        try
+        {
+            return string.Format(fmt, args);
+        }
+        catch
+        {
+            return fmt;
+        }
+    }
+
+    private void SetStatus(string key, string ruFormat, string enFormat, params object[] args)
+    {
+        _lastStatusKey = key;
+        _lastStatusRu = ruFormat;
+        _lastStatusEn = enFormat;
+        _lastStatusArgs = args;
+
+        StatusText.Text = args.Length == 0
+            ? L(key, ruFormat, enFormat)
+            : LF(key, ruFormat, enFormat, args);
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        if (_langHooked)
+            return;
+
+        LocalizationManager.LanguageChanged += OnLanguageChanged;
+        _langHooked = true;
+    }
+
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        if (!_langHooked)
+            return;
+
+        LocalizationManager.LanguageChanged -= OnLanguageChanged;
+        _langHooked = false;
+    }
+
+    private void OnLanguageChanged(AppLanguage _)
+    {
+        if (_lastStatusKey == null || _lastStatusRu == null || _lastStatusEn == null)
+            return;
+
+        var args = _lastStatusArgs ?? System.Array.Empty<object>();
+        StatusText.Text = args.Length == 0
+            ? L(_lastStatusKey, _lastStatusRu, _lastStatusEn)
+            : LF(_lastStatusKey, _lastStatusRu, _lastStatusEn, args);
+    }
+
     public ComedyPage()
     {
         InitializeComponent();
+
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
+
         ApplyDefaultsToUi();
         AutoLoadFromIniSilent();
     }
@@ -65,8 +140,8 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         catch (Exception ex)
         {
             System.Windows.MessageBox.Show(
-                "Не удалось прочитать settings.json.\n" + ex.Message,
-                UiTitle,
+                LF("STR_Common_Msg_SettingsReadFailed", "Не удалось прочитать settings.json.\n{0}", "Failed to read settings.json.\n{0}", ex.Message),
+                Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             return false;
@@ -75,8 +150,8 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         if (string.IsNullOrWhiteSpace(gamePath) || !Directory.Exists(gamePath))
         {
             System.Windows.MessageBox.Show(
-                "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.",
-                UiTitle,
+                L("STR_Common_Msg_GamePathInvalid", "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.", "Game path is not set or invalid.\nOpen Settings and select the Skyrim Special Edition folder."),
+                Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -101,13 +176,13 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
 
         if (!TryGetIniPath(out var iniPath))
         {
-            StatusText.Text = "Путь к игре не задан (default).";
+            SetStatus("STR_Common_Status_GamePathMissingDefault", "Путь к игре не задан (default).", "Game path is not set (default).");
             return;
         }
 
         if (!File.Exists(iniPath))
         {
-            StatusText.Text = "INI не найден (default).";
+            SetStatus("STR_Common_Status_IniNotFoundDefault", "INI не найден (default).", "INI not found (default).");
             return;
         }
 
@@ -133,7 +208,7 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
 
         EscortDurationBox.Text = GetOr(map, "EscortDuration", EscortDurationBox.Text);
 
-        StatusText.Text = $"Загружено из INI ({SafeNow()}).";
+        SetStatus("STR_Common_Status_LoadedFromIni", "Загружено из INI ({0}).", "Loaded from INI ({0}).", SafeNow());
     }
 
     private void SaveApply_Click(object sender, RoutedEventArgs e)
@@ -192,8 +267,8 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         catch (Exception ex)
         {
             System.Windows.MessageBox.Show(
-                "Не удалось сохранить INI.\n" + ex.Message,
-                UiTitle,
+                LF("STR_Common_Msg_IniSaveFailed", "Не удалось сохранить INI.\n{0}", "Failed to save INI.\n{0}", ex.Message),
+                Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             return;
@@ -201,14 +276,14 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
 
         if (TryApplyInGame(out var reason))
         {
-            StatusText.Text = $"Сохранено и применено ({SafeNow()}).";
+            SetStatus("STR_Common_Status_SavedApplied", "Сохранено и применено ({0}).", "Saved and applied ({0}).", SafeNow());
         }
         else
         {
-            StatusText.Text = $"Сохранено, но не применено ({SafeNow()}).";
+            SetStatus("STR_Common_Status_SavedNotApplied", "Сохранено, но не применено ({0}).", "Saved, but not applied ({0}).", SafeNow());
             System.Windows.MessageBox.Show(
-                "INI сохранён, но применить в игре не удалось.\n" + reason,
-                UiTitle,
+                LF("STR_Common_Msg_IniSavedButNotApplied", "INI сохранён, но применить в игре не удалось.\n{0}", "INI saved, but failed to apply in game.\n{0}", reason),
+                Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -219,14 +294,14 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         reason = "";
         if (!TryGetGamePath(out var gamePath))
         {
-            reason = "Путь к игре не задан.";
+            reason = L("STR_Common_Reason_GamePathMissing", "Путь к игре не задан.", "Game path is not set.");
             return false;
         }
 
         var tdlSend = Path.Combine(gamePath, ToolsRelativePath);
         if (!File.Exists(tdlSend))
         {
-            reason = $"tdl_send.exe не найден: {tdlSend}";
+            reason = LF("STR_Common_Reason_TdlSendNotFound", "tdl_send.exe не найден: {0}", "tdl_send.exe not found: {0}", tdlSend);
             return false;
         }
 
@@ -246,14 +321,14 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
             using var p = Process.Start(psi);
             if (p == null)
             {
-                reason = "Не удалось запустить tdl_send.exe.";
+                reason = L("STR_Common_Reason_TdlSendStartFailed", "Не удалось запустить tdl_send.exe.", "Failed to start tdl_send.exe.");
                 return false;
             }
 
             if (!p.WaitForExit(3500))
             {
                 try { p.Kill(entireProcessTree: true); } catch { }
-                reason = "tdl_send.exe не завершился по таймауту.";
+                reason = L("STR_Common_Reason_TdlSendTimeout", "tdl_send.exe не завершился по таймауту.", "tdl_send.exe did not exit within the timeout.");
                 return false;
             }
 
@@ -262,7 +337,8 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
 
             if (p.ExitCode != 0)
             {
-                reason = $"Код выхода: {p.ExitCode}\n{(string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)}".Trim();
+                var msg = (string.IsNullOrWhiteSpace(stderr) ? stdout : stderr);
+                reason = LF("STR_Common_Reason_ExitCode", "Код выхода: {0}\n{1}", "Exit code: {0}\n{1}", p.ExitCode, msg).Trim();
                 return false;
             }
 
@@ -278,7 +354,7 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
     private void DefaultsAll_Click(object sender, RoutedEventArgs e)
     {
         ApplyDefaultsToUi();
-        StatusText.Text = $"Сброшено на default ({SafeNow()}).";
+        SetStatus("STR_Common_Status_ResetDefault", "Сброшено на default ({0}).", "Reset to default ({0}).", SafeNow());
     }
 
     private void DefaultRow_Click(object sender, RoutedEventArgs e)
@@ -291,7 +367,7 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
             return;
 
         SetDefaultForKey(key);
-        StatusText.Text = $"Default: {key} ({SafeNow()}).";
+        SetStatus("STR_Common_Status_DefaultOne", "Default: {0} ({1}).", "Default: {0} ({1}).", key, SafeNow());
     }
 
     private void ApplyDefaultsToUi()
@@ -316,7 +392,7 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
 
         EscortDurationBox.Text = DefaultEscortDuration.ToString(CultureInfo.InvariantCulture);
 
-        StatusText.Text = "Готово (default).";
+        SetStatus("STR_Common_Status_ReadyDefault", "Готово (default).", "Ready (default).");
     }
 
     private void SetDefaultForKey(string key)
@@ -449,8 +525,8 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         if (!int.TryParse((box.Text ?? "").Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name}: введи целое число.",
-                UiTitle,
+                LF("STR_Common_Validation_Int", "{0}: введи целое число.", "{0}: enter an integer.", name),
+                Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -459,8 +535,8 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: допустимый диапазон {min}..{max}.",
-                UiTitle,
+                LF("STR_Common_Validation_Range", "{0}: допустимый диапазон {1}..{2}.", "{0}: valid range {1}..{2}.", name, min, max),
+                Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -476,8 +552,8 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name}: введи число.",
-                UiTitle,
+                LF("STR_Common_Validation_Number", "{0}: введи число.", "{0}: enter a number.", name),
+                Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -486,8 +562,8 @@ public partial class ComedyPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: допустимый диапазон {min}..{max}.",
-                UiTitle,
+                LF("STR_Common_Validation_Range", "{0}: допустимый диапазон {1}..{2}.", "{0}: valid range {1}..{2}.", name, min, max),
+                Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;

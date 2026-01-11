@@ -100,4 +100,136 @@
     <sys:String x:Key="STR_Common_No" xmlns:sys="clr-namespace:System;assembly=mscorlib">нет</sys:String>
     <sys:String x:Key="STR_Common_Status" xmlns:sys="clr-namespace:System;assembly=mscorlib">Статус:</sys:String>
 
+    <sys:String x:Key="STR_Common_SaveApply" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сохранить + применить</sys:String>
+    <sys:String x:Key="STR_Common_ResetAll" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить всё</sys:String>
+    <sys:String x:Key="STR_Common_Parameters" xmlns:sys="clr-namespace:System;assembly=mscorlib">Параметры</sys:String>
+    <sys:String x:Key="STR_Common_Warning" xmlns:sys="clr-namespace:System;assembly=mscorlib">ВНИМАНИЕ!</sys:String>
+
+    <!-- Chaos page -->
+    <sys:String x:Key="STR_Chaos_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Хаос</sys:String>
+    <sys:String x:Key="STR_Chaos_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки секции [Chaos] в TDL_StreamPlugin.ini</sys:String>
+
+    <sys:String x:Key="STR_Chaos_BackfireChance_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Вероятность Backfire (%)</sys:String>
+    <sys:String x:Key="STR_Chaos_BackfireChance_Tip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Изменяет вероятность поражения игрока его же магией.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_BackfireChance" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на default (20)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_BackfireDuration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Длительность Backfire (сек)</sys:String>
+    <sys:String x:Key="STR_Chaos_BackfireDuration_Tip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Изменяет длительность эффекта Backfire (в секундах).</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_BackfireDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на default (60)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_ShoutPushForce_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сила отталкивания игрока при крике</sys:String>
+    <sys:String x:Key="STR_Chaos_ShoutPushForce_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Изменяет силу отталкивания игрока при Backfire на крике.</sys:String>
+    <sys:String x:Key="STR_Chaos_ShoutPushForce_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Установка большого значения может привести к полету через всю карту и попаданию в текстуру.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_ShoutPushForce" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на default (20)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_ShoutPushDelay_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка перед отталкиванием при крике (сек)</sys:String>
+    <sys:String x:Key="STR_Chaos_ShoutPushDelay_Tip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка перед применением отталкивания при Backfire на крике.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_ShoutPushDelay" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на default (0.1)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackForce_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сила отталкивания врагов</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackForce_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Изменяет силу отталкивания врагов при срабатывании эффекта.</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackForce_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Установка большого значения может привести к полету врага через всю карту и попаданию в текстуру.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackForce" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на default (25)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackRadius_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Радиус поиска цели (units)</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackRadius_Tip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Максимальная дистанция, в которой ищется цель для отталкивания.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackRadius" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на default (900)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackCooldown_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка отталкивания магией (сек)</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackCooldown_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка перед отталкиванием при попаданием магией.</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackCooldown_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">При установке маленького значения урон противнику не успевает нанестись.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackCooldown" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на default (0.35)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackMeleeDelay_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка отталкивания при мили (сек)</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackMeleeDelay_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка перед отталкиванием при ударе в ближнем бою.</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackMeleeDelay_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">При установке маленького значения урон противнику не успевает нанестись.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackMeleeDelay" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на default (0.12)</sys:String>
+
+    <sys:String x:Key="STR_Chaos_KnockbackBowDelay_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка отталкивания при луке (сек)</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackBowDelay_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка перед отталкиванием при выстреле из лука/арбалета.</sys:String>
+    <sys:String x:Key="STR_Chaos_KnockbackBowDelay_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">При установке маленького значения урон противнику не успевает нанестись.</sys:String>
+    <sys:String x:Key="STR_Chaos_Reset_KnockbackBowDelay" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на default (0.14)</sys:String>
+
+
+    <!-- Show / Comedy -->
+    <sys:String x:Key="STR_Show_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Шоу</sys:String>
+    <sys:String x:Key="STR_Show_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки секции [Comedy] в TDL_StreamPlugin.ini</sys:String>
+    <sys:String x:Key="STR_Show_Section_FakeHero" xmlns:sys="clr-namespace:System;assembly=mscorlib">ЛОЖНЫЙ ГЕРОЙ</sys:String>
+    <sys:String x:Key="STR_Show_Section_Horror" xmlns:sys="clr-namespace:System;assembly=mscorlib">ХОРРОР МОД</sys:String>
+    <sys:String x:Key="STR_Show_Section_Arena" xmlns:sys="clr-namespace:System;assembly=mscorlib">ВОЛНА ВРАГОВ</sys:String>
+    <sys:String x:Key="STR_Show_Section_Escort" xmlns:sys="clr-namespace:System;assembly=mscorlib">СОПРОВОЖДЕНИЕ</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_Duration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Длительность (сек)</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_Duration_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сколько секунд длится эффект.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_ActionInterval_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Частота действий (сек)</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_ActionInterval_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Пауза (сек) между действиями героя.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_DamageMult_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель урона</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_DamageMult_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель урона героя.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_PushForce_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сила толчка</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_PushForce_TT_Prefix" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сила отбрасывания/толчка.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_PushForce_TT_Warn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Установка большого значения может привести к полету через всю карту и попаданию в текстуру.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_ShoutChance_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Вероятность толчка (%)</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_ShoutChance_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Шанс (0–100) выполнить толчок/крик.</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_SpellChance_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Вероятность заклинания (%)</sys:String>
+    <sys:String x:Key="STR_Show_FakeHero_SpellChance_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Шанс (0–100) использовать заклинание.</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Duration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Длительность кошмара (сек)</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Duration_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сколько секунд длится охота/кошмар.</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Spawn_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Дистанция появления</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Spawn_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Расстояние появления охотника от игрока (в игровых единицах).</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Teleport_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Дистанция телепорта</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Teleport_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">На каком расстоянии охотник может телепортироваться к игроку (units).</sys:String>
+    <sys:String x:Key="STR_Show_Horror_MaxDist_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Предел преследования</sys:String>
+    <sys:String x:Key="STR_Show_Horror_MaxDist_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Максимальная дистанция преследования (units).</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Health_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Живучесть охотника</sys:String>
+    <sys:String x:Key="STR_Show_Horror_Health_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Запас здоровья охотника.</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Waves_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Количество волн</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Waves_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сколько волн врагов будет создано.</sys:String>
+    <sys:String x:Key="STR_Show_Arena_PerWave_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Врагов в волне</sys:String>
+    <sys:String x:Key="STR_Show_Arena_PerWave_TT_Prefix" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сколько врагов появляется в одной волне.</sys:String>
+    <sys:String x:Key="STR_Show_Arena_PerWave_TT_Warn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Установка большого значения может привести к падения FPS и вылетам игры</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Interval_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Пауза между волнами (сек)</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Interval_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка (сек) между волнами.</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Radius_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Размер арены</sys:String>
+    <sys:String x:Key="STR_Show_Arena_Radius_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Радиус арены/спавна вокруг игрока (units).</sys:String>
+    <sys:String x:Key="STR_Show_Escort_Duration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Время сопровождения (сек)</sys:String>
+    <sys:String x:Key="STR_Show_Escort_Duration_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сколько секунд длится режим сопровождения.</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (120)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroActionInterval" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (3.0)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroDamageMult" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (0.8)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroPushForce" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (15)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroShoutChance" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (30)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_FakeHeroSpellChance" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (30)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (120)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorSpawn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (1200)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorTeleport" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (1000)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorMaxDist" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (3000)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_HorrorHealth" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (1000)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_ArenaWaves" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (3)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_ArenaPerWave" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (3)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_ArenaInterval" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (5.0)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_ArenaRadius" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (1200)</sys:String>
+    <sys:String x:Key="STR_Show_Reset_EscortDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (120)</sys:String>
+
+    <!-- Information (Documentation page) -->
+    <sys:String x:Key="STR_Info_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Информация</sys:String>
+    <sys:String x:Key="STR_Info_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Встроенная справка (Markdown) из папки docs\ (рядом с приложением).</sys:String>
+    <sys:String x:Key="STR_Info_Group_GameMod" xmlns:sys="clr-namespace:System;assembly=mscorlib">Игра / мод</sys:String>
+    <sys:String x:Key="STR_Info_Btn_Refresh" xmlns:sys="clr-namespace:System;assembly=mscorlib">Обновить</sys:String>
+    <sys:String x:Key="STR_Info_Btn_OpenDocsFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть папку docs</sys:String>
+    <sys:String x:Key="STR_Info_Btn_OpenFile" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть файл</sys:String>
+    <sys:String x:Key="STR_Info_Btn_CopyMarkdown" xmlns:sys="clr-namespace:System;assembly=mscorlib">Копировать Markdown</sys:String>
+    <sys:String x:Key="STR_Info_Group_Documents" xmlns:sys="clr-namespace:System;assembly=mscorlib">Документы</sys:String>
+    <sys:String x:Key="STR_Info_Msg_DocsFolderNotFound" xmlns:sys="clr-namespace:System;assembly=mscorlib">Папка docs не найдена рядом с приложением.</sys:String>
+    <sys:String x:Key="STR_Info_Msg_FileNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Файл не найден:
+{0}</sys:String>
+    <sys:String x:Key="STR_Info_Status_Copied_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Скопировано в буфер ({0})</sys:String>
+    <sys:String x:Key="STR_Info_Placeholder_SelectDoc" xmlns:sys="clr-namespace:System;assembly=mscorlib">Выбери документ слева.</sys:String>
+    <sys:String x:Key="STR_Info_Status_DocsMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">docs не найдена (положи docs\ рядом с .exe).</sys:String>
+    <sys:String x:Key="STR_Info_Status_FoundCount_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Найдено документов: {0}</sys:String>
+    <sys:String x:Key="STR_Info_Placeholder_NoDocs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Документы не найдены (нет .md файлов).</sys:String>
+    <sys:String x:Key="STR_Info_Status_NotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не найдено: {0}</sys:String>
+    <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не удалось прочитать файл:
+{0}</sys:String>
+    <sys:String x:Key="STR_Info_Status_ReadError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Ошибка чтения</sys:String>
+    <sys:String x:Key="STR_Info_Status_Opened_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыто: {0} ({1})</sys:String>
+
 </ResourceDictionary>

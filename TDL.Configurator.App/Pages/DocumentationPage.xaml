@@ -12,9 +12,9 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Grid.Row="0" Text="Documentation" FontSize="22" FontWeight="SemiBold"/>
+        <TextBlock Grid.Row="0" Text="{DynamicResource STR_Info_Title}" FontSize="22" FontWeight="SemiBold"/>
         <TextBlock Grid.Row="1"
-                   Text="Встроенная справка (Markdown) из папки docs\"
+                   Text="{DynamicResource STR_Info_Subtitle}"
                    Opacity="0.7"
                    Margin="0,6,0,16"/>
 
@@ -31,13 +31,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <GroupBox Header="Игра / мод" Margin="0,0,0,12">
+            <GroupBox Header="{DynamicResource STR_Info_Group_GameMod}" Margin="0,0,0,12">
                 <StackPanel Margin="10">
                     <WrapPanel Margin="0,0,0,8">
-                        <Button Grid.Column="0" Content="Обновить" Width="120" Height="22" Margin="0,0,8,0" Click="Refresh_Click"/>
-                        <Button Grid.Column="1" Content="Открыть папку docs" Width="180" Height="22" Margin="0,0,8,0" Click="OpenDocsFolder_Click"/>
-                        <Button Grid.Column="2" Content="Открыть файл" Width="140" Height="22" Margin="0,0,8,0" Click="OpenSelectedFile_Click"/>
-                        <Button Grid.Column="3" Content="Копировать Markdown" Width="170" Height="22" Margin="0,0,8,0" Click="CopyMarkdown_Click"/>
+                        <Button Grid.Column="0" Content="{DynamicResource STR_Info_Btn_Refresh}" Width="120" Height="22" Margin="0,0,8,0" Click="Refresh_Click"/>
+                        <Button Grid.Column="1" Content="{DynamicResource STR_Info_Btn_OpenDocsFolder}" Width="180" Height="22" Margin="0,0,8,0" Click="OpenDocsFolder_Click"/>
+                        <Button Grid.Column="2" Content="{DynamicResource STR_Info_Btn_OpenFile}" Width="140" Height="22" Margin="0,0,8,0" Click="OpenSelectedFile_Click"/>
+                        <Button Grid.Column="3" Content="{DynamicResource STR_Info_Btn_CopyMarkdown}" Width="170" Height="22" Margin="0,0,8,0" Click="CopyMarkdown_Click"/>
                     </WrapPanel>
 
                     <WrapPanel>
@@ -46,11 +46,11 @@
                 </StackPanel>
             </GroupBox>
 
-            
+
         </Grid>
 
         <!-- Content -->
-        <GroupBox Grid.Row="3" Header="Документы">
+        <GroupBox Grid.Row="3" Header="{DynamicResource STR_Info_Group_Documents}">
             <Grid Margin="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="230" MinWidth="220"/>
