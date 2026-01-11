@@ -3,12 +3,6 @@
                     xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
                     xmlns:sw="clr-namespace:System.Windows;assembly=PresentationFramework">
 
-
-    <!-- Tooltip defaults (overridden by theme dictionaries) -->
-    <SolidColorBrush x:Key="TDL.Brush.TooltipBackground" Color="#FFFDFDFD"/>
-    <SolidColorBrush x:Key="TDL.Brush.TooltipText" Color="#FF111111"/>
-    <SolidColorBrush x:Key="TDL.Brush.TooltipBorder" Color="#33000000"/>
-
     <!-- Base window -->
     <!-- Custom title bar for ALL windows -->
     <Style TargetType="Window">
@@ -170,40 +164,6 @@
         <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
     </Style>
 
-
-    <!-- Tooltips: theme-aware (Dark/Nexus were unreadable with default white tooltip) -->
-    <Style TargetType="ToolTip">
-        <Setter Property="Background" Value="{DynamicResource TDL.Brush.TooltipBackground}"/>
-        <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.TooltipText}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.TooltipBorder}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="10,8"/>
-        <Setter Property="MaxWidth" Value="560"/>
-        <Setter Property="Placement" Value="Mouse"/>
-        <Setter Property="HorizontalOffset" Value="8"/>
-        <Setter Property="VerticalOffset" Value="10"/>
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToolTip">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="6"
-                            SnapsToDevicePixels="True">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.35"/>
-                        </Border.Effect>
-                        <ContentPresenter Margin="{TemplateBinding Padding}"
-                                          TextElement.Foreground="{TemplateBinding Foreground}"
-                                          TextElement.FontSize="12.5"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
     <!-- Controls -->
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="{DynamicResource TDL.Brush.ControlBackground}"/>
@@ -267,6 +227,9 @@
         </Style.Triggers>
     </Style>
 
+
+    <!-- Launch game button: default uses Accent; Light/Dark override in Colors.*.xaml -->
+    <Style x:Key="TDL.LaunchGameButtonStyle" TargetType="Button" BasedOn="{StaticResource TDL.AccentButtonStyle}"/>
     <!-- Icon buttons (bottom links) -->
     <Style x:Key="TDL.IconButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Width" Value="36"/>

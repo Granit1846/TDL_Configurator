@@ -32,11 +32,15 @@
                 <!-- Launch game (SKSE) -->
                 <Button Grid.Column="1" Height="36" Margin="16,0,0,0"
                         VerticalAlignment="Center"
-                        ToolTip="Запуск Skyrim через skse64_loader.exe"
+                        Style="{StaticResource TDL.LaunchGameButtonStyle}"
+                        ToolTip="{DynamicResource STR_LaunchGame_Tooltip}"
                         Click="OnLaunchGameClick">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="/Assets/logo4.png" Width="24" Height="24" Stretch="Uniform" Margin="0,0,10,0"/>
-                        <TextBlock Text="Запустить&#10;игру" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        <Image Source="/Assets/logo6.png" Width="24" Height="24" Stretch="Uniform" Margin="0,0,10,0"/>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <TextBlock Text="{DynamicResource STR_LaunchGame_Line1}" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Text="{DynamicResource STR_LaunchGame_Line2}" FontSize="12" FontWeight="SemiBold" Margin="0,-2,0,0"/>
+                        </StackPanel>
                     </StackPanel>
                 </Button>
 

@@ -57,14 +57,38 @@ public partial class SettingsWindow : Window
 
     private void Browse_Click(object sender, RoutedEventArgs e)
     {
+        // Note: AppSettings does not implement INotifyPropertyChanged.
+        // Therefore, updating _settings.GamePath alone will NOT update the TextBox via binding.
+        // We must write into GamePathBox.Text (TwoWay binding with PropertyChanged trigger)
+        // so the chosen folder is reflected in UI and persisted on Save.
+
         using var dlg = new Forms.FolderBrowserDialog
         {
             Description = GetString("STR_Settings_GamePath_Label"),
             UseDescriptionForTitle = true
         };
 
-        if (dlg.ShowDialog() == Forms.DialogResult.OK)
-            _settings.GamePath = dlg.SelectedPath;
+        // Start from current value if it exists.
+        try
+        {
+            var current = (GamePathBox.Text ?? string.Empty).Trim();
+            if (!string.IsNullOrWhiteSpace(current) && Directory.Exists(current))
+                dlg.SelectedPath = current;
+        }
+        catch
+        {
+            // ignore
+        }
+
+        if (dlg.ShowDialog() != Forms.DialogResult.OK)
+            return;
+
+        var selected = (dlg.SelectedPath ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(selected))
+            return;
+
+        // Update UI first (binding will push to _settings.GamePath).
+        GamePathBox.Text = selected;
     }
 
     private void ThemeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

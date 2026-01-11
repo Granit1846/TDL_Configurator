@@ -13,12 +13,6 @@
     <SolidColorBrush x:Key="TDL.Brush.Text" Color="#FFDEDEDE"/>
     <SolidColorBrush x:Key="TDL.Brush.TextDim" Color="#FFB8B8B8"/>
 
-    <!-- Tooltips -->
-    <SolidColorBrush x:Key="TDL.Brush.TooltipBackground" Color="#FF2B2B2B"/>
-    <SolidColorBrush x:Key="TDL.Brush.TooltipText" Color="#FFDEDEDE"/>
-    <SolidColorBrush x:Key="TDL.Brush.TooltipBorder" Color="#66DEDEDE"/>
-
-
     <!-- Optional header brush (will be wired in later file: App.xaml / header styles) -->
     <SolidColorBrush x:Key="TDL.Brush.TextHeader" Color="#FFD1D1D1"/>
 
@@ -230,5 +224,18 @@
     <Style x:Key="TDL.WindowStyle"
        TargetType="Window"
        BasedOn="{StaticResource TDL.CustomChromeWindowStyle}"/>
+
+    <!-- Dark theme overrides: make Accent (Save/Apply) button dark gray; Launch button dark gray -->
+    <Style x:Key="TDL.AccentButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="{DynamicResource TDL.Brush.ControlBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.ControlBorder}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
+    </Style>
+
+    <Style x:Key="TDL.LaunchGameButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="{DynamicResource TDL.Brush.ControlBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.ControlBorder}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
+    </Style>
 
 </ResourceDictionary>

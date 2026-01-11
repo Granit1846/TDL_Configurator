@@ -6,6 +6,14 @@
     <sys:String x:Key="STR_App_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Внешний интерфейс настроек (INI)</sys:String>
     <sys:String x:Key="STR_App_Settings" xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки</sys:String>
 
+    <!-- Launch game (SKSE) -->
+    <sys:String x:Key="STR_LaunchGame_Line1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Запустить</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Line2" xmlns:sys="clr-namespace:System;assembly=mscorlib">игру</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Запуск Skyrim через skse64_loader.exe</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Msg_GamePathMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">Путь к игре не задан или папка не существует.\n\nОткрой Настройки и укажи папку: Skyrim Special Edition.</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Msg_LoaderMissing_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не найден skse64_loader.exe: Проверь версию SKSE и путь к игре в Настройках.</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Msg_LaunchFailed_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не удалось запустить игру через SKSE.\n\n{0}</sys:String>
+
     <!-- Main navigation -->
     <sys:String x:Key="STR_Tab_Chaos" xmlns:sys="clr-namespace:System;assembly=mscorlib">Хаос</sys:String>
     <sys:String x:Key="STR_Tab_Hunter" xmlns:sys="clr-namespace:System;assembly=mscorlib">Охотник</sys:String>

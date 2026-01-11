@@ -37,4 +37,11 @@
        TargetType="Window"
        BasedOn="{StaticResource TDL.CustomChromeWindowStyle}"/>
 
+    <!-- Light theme override: Launch button should be white (not Accent) -->
+    <Style x:Key="TDL.LaunchGameButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="{DynamicResource TDL.Brush.ControlBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.ControlBorder}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
+    </Style>
+
 </ResourceDictionary>

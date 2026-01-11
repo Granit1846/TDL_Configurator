@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using TDL.Configurator.App.Services;
 using TDL.Configurator.App.Pages;
 using TDL.Configurator.Core;
 
@@ -17,6 +18,22 @@ public partial class MainWindow : Window
 
         // Выберем первую вкладку при старте
         NavList.SelectedIndex = 0;
+    }
+
+    private static string L(string key, string fallback)
+        => System.Windows.Application.Current?.TryFindResource(key) as string ?? fallback;
+
+    private static string LF(string key, string fallbackFormat, params object[] args)
+    {
+        var fmt = L(key, fallbackFormat);
+        try
+        {
+            return string.Format(fmt, args);
+        }
+        catch
+        {
+            return fmt;
+        }
     }
 
     private void OnSettingsClick(object sender, RoutedEventArgs e)
@@ -38,11 +55,17 @@ public partial class MainWindow : Window
             var s = AppSettings.Load();
             var gamePath = (s?.GamePath ?? string.Empty).Trim();
 
+            var caption = L("STR_App_Title", "TDL Configurator");
+
             if (string.IsNullOrWhiteSpace(gamePath) || !Directory.Exists(gamePath))
             {
                 System.Windows.MessageBox.Show(
-                    "Путь к игре не задан или папка не существует.\n\nОткрой Настройки и укажи папку: Skyrim Special Edition.",
-                    "TDL Configurator",
+                    L(
+                        "STR_LaunchGame_Msg_GamePathMissing",
+                        LocalizationManager.CurrentLanguage == AppLanguage.En
+                            ? "Game path is not set or the folder does not exist.\n\nOpen Settings and select the Skyrim Special Edition folder."
+                            : "Путь к игре не задан или папка не существует.\n\nОткрой Настройки и укажи папку: Skyrim Special Edition."),
+                    caption,
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
 
@@ -55,8 +78,13 @@ public partial class MainWindow : Window
             if (!File.Exists(loaderPath))
             {
                 System.Windows.MessageBox.Show(
-                    "Не найден skse64_loader.exe. Проверь версию SKSE и путь к игре в Настройках.",
-                    "TDL Configurator",
+                    LF(
+                        "STR_LaunchGame_Msg_LoaderMissing_Fmt",
+                        LocalizationManager.CurrentLanguage == AppLanguage.En
+                            ? "skse64_loader.exe was not found:\nCheck your SKSE installation and the game path in Settings."
+                            : "Не найден skse64_loader.exe:\nПроверь версию SKSE и путь к игре в Настройках.",
+                        loaderPath),
+                    caption,
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 return;
@@ -74,8 +102,13 @@ public partial class MainWindow : Window
         catch (Exception ex)
         {
             System.Windows.MessageBox.Show(
-                "Не удалось запустить игру через SKSE.\n\n" + ex.Message,
-                "TDL Configurator",
+                LF(
+                    "STR_LaunchGame_Msg_LaunchFailed_Fmt",
+                    LocalizationManager.CurrentLanguage == AppLanguage.En
+                        ? "Failed to launch the game via SKSE.\n\n{0}"
+                        : "Не удалось запустить игру через SKSE.\n\n{0}",
+                    ex.Message),
+                L("STR_App_Title", "TDL Configurator"),
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }

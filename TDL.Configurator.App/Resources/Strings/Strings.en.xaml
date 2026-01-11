@@ -6,6 +6,14 @@
     <sys:String x:Key="STR_App_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">External settings UI (INI)</sys:String>
     <sys:String x:Key="STR_App_Settings" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings</sys:String>
 
+    <!-- Launch game (SKSE) -->
+    <sys:String x:Key="STR_LaunchGame_Line1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Launch</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Line2" xmlns:sys="clr-namespace:System;assembly=mscorlib">game</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Launch Skyrim via skse64_loader.exe</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Msg_GamePathMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">Game path is not set or the folder does not exist.\n\nOpen Settings and select the Skyrim Special Edition folder.</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Msg_LoaderMissing_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">skse64_loader.exe was not found: Check your SKSE installation and the game path in Settings.</sys:String>
+    <sys:String x:Key="STR_LaunchGame_Msg_LaunchFailed_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Failed to launch the game via SKSE.\n\n{0}</sys:String>
+
     <!-- Main navigation -->
     <sys:String x:Key="STR_Tab_Chaos" xmlns:sys="clr-namespace:System;assembly=mscorlib">Chaos</sys:String>
     <sys:String x:Key="STR_Tab_Hunter" xmlns:sys="clr-namespace:System;assembly=mscorlib">Hunter</sys:String>
@@ -107,7 +115,7 @@
     <sys:String x:Key="STR_Common_Warning" xmlns:sys="clr-namespace:System;assembly=mscorlib">WARNING!</sys:String>
 
     <!-- Chaos page -->
-    
+
     <sys:String x:Key="STR_Chaos_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Chaos</sys:String>
     <sys:String x:Key="STR_Chaos_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings for [Chaos] section in TDL_StreamPlugin.ini</sys:String>
 
@@ -154,7 +162,7 @@
 
 
     <!-- Show / Comedy -->
-    
+
     <sys:String x:Key="STR_Show_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Show</sys:String>
     <sys:String x:Key="STR_Show_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings for [Comedy] section in TDL_StreamPlugin.ini</sys:String>
     <sys:String x:Key="STR_Show_Section_FakeHero" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAKE HERO</sys:String>
