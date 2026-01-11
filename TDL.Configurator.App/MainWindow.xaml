@@ -18,16 +18,29 @@
                 Background="{DynamicResource TDL.Brush.HeaderBackground}">
             <Grid Margin="16,0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <StackPanel Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                     <TextBlock Text="{DynamicResource STR_App_Title}" FontSize="18" FontWeight="SemiBold"/>
                     <TextBlock Text="{DynamicResource STR_App_Subtitle}" Opacity="0.7" FontSize="12"/>
                 </StackPanel>
 
-                <Button Grid.Column="1" Width="140" Height="32"
+                <!-- Launch game (SKSE) -->
+                <Button Grid.Column="1" Height="36" Margin="16,0,0,0"
+                        VerticalAlignment="Center"
+                        ToolTip="Запуск Skyrim через skse64_loader.exe"
+                        Click="OnLaunchGameClick">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="/Assets/logo4.png" Width="24" Height="24" Stretch="Uniform" Margin="0,0,10,0"/>
+                        <TextBlock Text="Запустить&#10;игру" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Grid.Column="3" Width="140" Height="32"
                         VerticalAlignment="Center"
                         Content="{DynamicResource STR_App_Settings}"
                         Click="OnSettingsClick"/>
@@ -52,7 +65,7 @@
 
                     <!-- Логотип прямо над вкладками -->
                     <Border Grid.Row="0" BorderBrush="{DynamicResource TDL.Brush.Border}" BorderThickness="0,0,0,1" Padding="10">
-                        <Image Source="/Assets/logo3.png"
+                        <Image Source="/Assets/logo.png"
                                Height="144"
                                Stretch="Uniform"
                                HorizontalAlignment="Center"
@@ -62,7 +75,7 @@
                     <!-- Вкладки -->
                     <ListBox Grid.Row="1"
                          x:Name="NavList"
-                         Margin="8"
+                         Margin="8" FontSize="18"
                          SelectionChanged="NavList_SelectionChanged"
                          ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <ListBoxItem Tag="Chaos" Content="{DynamicResource STR_Tab_Chaos}" Height="30"/>

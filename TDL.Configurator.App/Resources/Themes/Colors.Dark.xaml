@@ -13,6 +13,12 @@
     <SolidColorBrush x:Key="TDL.Brush.Text" Color="#FFDEDEDE"/>
     <SolidColorBrush x:Key="TDL.Brush.TextDim" Color="#FFB8B8B8"/>
 
+    <!-- Tooltips -->
+    <SolidColorBrush x:Key="TDL.Brush.TooltipBackground" Color="#FF2B2B2B"/>
+    <SolidColorBrush x:Key="TDL.Brush.TooltipText" Color="#FFDEDEDE"/>
+    <SolidColorBrush x:Key="TDL.Brush.TooltipBorder" Color="#66DEDEDE"/>
+
+
     <!-- Optional header brush (will be wired in later file: App.xaml / header styles) -->
     <SolidColorBrush x:Key="TDL.Brush.TextHeader" Color="#FFD1D1D1"/>
 

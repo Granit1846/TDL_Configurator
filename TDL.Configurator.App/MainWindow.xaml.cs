@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using TDL.Configurator.App.Pages;
+using TDL.Configurator.Core;
 
 
 namespace TDL.Configurator.App;
@@ -25,6 +29,56 @@ public partial class MainWindow : Window
 
         // Пока ничего не обновляем принудительно — QuickAccess будем читать настройки при открытии.
         // Если нужно — позже добавим "Refresh current page".
+    }
+
+    private void OnLaunchGameClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var s = AppSettings.Load();
+            var gamePath = (s?.GamePath ?? string.Empty).Trim();
+
+            if (string.IsNullOrWhiteSpace(gamePath) || !Directory.Exists(gamePath))
+            {
+                System.Windows.MessageBox.Show(
+                    "Путь к игре не задан или папка не существует.\n\nОткрой Настройки и укажи папку: Skyrim Special Edition.",
+                    "TDL Configurator",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                // Удобно сразу открыть настройки.
+                OnSettingsClick(this, new RoutedEventArgs());
+                return;
+            }
+
+            var loaderPath = Path.Combine(gamePath, "skse64_loader.exe");
+            if (!File.Exists(loaderPath))
+            {
+                System.Windows.MessageBox.Show(
+                    "Не найден skse64_loader.exe. Проверь версию SKSE и путь к игре в Настройках.",
+                    "TDL Configurator",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            var psi = new ProcessStartInfo
+            {
+                FileName = loaderPath,
+                WorkingDirectory = gamePath,
+                UseShellExecute = true
+            };
+
+            Process.Start(psi);
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(
+                "Не удалось запустить игру через SKSE.\n\n" + ex.Message,
+                "TDL Configurator",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
     }
 
     private void NavList_SelectionChanged(object sender, SelectionChangedEventArgs e)

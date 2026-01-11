@@ -10,6 +10,12 @@
     <SolidColorBrush x:Key="TDL.Brush.Text"        Color="#FFD1D1D1"/>
     <SolidColorBrush x:Key="TDL.Brush.TextDim"     Color="#FFB8B8B8"/>
 
+    <!-- Tooltips -->
+    <SolidColorBrush x:Key="TDL.Brush.TooltipBackground" Color="#FF232A35"/>
+    <SolidColorBrush x:Key="TDL.Brush.TooltipText" Color="#FFD1D1D1"/>
+    <SolidColorBrush x:Key="TDL.Brush.TooltipBorder" Color="#66D16820"/>
+
+
     <SolidColorBrush x:Key="TDL.Brush.Border"      Color="#FFD16820"/>
     <SolidColorBrush x:Key="TDL.Brush.ControlBorder" Color="#FFD16820"/>
 
