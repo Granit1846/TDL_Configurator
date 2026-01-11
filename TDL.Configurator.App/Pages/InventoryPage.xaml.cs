@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using TDL.Configurator.App.Services;
 using TDL.Configurator.Core;
 
 using WpfButton = System.Windows.Controls.Button;
@@ -46,6 +47,21 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
 
     private static string SafeNow() => DateTime.Now.ToString("HH:mm:ss");
 
+    private static string UiTitleL =>
+        (System.Windows.Application.Current?.TryFindResource("STR_App_Title") as string) ?? UiTitle;
+
+    private static string L(string key, string ru, string en)
+    {
+        var s = System.Windows.Application.Current?.TryFindResource(key) as string;
+        if (!string.IsNullOrWhiteSpace(s))
+            return s!;
+        return LocalizationManager.CurrentLanguage == AppLanguage.En ? en : ru;
+    }
+
+    private static string LF(string key, string ruFmt, string enFmt, params object[] args) =>
+        string.Format(CultureInfo.CurrentCulture, L(key, ruFmt, enFmt), args);
+
+
     private bool TryGetGamePath(out string gamePath)
     {
         gamePath = "";
@@ -57,8 +73,8 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         catch (Exception ex)
         {
             System.Windows.MessageBox.Show(
-                "Не удалось прочитать settings.json.\n" + ex.Message,
-                UiTitle,
+                L("STR_Common_Err_SettingsReadFailed", "Не удалось прочитать settings.json.\n" + ex.Message, "Failed to read settings.json.\n" + ex.Message),
+                UiTitleL,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             return false;
@@ -67,8 +83,8 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         if (string.IsNullOrWhiteSpace(gamePath) || !Directory.Exists(gamePath))
         {
             System.Windows.MessageBox.Show(
-                "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.",
-                UiTitle,
+                L("STR_Common_Warn_GamePathInvalid", "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.", "Game path is not set or invalid.\nOpen Settings and select the Skyrim Special Edition folder."),
+                UiTitleL,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -93,13 +109,13 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
 
         if (!TryGetIniPath(out var iniPath))
         {
-            InventoryStatusText.Text = "Путь к игре не задан (default).";
+            InventoryStatusText.Text = L("STR_Inventory_Status_GamePathMissingDefault", "Путь к игре не задан (default).", "Game path is not set (default).");
             return;
         }
 
         if (!File.Exists(iniPath))
         {
-            InventoryStatusText.Text = "INI не найден (default).";
+            InventoryStatusText.Text = L("STR_Inventory_Status_IniMissingDefault", "INI не найден (default).", "INI not found (default).");
             return;
         }
 
@@ -116,7 +132,7 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         ProtectTokensByNameCheck.IsChecked = GetOr(map, "ProtectTokensByName", DefaultProtectTokensByName ? "1" : "0") != "0";
         DropShowProgressCheck.IsChecked = GetOr(map, "DropShowProgress", DefaultDropShowProgress ? "1" : "0") != "0";
 
-        InventoryStatusText.Text = $"Загружено из INI ({SafeNow()}).";
+        InventoryStatusText.Text = LF("STR_Common_Status_LoadedFromIni", "Загружено из INI ({0}).", "Loaded from INI ({0}).", SafeNow());
     }
 
     private void SaveApply_Click(object sender, RoutedEventArgs e)
@@ -132,8 +148,8 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         if (scatterExact == 0 && scatterMin > scatterMax)
         {
             System.Windows.MessageBox.Show(
-                "ScatterMinCount не может быть больше ScatterMaxCount (когда точное количество = 0).",
-                "Inventory",
+                L("STR_Inventory_Warn_ScatterMinGreaterThanMax", "ScatterMinCount не может быть больше ScatterMaxCount (когда точное количество = 0).", "ScatterMinCount cannot be greater than ScatterMaxCount (when ExactCount is 0)."),
+                UiTitleL,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -167,8 +183,8 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         catch (Exception ex)
         {
             System.Windows.MessageBox.Show(
-                "Не удалось сохранить INI.\n" + ex.Message,
-                UiTitle,
+                L("STR_Common_Err_IniSaveFailed", "Не удалось сохранить INI.\n" + ex.Message, "Failed to save INI.\n" + ex.Message),
+                UiTitleL,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             return;
@@ -176,14 +192,14 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
 
         if (TryApplyInGame(out var reason))
         {
-            InventoryStatusText.Text = $"Сохранено и применено ({SafeNow()}).";
+            InventoryStatusText.Text = LF("STR_Common_Status_SavedApplied", "Сохранено и применено ({0}).", "Saved and applied ({0}).", SafeNow());
         }
         else
         {
-            InventoryStatusText.Text = $"Сохранено, но не применено ({SafeNow()}).";
+            InventoryStatusText.Text = LF("STR_Common_Status_SavedNotApplied", "Сохранено, но не применено ({0}).", "Saved, but not applied ({0}).", SafeNow());
             System.Windows.MessageBox.Show(
-                "INI сохранён, но применить в игре не удалось.\n" + reason,
-                UiTitle,
+                LF("STR_Common_Warn_SavedButNotApplied", "INI сохранён, но применить в игре не удалось.\n{0}", "INI was saved, but could not be applied in-game.\n{0}", reason),
+                UiTitleL,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -194,14 +210,14 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         reason = "";
         if (!TryGetGamePath(out var gamePath))
         {
-            reason = "Путь к игре не задан.";
+            reason = L("STR_Common_Reason_GamePathMissing", "Путь к игре не задан.", "Game path is not set.");
             return false;
         }
 
         var tdlSend = Path.Combine(gamePath, ToolsRelativePath);
         if (!File.Exists(tdlSend))
         {
-            reason = $"tdl_send.exe не найден: {tdlSend}";
+            reason = LF("STR_Common_Reason_TdlSendMissing", "tdl_send.exe не найден: {0}", "tdl_send.exe not found: {0}", tdlSend);
             return false;
         }
 
@@ -221,14 +237,14 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
             using var p = Process.Start(psi);
             if (p == null)
             {
-                reason = "Не удалось запустить tdl_send.exe.";
+                reason = L("STR_Common_Reason_TdlSendStartFailed", "Не удалось запустить tdl_send.exe.", "Failed to start tdl_send.exe.");
                 return false;
             }
 
             if (!p.WaitForExit(3500))
             {
                 try { p.Kill(entireProcessTree: true); } catch { }
-                reason = "tdl_send.exe не завершился по таймауту.";
+                reason = L("STR_Common_Reason_TdlSendTimeout", "tdl_send.exe не завершился по таймауту.", "tdl_send.exe did not finish before the timeout.");
                 return false;
             }
 
@@ -237,7 +253,7 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
 
             if (p.ExitCode != 0)
             {
-                reason = $"Код выхода: {p.ExitCode}\n{(string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)}".Trim();
+                reason = LF("STR_Common_Reason_TdlSendExitCode", "Код выхода: {0}\n{1}", "Exit code: {0}\n{1}", p.ExitCode, (string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)).Trim();
                 return false;
             }
 
@@ -253,7 +269,7 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
     private void DefaultsAll_Click(object sender, RoutedEventArgs e)
     {
         ApplyDefaultsToUi();
-        InventoryStatusText.Text = $"Сброшено на default ({SafeNow()}).";
+        InventoryStatusText.Text = LF("STR_Common_Status_ResetDefault", "Сброшено на default ({0}).", "Reset to default ({0}).", SafeNow());
     }
 
     private void DefaultRow_Click(object sender, RoutedEventArgs e)
@@ -283,7 +299,7 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         ProtectTokensByNameCheck.IsChecked = DefaultProtectTokensByName;
         DropShowProgressCheck.IsChecked = DefaultDropShowProgress;
 
-        InventoryStatusText.Text = "Готово (default).";
+        InventoryStatusText.Text = L("STR_Common_Status_ReadyDefault", "Готово (default).", "Ready (default).");
     }
 
     private void SetDefaultForKey(string key)
@@ -406,8 +422,8 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         if (!int.TryParse((box.Text ?? "").Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name}: введи целое число.",
-                UiTitle,
+                LF("STR_Validation_IntRequired", "{0}: введи целое число.", "{0}: enter an integer.", name),
+                UiTitleL,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -416,8 +432,8 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: допустимый диапазон {min}..{max}.",
-                UiTitle,
+                LF("STR_Validation_IntRange", "{0}: допустимый диапазон {1}..{2}.", "{0}: allowed range is {1}..{2}.", name, min, max),
+                UiTitleL,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -433,8 +449,8 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name}: введи число.",
-                UiTitle,
+                LF("STR_Validation_NumberRequired", "{0}: введи число.", "{0}: enter a number.", name),
+                UiTitleL,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;
@@ -443,8 +459,8 @@ public partial class InventoryPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: допустимый диапазон {min}..{max}.",
-                UiTitle,
+                LF("STR_Validation_NumberRange", "{0}: допустимый диапазон {1}..{2}.", "{0}: allowed range is {1}..{2}.", name, min, max),
+                UiTitleL,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return false;

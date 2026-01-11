@@ -36,20 +36,20 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
 
-            <TextBlock Text="Inventory" FontSize="22" FontWeight="SemiBold"/>
-            <TextBlock Text="Настройки секции [Inventory] в TDL_StreamPlugin.ini"
-                       Opacity="0.7" Margin="0,6,0,16"/>
+            <TextBlock Text="{DynamicResource STR_Inventory_Title}" Style="{StaticResource PageTitleStyle}"/>
+            <TextBlock Text="{DynamicResource STR_Inventory_Subtitle}"
+                       Style="{StaticResource PageSubtitleStyle}"/>
 
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
-                <Button Content="Сохранить + применить" Width="170" Height="22" Margin="0,0,8,0" Click="SaveApply_Click"/>
-                <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
+                <Button Content="{DynamicResource STR_Common_SaveApply}" Width="170" Height="22" Margin="0,0,8,0" Click="SaveApply_Click"/>
+                <Button Content="{DynamicResource STR_Common_ResetAll}" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
                 <TextBlock x:Name="InventoryStatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
 
-            <GroupBox Header="Параметры">
+            <GroupBox Header="{DynamicResource STR_Common_Parameters}">
                 <StackPanel Margin="10">
 
-                    <Expander Header="ДОЖДЬ ПРЕДМЕТОВ" IsExpanded="True" Margin="0,0,0,12">
+                    <Expander Header="{DynamicResource STR_Inventory_Scatter_Group}" IsExpanded="True" Margin="0,0,0,12">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
@@ -66,28 +66,29 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Точное количество (0 — рандом)"
-                                       ToolTip="Если 0 — используется Min/Max. Если >0 — выбрасывается ровно это число."/>
+                                       Text="{DynamicResource STR_Inventory_ScatterExactCount_Label}"
+                                       ToolTip="{DynamicResource STR_Inventory_ScatterExactCount_TT}"/>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="ScatterExactCountBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterExactCount" ToolTip="Сбросить на Default (0)" Click="DefaultRow_Click"/>
+                                    Tag="ScatterExactCount" ToolTip="{DynamicResource STR_Inventory_Reset_ScatterExactCount}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Минимум предметов"
-                                       ToolTip="Минимум предметов (когда точное количество = 0)."/>
+                                       Text="{DynamicResource STR_Inventory_ScatterMinCount_Label}"
+                                       ToolTip="{DynamicResource STR_Inventory_ScatterMinCount_TT}"/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="ScatterMinCountBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterMinCount" ToolTip="Сбросить на Default (150)" Click="DefaultRow_Click"/>
+                                    Tag="ScatterMinCount" ToolTip="{DynamicResource STR_Inventory_Reset_ScatterMinCount}" Click="DefaultRow_Click"/>
 
-                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Максимум предметов">
+                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="{DynamicResource STR_Inventory_ScatterMaxCount_Label}">
                                 <TextBlock.ToolTip>
                                     <ToolTip MaxWidth="420">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Максимум предметов (когда точное количество = 0). "/>
-                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                            <Run Text=" Установка большого значения может привести к падения FPS и вылетам игры" Foreground="Red"/>
+                                            <Run Text="{DynamicResource STR_Inventory_ScatterMaxCount_TT_Prefix}"/>
+                                            <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text="{DynamicResource STR_Inventory_ScatterMaxCount_TT_Warn}" Foreground="Red"/>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -95,19 +96,19 @@
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="ScatterMaxCountBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterMaxCount" ToolTip="Сбросить на Default (200)" Click="DefaultRow_Click"/>
+                                    Tag="ScatterMaxCount" ToolTip="{DynamicResource STR_Inventory_Reset_ScatterMaxCount}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Радиус разброса"
-                                       ToolTip="Радиус (в игровых единицах), в котором разлетаются предметы."/>
+                                       Text="{DynamicResource STR_Inventory_ScatterRadius_Label}"
+                                       ToolTip="{DynamicResource STR_Inventory_ScatterRadius_TT}"/>
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="ScatterRadiusBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScatterRadius" ToolTip="Сбросить на Default (1200)" Click="DefaultRow_Click"/>
+                                    Tag="ScatterRadius" ToolTip="{DynamicResource STR_Inventory_Reset_ScatterRadius}" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
-                    <Expander Header="РАЗДЕТЬ" IsExpanded="True">
+                    <Expander Header="{DynamicResource STR_Inventory_Drop_Group}" IsExpanded="True">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
@@ -125,20 +126,21 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Размер пачки"
-                                       ToolTip="Сколько предметов выбрасывать за один цикл."/>
+                                       Text="{DynamicResource STR_Inventory_DropBatchSize_Label}"
+                                       ToolTip="{DynamicResource STR_Inventory_DropBatchSize_TT}"/>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="DropBatchSizeBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DropBatchSize" ToolTip="Сбросить на Default (10)" Click="DefaultRow_Click"/>
+                                    Tag="DropBatchSize" ToolTip="{DynamicResource STR_Inventory_Reset_DropBatchSize}" Click="DefaultRow_Click"/>
 
-                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Пауза между выбросами">
+                            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
+                                       Text="{DynamicResource STR_Inventory_DropInterval_Label}">
                                 <TextBlock.ToolTip>
                                     <ToolTip MaxWidth="420">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Задержка (сек) между циклами выбрасывания. "/>
-                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                            <Run Text=" Установка маленького значения может привести к вылетам игры" Foreground="Red"/>
+                                            <Run Text="{DynamicResource STR_Inventory_DropInterval_TT_Prefix}"/>
+                                            <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text="{DynamicResource STR_Inventory_DropInterval_TT_Warn}" Foreground="Red"/>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
@@ -146,31 +148,31 @@
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="DropIntervalBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DropInterval" ToolTip="Сбросить на Default (0.2)" Click="DefaultRow_Click"/>
+                                    Tag="DropInterval" ToolTip="{DynamicResource STR_Inventory_Reset_DropInterval}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Таймаут (сек)"
-                                       ToolTip="Ограничение по времени на операцию (сек)."/>
+                                       Text="{DynamicResource STR_Inventory_DropTimeout_Label}"
+                                       ToolTip="{DynamicResource STR_Inventory_DropTimeout_TT}"/>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="DropTimeoutBox"
                                      Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DropTimeout" ToolTip="Сбросить на Default (30)" Click="DefaultRow_Click"/>
+                                    Tag="DropTimeout" ToolTip="{DynamicResource STR_Inventory_Reset_DropTimeout}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Защитить важное"
-                                       ToolTip="1/0. Если включено — важные токены/предметы не будут выброшены."/>
+                                       Text="{DynamicResource STR_Inventory_ProtectTokens_Label}"
+                                       ToolTip="{DynamicResource STR_Inventory_ProtectTokens_TT}"/>
                             <CheckBox Grid.Row="3" Grid.Column="1" x:Name="ProtectTokensByNameCheck"
                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ProtectTokensByName" ToolTip="Сбросить на Default (1)" Click="DefaultRow_Click"/>
+                                    Tag="ProtectTokensByName" ToolTip="{DynamicResource STR_Inventory_Reset_ProtectTokens}" Click="DefaultRow_Click"/>
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Показывать процесс"
-                                       ToolTip="1/0. Если включено — показывать прогресс/уведомления."/>
+                                       Text="{DynamicResource STR_Inventory_DropShowProgress_Label}"
+                                       ToolTip="{DynamicResource STR_Inventory_DropShowProgress_TT}"/>
                             <CheckBox Grid.Row="4" Grid.Column="1" x:Name="DropShowProgressCheck"
                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DropShowProgress" ToolTip="Сбросить на Default (0)" Click="DefaultRow_Click"/>
+                                    Tag="DropShowProgress" ToolTip="{DynamicResource STR_Inventory_Reset_DropShowProgress}" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 

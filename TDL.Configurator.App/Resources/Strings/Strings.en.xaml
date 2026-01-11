@@ -291,4 +291,49 @@
     <sys:String x:Key="STR_Hunter_SpawnOffset_Tooltip_P2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Too small a value may cause near-instant spawns and visual artifacts.</sys:String>
     <sys:String x:Key="STR_Hunter_SpawnOffset_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (1200)</sys:String>
 
+    <!-- Inventory -->
+    <sys:String x:Key="STR_Inventory_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Inventory</sys:String>
+    <sys:String x:Key="STR_Inventory_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings for [Inventory] section in TDL_StreamPlugin.ini</sys:String>
+
+    <sys:String x:Key="STR_Inventory_Scatter_Group" xmlns:sys="clr-namespace:System;assembly=mscorlib">ITEM RAIN</sys:String>
+    <sys:String x:Key="STR_Inventory_Drop_Group" xmlns:sys="clr-namespace:System;assembly=mscorlib">STRIP</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ScatterExactCount_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Exact count (0 = random)</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterExactCount_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">If 0, Min/Max are used. If &gt;0, exactly this amount is dropped.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ScatterExactCount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (0)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ScatterMinCount_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Minimum items</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterMinCount_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Minimum items (when exact count = 0).</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ScatterMinCount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (150)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ScatterMaxCount_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Maximum items</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterMaxCount_TT_Prefix" xmlns:sys="clr-namespace:System;assembly=mscorlib">Maximum items (when exact count = 0).</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterMaxCount_TT_Warn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Setting a high value may cause FPS drops and game crashes.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ScatterMaxCount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (200)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ScatterRadius_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Scatter radius</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterRadius_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Radius (game units) within which items will scatter.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ScatterRadius" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (1200)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_DropBatchSize_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Batch size</sys:String>
+    <sys:String x:Key="STR_Inventory_DropBatchSize_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">How many items to drop per cycle.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_DropBatchSize" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (10)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_DropInterval_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Delay between drops</sys:String>
+    <sys:String x:Key="STR_Inventory_DropInterval_TT_Prefix" xmlns:sys="clr-namespace:System;assembly=mscorlib">Delay (sec) between drop cycles.</sys:String>
+    <sys:String x:Key="STR_Inventory_DropInterval_TT_Warn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Setting a very small value may cause crashes.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_DropInterval" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (0.2)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_DropTimeout_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Timeout (sec)</sys:String>
+    <sys:String x:Key="STR_Inventory_DropTimeout_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Time limit for the operation (sec).</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_DropTimeout" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (30)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ProtectTokens_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Protect important items</sys:String>
+    <sys:String x:Key="STR_Inventory_ProtectTokens_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">1/0. If enabled, important tokens/items will not be dropped.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ProtectTokens" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (1)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_DropShowProgress_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Show progress</sys:String>
+    <sys:String x:Key="STR_Inventory_DropShowProgress_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">1/0. If enabled, show progress/notifications.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_DropShowProgress" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (0)</sys:String>
+
 </ResourceDictionary>

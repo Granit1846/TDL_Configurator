@@ -288,4 +288,49 @@
     <sys:String x:Key="STR_Hunter_SpawnOffset_Tooltip_P2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Слишком малое значение может приводить к появлению почти вплотную и визуальным артефактам.</sys:String>
     <sys:String x:Key="STR_Hunter_SpawnOffset_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (1200)</sys:String>
 
+    <!-- Inventory -->
+    <sys:String x:Key="STR_Inventory_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Инвентарь</sys:String>
+    <sys:String x:Key="STR_Inventory_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки секции [Inventory] в TDL_StreamPlugin.ini</sys:String>
+
+    <sys:String x:Key="STR_Inventory_Scatter_Group" xmlns:sys="clr-namespace:System;assembly=mscorlib">ДОЖДЬ ПРЕДМЕТОВ</sys:String>
+    <sys:String x:Key="STR_Inventory_Drop_Group" xmlns:sys="clr-namespace:System;assembly=mscorlib">РАЗДЕТЬ</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ScatterExactCount_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Точное количество (0 — рандом)</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterExactCount_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Если 0 — используется Min/Max. Если >0 — выбрасывается ровно это число.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ScatterExactCount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (0)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ScatterMinCount_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Минимум предметов</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterMinCount_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Минимум предметов (когда точное количество = 0).</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ScatterMinCount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (150)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ScatterMaxCount_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Максимум предметов</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterMaxCount_TT_Prefix" xmlns:sys="clr-namespace:System;assembly=mscorlib">Максимум предметов (когда точное количество = 0).</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterMaxCount_TT_Warn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Установка большого значения может привести к падения FPS и вылетам игры</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ScatterMaxCount" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (200)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ScatterRadius_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Радиус разброса</sys:String>
+    <sys:String x:Key="STR_Inventory_ScatterRadius_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Радиус (в игровых единицах), в котором разлетаются предметы.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ScatterRadius" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (1200)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_DropBatchSize_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Размер пачки</sys:String>
+    <sys:String x:Key="STR_Inventory_DropBatchSize_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сколько предметов выбрасывать за один цикл.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_DropBatchSize" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (10)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_DropInterval_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Пауза между выбросами</sys:String>
+    <sys:String x:Key="STR_Inventory_DropInterval_TT_Prefix" xmlns:sys="clr-namespace:System;assembly=mscorlib">Задержка (сек) между циклами выбрасывания.</sys:String>
+    <sys:String x:Key="STR_Inventory_DropInterval_TT_Warn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Установка маленького значения может привести к вылетам игры</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_DropInterval" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (0.2)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_DropTimeout_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Таймаут (сек)</sys:String>
+    <sys:String x:Key="STR_Inventory_DropTimeout_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">Ограничение по времени на операцию (сек).</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_DropTimeout" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (30)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_ProtectTokens_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Защитить важное</sys:String>
+    <sys:String x:Key="STR_Inventory_ProtectTokens_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">1/0. Если включено — важные токены/предметы не будут выброшены.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_ProtectTokens" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (1)</sys:String>
+
+    <sys:String x:Key="STR_Inventory_DropShowProgress_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Показывать процесс</sys:String>
+    <sys:String x:Key="STR_Inventory_DropShowProgress_TT" xmlns:sys="clr-namespace:System;assembly=mscorlib">1/0. Если включено — показывать прогресс/уведомления.</sys:String>
+    <sys:String x:Key="STR_Inventory_Reset_DropShowProgress" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (0)</sys:String>
+
 </ResourceDictionary>
