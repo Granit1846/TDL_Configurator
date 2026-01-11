@@ -1,6 +1,107 @@
 ﻿<UserControl x:Class="TDL.Configurator.App.Pages.TestPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <UserControl.Resources>
+
+        <Style x:Key="TDL.ThemedComboBoxItem" TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource TDL.Brush.Hover}"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource TDL.Brush.Selection}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="TDL.ThemedComboBox" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="Background" Value="{DynamicResource TDL.Brush.ControlBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.ControlBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource TDL.ThemedComboBoxItem}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="Bd"
+                                CornerRadius="6"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="28"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentPresenter Grid.Column="0"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Left"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                  RecognizesAccessKey="True"
+                                                  TextElement.Foreground="{TemplateBinding Foreground}"/>
+
+                                    <ToggleButton Grid.Column="1"
+                                              Focusable="False"
+                                              IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                              Background="Transparent"
+                                              BorderThickness="0">
+                                        <Path Data="M 0 0 L 4 4 L 8 0 Z"
+                                          Width="8" Height="4"
+                                          Stretch="Uniform"
+                                          Fill="{DynamicResource TDL.Brush.TextDim}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
+                            </Border>
+
+                            <Popup Name="PART_Popup"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               Placement="Bottom"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Fade">
+                                <Border Margin="0,4,0,0"
+                                    CornerRadius="6"
+                                    Background="{DynamicResource TDL.Brush.ControlBackground}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ScrollViewer SnapsToDevicePixels="True">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource TDL.Brush.ControlBackgroundHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.55"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
             <TextBlock Text="Test" FontSize="22" FontWeight="SemiBold"/>
@@ -9,11 +110,41 @@
             <!-- NORMAL source -->
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
                 <TextBlock Text="SOURCE:" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                <ComboBox x:Name="SourceBox" Width="160" SelectedIndex="1">
+                <ComboBox x:Name="SourceBox"
+                    Width="160" Height="22"
+                    SelectedIndex="1"
+                          Style="{StaticResource TDL.ThemedComboBox}"
+                    Background="{DynamicResource TDL.Brush.ControlBackground}"
+                    Foreground="{DynamicResource TDL.Brush.Text}"
+                    BorderBrush="{DynamicResource TDL.Brush.ControlBorder}"
+                    BorderThickness="1"
+                    Padding="10,0"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Center">
+                    
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Padding" Value="10,6"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsHighlighted" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource TDL.Brush.Hover}"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource TDL.Brush.Selection}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+
                     <ComboBoxItem Content="1 — beats"/>
                     <ComboBoxItem Content="2 — points"/>
                     <ComboBoxItem Content="3 — vote"/>
                 </ComboBox>
+
             </WrapPanel>
 
             <!-- FORCE params -->

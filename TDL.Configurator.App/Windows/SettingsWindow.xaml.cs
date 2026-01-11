@@ -44,11 +44,12 @@ public partial class SettingsWindow : Window
         };
 
         _settings = AppSettings.Load();
+        DataContext = _settings;
+
         _originalTheme = _settings.Theme;
         _originalLanguage = _settings.Language;
 
         _isInitializing = true;
-        GamePathBox.Text = _settings.GamePath;
         SelectComboItemByTag(ThemeBox, _settings.Theme.ToString());
         SelectComboItemByTag(LanguageBox, _settings.Language.ToString());
         _isInitializing = false;
@@ -58,12 +59,12 @@ public partial class SettingsWindow : Window
     {
         using var dlg = new Forms.FolderBrowserDialog
         {
-            Description = "Выберите папку игры Skyrim Special Edition",
+            Description = GetString("STR_Settings_GamePath_Label"),
             UseDescriptionForTitle = true
         };
 
         if (dlg.ShowDialog() == Forms.DialogResult.OK)
-            GamePathBox.Text = dlg.SelectedPath;
+            _settings.GamePath = dlg.SelectedPath;
     }
 
     private void ThemeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -120,8 +121,6 @@ public partial class SettingsWindow : Window
         _settings.Theme = GetSelectedTheme();
         _settings.Language = GetSelectedLanguage();
         _settings.Save();
-
-        _saved = true;
 
         _saved = true;
 

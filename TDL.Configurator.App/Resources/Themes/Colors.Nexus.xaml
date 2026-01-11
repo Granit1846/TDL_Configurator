@@ -26,4 +26,8 @@
     <SolidColorBrush x:Key="TDL.Brush.HoverPressed" Color="#33233140"/>
     <SolidColorBrush x:Key="TDL.Brush.Selection"     Color="#22D16820"/>
 
+    <Style x:Key="TDL.WindowStyle"
+       TargetType="Window"
+       BasedOn="{StaticResource TDL.CustomChromeWindowStyle}"/>
+
 </ResourceDictionary>
