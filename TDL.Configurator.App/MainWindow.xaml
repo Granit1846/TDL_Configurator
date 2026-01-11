@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" x:Class="TDL.Configurator.App.MainWindow"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
-        Title="TDL Configurator"
+        Title="{DynamicResource STR_App_Title}"
         Style="{DynamicResource TDL.WindowStyle}"
         Width="1100" Height="700"
         WindowStartupLocation="CenterScreen">
@@ -23,8 +23,8 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <TextBlock Text="TDL Configurator" FontSize="18" FontWeight="SemiBold"/>
-                    <TextBlock Text="External settings UI (INI)" Opacity="0.7" FontSize="12"/>
+                    <TextBlock Text="{DynamicResource STR_App_Title}" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock Text="{DynamicResource STR_App_Subtitle}" Opacity="0.7" FontSize="12"/>
                 </StackPanel>
 
                 <Button Grid.Column="1" Width="140" Height="32"
@@ -65,15 +65,15 @@
                          Margin="8"
                          SelectionChanged="NavList_SelectionChanged"
                          ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <ListBoxItem Content="Chaos" Height="30"/>
-                        <ListBoxItem Content="Hunter" Height="30"/>
-                        <ListBoxItem Content="Inventory" Height="30"/>
-                        <ListBoxItem Content="Wrath" Height="30"/>
-                        <ListBoxItem Content="Gigant" Height="30"/>
-                        <ListBoxItem Content="Comedy" Height="30"/>
-                        <ListBoxItem Content="Documentation" Height="30"/>
-                        <ListBoxItem Content="Quick access" Height="30"/>
-                        <ListBoxItem Content="Test" Height="30"/>
+                        <ListBoxItem Tag="Chaos" Content="{DynamicResource STR_Tab_Chaos}" Height="30"/>
+                        <ListBoxItem Tag="Hunter" Content="{DynamicResource STR_Tab_Hunter}" Height="30"/>
+                        <ListBoxItem Tag="Inventory" Content="{DynamicResource STR_Tab_Inventory}" Height="30"/>
+                        <ListBoxItem Tag="Wrath" Content="{DynamicResource STR_Tab_Wrath}" Height="30"/>
+                        <ListBoxItem Tag="Characteristics" Content="{DynamicResource STR_Tab_Characteristics}" Height="30"/>
+                        <ListBoxItem Tag="Show" Content="{DynamicResource STR_Tab_Show}" Height="30"/>
+                        <ListBoxItem Tag="Information" Content="{DynamicResource STR_Tab_Information}" Height="30"/>
+                        <ListBoxItem Tag="QuickAccess" Content="{DynamicResource STR_Tab_QuickAccess}" Height="30"/>
+                        <ListBoxItem Tag="Test" Content="{DynamicResource STR_Tab_Test}" Height="30"/>
                     </ListBox>
                 </Grid>
             </Border>

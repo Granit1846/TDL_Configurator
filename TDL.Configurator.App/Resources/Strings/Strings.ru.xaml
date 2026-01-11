@@ -2,7 +2,23 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- General -->
+    <sys:String x:Key="STR_App_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">TDL Configurator</sys:String>
+    <sys:String x:Key="STR_App_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Внешний интерфейс настроек (INI)</sys:String>
     <sys:String x:Key="STR_App_Settings" xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки</sys:String>
+
+    <!-- Main navigation -->
+    <sys:String x:Key="STR_Tab_Chaos" xmlns:sys="clr-namespace:System;assembly=mscorlib">Хаос</sys:String>
+    <sys:String x:Key="STR_Tab_Hunter" xmlns:sys="clr-namespace:System;assembly=mscorlib">Охотник</sys:String>
+    <sys:String x:Key="STR_Tab_Inventory" xmlns:sys="clr-namespace:System;assembly=mscorlib">Инвентарь</sys:String>
+    <sys:String x:Key="STR_Tab_Wrath" xmlns:sys="clr-namespace:System;assembly=mscorlib">Гнев небес</sys:String>
+    <sys:String x:Key="STR_Tab_Characteristics" xmlns:sys="clr-namespace:System;assembly=mscorlib">Характеристики</sys:String>
+    <sys:String x:Key="STR_Tab_Show" xmlns:sys="clr-namespace:System;assembly=mscorlib">Шоу</sys:String>
+    <sys:String x:Key="STR_Tab_Information" xmlns:sys="clr-namespace:System;assembly=mscorlib">Информация</sys:String>
+    <sys:String x:Key="STR_Tab_QuickAccess" xmlns:sys="clr-namespace:System;assembly=mscorlib">Быстрый доступ</sys:String>
+    <sys:String x:Key="STR_Tab_Test" xmlns:sys="clr-namespace:System;assembly=mscorlib">Тест</sys:String>
+
+    <!-- Generic placeholders -->
+    <sys:String x:Key="STR_Page_Placeholder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Страница: {0}\n(контент добавим позже)</sys:String>
     <sys:String x:Key="STR_Settings_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки</sys:String>
     <sys:String x:Key="STR_Settings_PreviewHint" xmlns:sys="clr-namespace:System;assembly=mscorlib">Превью: тема/язык применяются сразу. Сохранить — фиксирует изменения.</sys:String>
 
@@ -13,8 +29,8 @@
 
     <!-- Settings: Theme -->
     <sys:String x:Key="STR_Settings_Theme_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Тема</sys:String>
-    <sys:String x:Key="STR_Settings_Theme_Light" xmlns:sys="clr-namespace:System;assembly=mscorlib">Светлая (по умолчанию)</sys:String>
-    <sys:String x:Key="STR_Settings_Theme_Dark" xmlns:sys="clr-namespace:System;assembly=mscorlib">Тёмная (по умолчанию)</sys:String>
+    <sys:String x:Key="STR_Settings_Theme_Light" xmlns:sys="clr-namespace:System;assembly=mscorlib">Светлая</sys:String>
+    <sys:String x:Key="STR_Settings_Theme_Dark" xmlns:sys="clr-namespace:System;assembly=mscorlib">Тёмная</sys:String>
     <sys:String x:Key="STR_Settings_Theme_Nexus" xmlns:sys="clr-namespace:System;assembly=mscorlib">Nexus‑style</sys:String>
 
     <!-- Settings: Language -->
@@ -42,5 +58,46 @@
     <sys:String x:Key="STR_Msg_Settings" xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки</sys:String>
     <sys:String x:Key="STR_Msg_LinkNotSet" xmlns:sys="clr-namespace:System;assembly=mscorlib">Ссылка пока не задана.</sys:String>
     <sys:String x:Key="STR_Msg_UpdateUrlNotSet" xmlns:sys="clr-namespace:System;assembly=mscorlib">URL для проверки обновлений пока не задан.</sys:String>
+
+    <!-- QuickAccess -->
+    <sys:String x:Key="STR_QuickAccess_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Быстрый доступ</sys:String>
+    <sys:String x:Key="STR_QuickAccess_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Быстрый доступ к файлам игры и логам.</sys:String>
+
+    <sys:String x:Key="STR_QuickAccess_Group_GameMod" xmlns:sys="clr-namespace:System;assembly=mscorlib">Игра / мод</sys:String>
+    <sys:String x:Key="STR_QuickAccess_Group_Logs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Логи</sys:String>
+
+    <sys:String x:Key="STR_QuickAccess_OpenPluginsFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть папку Plugins</sys:String>
+    <sys:String x:Key="STR_QuickAccess_OpenIni" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть INI (TDL_StreamPlugin.ini)</sys:String>
+    <sys:String x:Key="STR_QuickAccess_CreateIniTemplate" xmlns:sys="clr-namespace:System;assembly=mscorlib">Создать INI (Базовые значения)</sys:String>
+    <sys:String x:Key="STR_QuickAccess_OpenToolsFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть папку Tools (tdl_send.exe)</sys:String>
+    <sys:String x:Key="STR_QuickAccess_OpenTdlDataFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть папку Data\TDL</sys:String>
+
+    <sys:String x:Key="STR_QuickAccess_OpenTdlLog" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть TDL.0.log</sys:String>
+    <sys:String x:Key="STR_QuickAccess_OpenTdlLogFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть папку логов TDL</sys:String>
+    <sys:String x:Key="STR_QuickAccess_OpenSkseDocsFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть папку SKSE (Documents)</sys:String>
+    <sys:String x:Key="STR_QuickAccess_OpenPluginLog" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть TDL_StreamPlugin.log (если есть)</sys:String>
+
+    <sys:String x:Key="STR_QuickAccess_Status_NotChecked" xmlns:sys="clr-namespace:System;assembly=mscorlib">Статус: не проверялось</sys:String>
+
+    <!-- QuickAccess: messages & formats (used in code-behind) -->
+    <sys:String x:Key="STR_QuickAccess_Msg_SetGamePath" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сначала укажи путь к игре в Настройках (корень Skyrim Special Edition).</sys:String>
+    <sys:String x:Key="STR_QuickAccess_Msg_FolderNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Папка не найдена:\n{0}</sys:String>
+    <sys:String x:Key="STR_QuickAccess_Msg_FileNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Файл не найден:\n{0}</sys:String>
+
+    <sys:String x:Key="STR_QuickAccess_Status_GamePathMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">Статус: путь к игре не задан (Настройки).</sys:String>
+    <sys:String x:Key="STR_QuickAccess_Status_Format" xmlns:sys="clr-namespace:System;assembly=mscorlib">Статус: INI={0} | TDL.0.log={1} | Инструменты={2}</sys:String>
+    <sys:String x:Key="STR_QuickAccess_Status_OK" xmlns:sys="clr-namespace:System;assembly=mscorlib">OK</sys:String>
+    <sys:String x:Key="STR_QuickAccess_Status_Missing" xmlns:sys="clr-namespace:System;assembly=mscorlib">нет</sys:String>
+
+    <sys:String x:Key="STR_QuickAccess_Msg_IniExists" xmlns:sys="clr-namespace:System;assembly=mscorlib">INI уже существует.</sys:String>
+    <sys:String x:Key="STR_QuickAccess_Msg_IniCreated" xmlns:sys="clr-namespace:System;assembly=mscorlib">INI создан.</sys:String>
+    <sys:String x:Key="STR_QuickAccess_Msg_IniCreateFailed_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не удалось создать INI:\n{0}</sys:String>
+    <!-- QuickAccess: Status line -->
+    <sys:String x:Key="STR_QuickAccess_StatusLine_Format" xmlns:sys="clr-namespace:System;assembly=mscorlib">Статус: INI={0} | TDL.0.log={1} | Инструменты={2}</sys:String>
+
+    <!-- Common -->
+    <sys:String x:Key="STR_Common_Ok" xmlns:sys="clr-namespace:System;assembly=mscorlib">OK</sys:String>
+    <sys:String x:Key="STR_Common_No" xmlns:sys="clr-namespace:System;assembly=mscorlib">нет</sys:String>
+    <sys:String x:Key="STR_Common_Status" xmlns:sys="clr-namespace:System;assembly=mscorlib">Статус:</sys:String>
 
 </ResourceDictionary>

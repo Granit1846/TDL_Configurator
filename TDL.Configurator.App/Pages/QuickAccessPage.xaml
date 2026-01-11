@@ -3,39 +3,57 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="0,0,0,8">
-            <TextBlock Text="Quick access" FontSize="22" FontWeight="SemiBold"/>
-            <TextBlock Text="Быстрый доступ к файлам игры и логам." Opacity="0.7" Margin="0,6,0,16"/>
+            <TextBlock Text="{DynamicResource STR_QuickAccess_Title}" Style="{StaticResource PageTitleStyle}"/>
+            <TextBlock Text="{DynamicResource STR_QuickAccess_Subtitle}" Style="{StaticResource PageSubtitleStyle}"/>
 
-            <GroupBox Header="Игра / мод" Margin="0,0,0,12">
+            <GroupBox Header="{DynamicResource STR_QuickAccess_Group_GameMod}" Margin="0,0,0,12">
                 <StackPanel Margin="10">
                     <WrapPanel Margin="0,0,0,8">
-                        <Button Width="220" Height="22" Margin="0,0,8,0" Content="Открыть папку Plugins" Click="OpenPluginsFolder_Click"/>
-                        <Button Width="220" Margin="0,0,8,0" Content="Открыть INI (TDL_StreamPlugin.ini)" Click="OpenIni_Click"/>
-                        <Button Width="220" Content="Создать INI (шаблон)" Click="CreateIni_Click"/>
+                        <Button Width="220" Height="22" Margin="0,0,8,0"
+                                Content="{DynamicResource STR_QuickAccess_OpenPluginsFolder}"
+                                Click="OpenPluginsFolder_Click"/>
+                        <Button Width="220" Margin="0,0,8,0"
+                                Content="{DynamicResource STR_QuickAccess_OpenIni}"
+                                Click="OpenIni_Click"/>
+                        <Button Width="220"
+                                Content="{DynamicResource STR_QuickAccess_CreateIniTemplate}"
+                                Click="CreateIni_Click"/>
                     </WrapPanel>
 
                     <WrapPanel>
-                        <Button Width="220" Height="22" Margin="0,0,8,0" Content="Открыть папку Tools (tdl_send.exe)" Click="OpenToolsFolder_Click"/>
-                        <Button Width="220" Content="Открыть папку Data\TDL" Click="OpenTdlDataFolder_Click"/>
+                        <Button Width="220" Height="22" Margin="0,0,8,0"
+                                Content="{DynamicResource STR_QuickAccess_OpenToolsFolder}"
+                                Click="OpenToolsFolder_Click"/>
+                        <Button Width="220"
+                                Content="{DynamicResource STR_QuickAccess_OpenTdlDataFolder}"
+                                Click="OpenTdlDataFolder_Click"/>
                     </WrapPanel>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Логи" Margin="0,0,0,12">
+            <GroupBox Header="{DynamicResource STR_QuickAccess_Group_Logs}" Margin="0,0,0,12">
                 <StackPanel Margin="10">
                     <WrapPanel Margin="0,0,0,8">
-                        <Button Width="220" Height="22" Margin="0,0,8,0" Content="Открыть TDL.0.log" Click="OpenTdlLog_Click"/>
-                        <Button Width="220" Content="Открыть папку логов TDL" Click="OpenTdlLogFolder_Click"/>
+                        <Button Width="220" Height="22" Margin="0,0,8,0"
+                                Content="{DynamicResource STR_QuickAccess_OpenTdlLog}"
+                                Click="OpenTdlLog_Click"/>
+                        <Button Width="220"
+                                Content="{DynamicResource STR_QuickAccess_OpenTdlLogFolder}"
+                                Click="OpenTdlLogFolder_Click"/>
                     </WrapPanel>
 
                     <WrapPanel>
-                        <Button Width="220" Height="22" Margin="0,0,8,0" Content="Открыть папку SKSE (Documents)" Click="OpenSkseDocsFolder_Click"/>
-                        <Button Width="220" Content="Открыть TDL_StreamPlugin.log (если есть)" Click="OpenPluginLog_Click"/>
+                        <Button Width="220" Height="22" Margin="0,0,8,0"
+                                Content="{DynamicResource STR_QuickAccess_OpenSkseDocsFolder}"
+                                Click="OpenSkseDocsFolder_Click"/>
+                        <Button Width="220"
+                                Content="{DynamicResource STR_QuickAccess_OpenPluginLog}"
+                                Click="OpenPluginLog_Click"/>
                     </WrapPanel>
                 </StackPanel>
             </GroupBox>
 
-            <TextBlock x:Name="StatusText" Text="Статус: не проверялось" Opacity="0.75"/>
+            <TextBlock x:Name="StatusText" Text="{DynamicResource STR_QuickAccess_Status_NotChecked}" Opacity="0.75"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

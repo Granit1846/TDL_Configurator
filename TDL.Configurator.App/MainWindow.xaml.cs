@@ -32,23 +32,40 @@ public partial class MainWindow : Window
         if (NavList.SelectedItem is not ListBoxItem item)
             return;
 
-        var key = item.Content?.ToString() ?? "";
+        var key = item.Tag?.ToString() ?? "";
+
+        string GetPlaceholderText(string pageKey)
+        {
+            var fmt = System.Windows.Application.Current?.TryFindResource("STR_Page_Placeholder") as string;
+            if (string.IsNullOrWhiteSpace(fmt))
+                fmt = "Page: {0}";
+
+            try
+            {
+                return string.Format(fmt, pageKey);
+            }
+            catch
+            {
+                // Если строка ресурса случайно не форматная.
+                return fmt + " " + pageKey;
+            }
+        }
 
         MainContent.Content = key switch
         {
             "Chaos" => new ChaosPage(),
-            "Quick access" => new QuickAccessPage(),
+            "QuickAccess" => new QuickAccessPage(),
             "Test" => new TestPage(),
 
             "Inventory" => new InventoryPage(),
             "Wrath" => new WrathPage(),
             "Hunter" => new HunterPage(),
-            "Gigant" => new GigantPage(),
-            "Comedy" => new ComedyPage(),
-            "Documentation" => new DocumentationPage(),
+            "Characteristics" => new GigantPage(),
+            "Show" => new ComedyPage(),
+            "Information" => new DocumentationPage(),
             _ => new TextBlock
             {
-                Text = $"Страница: {key}\n(контент добавим позже)",
+                Text = GetPlaceholderText(key),
                 FontSize = 20,
                 FontWeight = FontWeights.SemiBold
             }

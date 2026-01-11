@@ -1,24 +1,72 @@
-﻿// Auto-generated patch: autoload INI + Save+Apply (SYSTEM_RELOAD_CONFIG)
-// Source of defaults/ranges: TDL_AllRanges.txt
+﻿// QuickAccessPage: dynamic status text updates on language change (LocalizationManager.LanguageChanged)
 
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
+using TDL.Configurator.App.Services;
 using TDL.Configurator.Core;
 
 namespace TDL.Configurator.App.Pages;
 
 public partial class QuickAccessPage : System.Windows.Controls.UserControl
 {
+    private bool _subscribed;
+
     public QuickAccessPage()
     {
         InitializeComponent();
+
+        Loaded += (_, __) =>
+        {
+            if (_subscribed) return;
+            LocalizationManager.LanguageChanged += OnLanguageChanged;
+            _subscribed = true;
+        };
+
+        Unloaded += (_, __) =>
+        {
+            if (!_subscribed) return;
+            LocalizationManager.LanguageChanged -= OnLanguageChanged;
+            _subscribed = false;
+        };
+
         UpdateStatus();
     }
 
-    private string GamePath => AppSettings.Load().GamePath.Trim();
+    private void OnLanguageChanged(AppLanguage _)
+    {
+        // При смене языка нужно пересобрать строку статуса (она генерируется кодом)
+        UpdateStatus();
+    }
+
+    private static bool IsRu => LocalizationManager.CurrentLanguage != AppLanguage.En;
+
+    private static string L(string key, string fallbackRu, string fallbackEn)
+    {
+        object v = System.Windows.Application.Current?.TryFindResource(key);
+        if (v is string s && !string.IsNullOrWhiteSpace(s))
+            return s;
+
+        return IsRu ? fallbackRu : fallbackEn;
+    }
+
+    private static string LF(string key, string fallbackRu, string fallbackEn, params object[] args)
+    {
+        var fmt = L(key, fallbackRu, fallbackEn);
+        try { return string.Format(fmt, args); }
+        catch { return fmt; }
+    }
+
+    private string GamePath
+    {
+        get
+        {
+            var p = AppSettings.Load().GamePath ?? string.Empty;
+            return p.Trim();
+        }
+    }
 
     private string PluginsFolder => Path.Combine(GamePath, "Data", "SKSE", "Plugins");
     private string IniPath => Path.Combine(PluginsFolder, "TDL_StreamPlugin.ini");
@@ -33,15 +81,20 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
     private string SkseDocsFolder => Path.Combine(DocsRoot, "My Games", "Skyrim Special Edition", "SKSE");
     private string PluginLogPath => Path.Combine(SkseDocsFolder, "TDL_StreamPlugin.log");
 
-    private bool EnsureGamePath()
+    private bool EnsureGamePath(bool showMessage)
     {
         if (string.IsNullOrWhiteSpace(GamePath) || !Directory.Exists(GamePath))
         {
-            System.Windows.MessageBox.Show(
-                "Сначала укажи путь к игре в Настройках (корень Skyrim Special Edition).",
-                "TDL Configurator",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            if (showMessage)
+            {
+                System.Windows.MessageBox.Show(
+                    L("STR_QuickAccess_Msg_GamePathRequired",
+                        "Сначала укажи путь к игре в Настройках (корень Skyrim Special Edition).",
+                        "Please set the game folder in Settings (Skyrim Special Edition root)."),
+                    L("STR_App_Title", "TDL Configurator", "TDL Configurator"),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
 
             return false;
         }
@@ -54,8 +107,11 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         if (!Directory.Exists(folder))
         {
             System.Windows.MessageBox.Show(
-                $"Папка не найдена:\n{folder}",
-                "TDL Configurator",
+                LF("STR_QuickAccess_Msg_FolderNotFound",
+                    "Папка не найдена:\n{0}",
+                    "Folder not found:\n{0}",
+                    folder),
+                L("STR_App_Title", "TDL Configurator", "TDL Configurator"),
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -69,8 +125,11 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         if (!File.Exists(file))
         {
             System.Windows.MessageBox.Show(
-                $"Файл не найден:\n{file}",
-                "TDL Configurator",
+                LF("STR_QuickAccess_Msg_FileNotFound",
+                    "Файл не найден:\n{0}",
+                    "File not found:\n{0}",
+                    file),
+                L("STR_App_Title", "TDL Configurator", "TDL Configurator"),
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -81,9 +140,12 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
 
     private void UpdateStatus()
     {
-        if (!EnsureGamePath())
+        // Статус должен быть БЕЗ всплывающих окон, потому что он будет вызываться при смене языка.
+        if (!EnsureGamePath(showMessage: false))
         {
-            StatusText.Text = "Статус: путь к игре не задан (Настройки).";
+            StatusText.Text = L("STR_QuickAccess_Status_GamePathMissing",
+                "Статус: путь к игре не задан (Настройки).",
+                "Status: game path is not set (Settings).");
             return;
         }
 
@@ -91,43 +153,78 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         var okLog = File.Exists(TdlLogPath);
         var okTools = Directory.Exists(ToolsFolder);
 
-        StatusText.Text =
-            $"Статус: INI={(okIni ? "OK" : "нет")} | TDL.0.log={(okLog ? "OK" : "нет")} | Tools={(okTools ? "OK" : "нет")}";
+        var okText = L("STR_Common_Ok", "OK", "OK");
+        var noText = L("STR_Common_No", "нет", "No");
+
+        var fmt = L("STR_QuickAccess_StatusLine_Format",
+            "Статус: INI={0} | TDL.0.log={1} | Инструменты={2}",
+            "Status: INI={0} | TDL.0.log={1} | Tools={2}");
+
+        StatusText.Text = string.Format(fmt,
+            okIni ? okText : noText,
+            okLog ? okText : noText,
+            okTools ? okText : noText);
     }
 
     private void OpenPluginsFolder_Click(object sender, RoutedEventArgs e)
     {
-        if (!EnsureGamePath()) return;
+        if (!EnsureGamePath(showMessage: true)) return;
         OpenFolder(PluginsFolder);
+        UpdateStatus();
     }
 
     private void OpenIni_Click(object sender, RoutedEventArgs e)
     {
-        if (!EnsureGamePath()) return;
+        if (!EnsureGamePath(showMessage: true)) return;
         OpenFile(IniPath);
+        UpdateStatus();
     }
 
     private void OpenToolsFolder_Click(object sender, RoutedEventArgs e)
     {
-        if (!EnsureGamePath()) return;
+        if (!EnsureGamePath(showMessage: true)) return;
         OpenFolder(ToolsFolder);
+        UpdateStatus();
     }
 
     private void OpenTdlDataFolder_Click(object sender, RoutedEventArgs e)
     {
-        if (!EnsureGamePath()) return;
+        if (!EnsureGamePath(showMessage: true)) return;
         OpenFolder(TdlDataFolder);
+        UpdateStatus();
     }
 
-    private void OpenTdlLog_Click(object sender, RoutedEventArgs e) => OpenFile(TdlLogPath);
-    private void OpenTdlLogFolder_Click(object sender, RoutedEventArgs e) => OpenFolder(TdlLogFolder);
+    private void OpenTdlLog_Click(object sender, RoutedEventArgs e)
+    {
+        if (!EnsureGamePath(showMessage: true)) return;
+        OpenFile(TdlLogPath);
+        UpdateStatus();
+    }
 
-    private void OpenSkseDocsFolder_Click(object sender, RoutedEventArgs e) => OpenFolder(SkseDocsFolder);
-    private void OpenPluginLog_Click(object sender, RoutedEventArgs e) => OpenFile(PluginLogPath);
+    private void OpenTdlLogFolder_Click(object sender, RoutedEventArgs e)
+    {
+        if (!EnsureGamePath(showMessage: true)) return;
+        OpenFolder(TdlLogFolder);
+        UpdateStatus();
+    }
+
+    private void OpenSkseDocsFolder_Click(object sender, RoutedEventArgs e)
+    {
+        if (!EnsureGamePath(showMessage: true)) return;
+        OpenFolder(SkseDocsFolder);
+        UpdateStatus();
+    }
+
+    private void OpenPluginLog_Click(object sender, RoutedEventArgs e)
+    {
+        if (!EnsureGamePath(showMessage: true)) return;
+        OpenFile(PluginLogPath);
+        UpdateStatus();
+    }
 
     private void CreateIni_Click(object sender, RoutedEventArgs e)
     {
-        if (!EnsureGamePath()) return;
+        if (!EnsureGamePath(showMessage: true)) return;
 
         try
         {
@@ -136,8 +233,8 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
             if (File.Exists(IniPath))
             {
                 System.Windows.MessageBox.Show(
-                    "INI уже существует.",
-                    "TDL Configurator",
+                    L("STR_QuickAccess_Msg_IniAlreadyExists", "INI уже существует.", "INI already exists."),
+                    L("STR_App_Title", "TDL Configurator", "TDL Configurator"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
                 return;
@@ -148,7 +245,6 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
             sb.AppendLine("; Generated by TDL Configurator");
             sb.AppendLine();
 
-            // Defaults from TDL_AllRanges.txt
             sb.AppendLine("[Chaos]");
             sb.AppendLine("BackfireChance=20");
             sb.AppendLine("BackfireDuration=60");
@@ -231,8 +327,8 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
             File.WriteAllText(IniPath, sb.ToString(), Encoding.UTF8);
 
             System.Windows.MessageBox.Show(
-                "INI создан.",
-                "TDL Configurator",
+                L("STR_QuickAccess_Msg_IniCreated", "INI создан.", "INI created."),
+                L("STR_App_Title", "TDL Configurator", "TDL Configurator"),
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
 
@@ -241,8 +337,11 @@ public partial class QuickAccessPage : System.Windows.Controls.UserControl
         catch (Exception ex)
         {
             System.Windows.MessageBox.Show(
-                $"Не удалось создать INI:\n{ex.Message}",
-                "TDL Configurator",
+                LF("STR_QuickAccess_Msg_CreateIniFailed",
+                    "Не удалось создать INI:\n{0}",
+                    "Failed to create INI:\n{0}",
+                    ex.Message),
+                L("STR_App_Title", "TDL Configurator", "TDL Configurator"),
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
