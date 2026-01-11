@@ -37,7 +37,7 @@
             <Button Grid.Column="3" Content="Копировать Markdown" Width="170" Height="22" Margin="0,0,8,0" Click="CopyMarkdown_Click"/>
 
             <TextBlock Grid.Column="5" Text="Поиск:" VerticalAlignment="Center" Opacity="0.7" Margin="0,0,6,0"/>
-            <TextBox Grid.Column="6" x:Name="SearchBox" Width="260" Height="22"
+            <TextBox Grid.Column="6" x:Name="SearchBox" Width="90" Height="22"
                      VerticalContentAlignment="Center"
                      TextChanged="SearchBox_TextChanged"/>
 
