@@ -222,17 +222,73 @@
     <sys:String x:Key="STR_Info_Btn_CopyMarkdown" xmlns:sys="clr-namespace:System;assembly=mscorlib">Copy Markdown</sys:String>
     <sys:String x:Key="STR_Info_Group_Documents" xmlns:sys="clr-namespace:System;assembly=mscorlib">Documents</sys:String>
     <sys:String x:Key="STR_Info_Msg_DocsFolderNotFound" xmlns:sys="clr-namespace:System;assembly=mscorlib">Docs folder was not found next to the application.</sys:String>
-    <sys:String x:Key="STR_Info_Msg_FileNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">File not found:
-{0}</sys:String>
+    <sys:String x:Key="STR_Info_Msg_FileNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">File not found:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_Copied_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Copied to clipboard ({0})</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_SelectDoc" xmlns:sys="clr-namespace:System;assembly=mscorlib">Select a document from the list on the left.</sys:String>
     <sys:String x:Key="STR_Info_Status_DocsMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">docs folder not found (place docs\ next to the .exe).</sys:String>
     <sys:String x:Key="STR_Info_Status_FoundCount_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Documents found: {0}</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_NoDocs" xmlns:sys="clr-namespace:System;assembly=mscorlib">No documents found (no .md files).</sys:String>
     <sys:String x:Key="STR_Info_Status_NotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Not found: {0}</sys:String>
-    <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Failed to read file:
-{0}</sys:String>
+    <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Failed to read file:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_ReadError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Read error</sys:String>
     <sys:String x:Key="STR_Info_Status_Opened_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Opened: {0} ({1})</sys:String>
+
+    <!--Gigant -->
+    <sys:String x:Key="STR_Characteristics_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Characteristics</sys:String>
+    <sys:String x:Key="STR_Characteristics_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings for [Gigant] section in TDL_StreamPlugin.ini</sys:String>
+    <sys:String x:Key="STR_Characteristics_SizeDamage_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">SIZE AND DAMAGE</sys:String>
+    <sys:String x:Key="STR_Characteristics_Speed_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">SPEED</sys:String>
+    <sys:String x:Key="STR_Char_ScaleBig_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Scale factor (Giant)</sys:String>
+    <sys:String x:Key="STR_Char_ScaleBig_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Changes player scale while the "Giant" effect is active.</sys:String>
+    <sys:String x:Key="STR_Char_ScaleBig_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Large values may cause collision and animation issues.</sys:String>
+    <sys:String x:Key="STR_Char_DamageBig_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Damage multiplier (Giant)</sys:String>
+    <sys:String x:Key="STR_Char_DamageBig_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Player damage multiplier while the "Giant" effect is active.</sys:String>
+    <sys:String x:Key="STR_Char_ScaleSmall_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Scale factor (Lilliput)</sys:String>
+    <sys:String x:Key="STR_Char_ScaleSmall_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Changes player scale while the "Lilliput" effect is active.</sys:String>
+    <sys:String x:Key="STR_Char_ScaleSmall_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Very small values may break collisions and camera behavior.</sys:String>
+    <sys:String x:Key="STR_Char_DamageSmall_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Damage multiplier (Lilliput)</sys:String>
+    <sys:String x:Key="STR_Char_DamageSmall_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Player damage multiplier while the "Lilliput" effect is active.</sys:String>
+    <sys:String x:Key="STR_Char_SizeDuration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Size duration (sec)</sys:String>
+    <sys:String x:Key="STR_Char_SizeDuration_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Duration of the size-change effect (in seconds).</sys:String>
+    <sys:String x:Key="STR_Char_SpeedFast_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Speed multiplier (boost)</sys:String>
+    <sys:String x:Key="STR_Char_SpeedFast_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Movement speed multiplier during boost.</sys:String>
+    <sys:String x:Key="STR_Char_SpeedFast_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Very large values may cause unstable physics and animations.</sys:String>
+    <sys:String x:Key="STR_Char_SpeedSlow_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Speed multiplier (slow)</sys:String>
+    <sys:String x:Key="STR_Char_SpeedSlow_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Movement speed multiplier during slow.</sys:String>
+    <sys:String x:Key="STR_Char_SpeedDuration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Speed duration (sec)</sys:String>
+    <sys:String x:Key="STR_Char_SpeedDuration_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Duration of the speed-change effect (in seconds).</sys:String>
+    <sys:String x:Key="STR_Char_Reset_ScaleBig" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (2.0)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_DamageBig" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (5.0)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_ScaleSmall" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (0.33)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_DamageSmall" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (0.5)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_SizeDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (60)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_SpeedFast" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (3)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_SpeedSlow" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (0.5)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_SpeedDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (60)</sys:String>
+
+    <!-- Hunter -->
+    <sys:String x:Key="STR_Hunter_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Hunter</sys:String>
+    <sys:String x:Key="STR_Hunter_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Settings for the [Hunter] section in TDL_StreamPlugin.ini</sys:String>
+
+    <sys:String x:Key="STR_Hunter_CorpseTime_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Corpse despawn time (sec)</sys:String>
+    <sys:String x:Key="STR_Hunter_CorpseTime_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">How many seconds the hunter corpse remains after death. 0 - despawns immediately.</sys:String>
+    <sys:String x:Key="STR_Hunter_CorpseTime_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (30)</sys:String>
+
+    <sys:String x:Key="STR_Hunter_Duration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Effect duration (sec)</sys:String>
+    <sys:String x:Key="STR_Hunter_Duration_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Duration of the "Hunter" event/effect (in seconds).</sys:String>
+    <sys:String x:Key="STR_Hunter_Duration_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (90)</sys:String>
+
+    <sys:String x:Key="STR_Hunter_MaxDistance_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Max distance (units)</sys:String>
+    <sys:String x:Key="STR_Hunter_MaxDistance_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Maximum distance at which the "Hunter" logic can search for / maintain a target.</sys:String>
+    <sys:String x:Key="STR_Hunter_MaxDistance_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (5500)</sys:String>
+
+    <sys:String x:Key="STR_Hunter_ReAggro_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Re-aggro interval (sec)</sys:String>
+    <sys:String x:Key="STR_Hunter_ReAggro_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">How often "Hunter" refreshes the target / re-engages the player.</sys:String>
+    <sys:String x:Key="STR_Hunter_ReAggro_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (4.0)</sys:String>
+
+    <sys:String x:Key="STR_Hunter_SpawnOffset_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Spawn offset (units)</sys:String>
+    <sys:String x:Key="STR_Hunter_SpawnOffset_Tooltip_P1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Distance at which "Hunter" spawns relative to the player.</sys:String>
+    <sys:String x:Key="STR_Hunter_SpawnOffset_Tooltip_P2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Too small a value may cause near-instant spawns and visual artifacts.</sys:String>
+    <sys:String x:Key="STR_Hunter_SpawnOffset_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Reset to Default (1200)</sys:String>
 
 </ResourceDictionary>

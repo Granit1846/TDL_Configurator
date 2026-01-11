@@ -6,20 +6,20 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel>
 
-            <TextBlock Text="Gigant" FontSize="22" FontWeight="SemiBold"/>
-            <TextBlock Text="Настройки секции [Gigant] в TDL_StreamPlugin.ini"
+            <TextBlock Text="{DynamicResource STR_Characteristics_Title}" FontSize="22" FontWeight="SemiBold"/>
+            <TextBlock Text="{DynamicResource STR_Characteristics_Subtitle}"
                        Opacity="0.7" Margin="0,6,0,16"/>
 
             <WrapPanel Margin="0,0,0,12" VerticalAlignment="Center">
-                <Button Content="Сохранить + применить" Width="170" Height="22" Margin="0,0,8,0" Click="SaveApply_Click"/>
-                <Button Content="Сбросить всё" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
+                <Button Content="{DynamicResource STR_Common_SaveApply}" Width="170" Height="22" Margin="0,0,8,0" Click="SaveApply_Click"/>
+                <Button Content="{DynamicResource STR_Common_ResetAll}" Width="130" Margin="0,0,12,0" Click="DefaultsAll_Click"/>
                 <TextBlock x:Name="GigantStatusText" Opacity="0.7" VerticalAlignment="Center"/>
             </WrapPanel>
 
-            <GroupBox Header="Параметры">
+            <GroupBox Header="{DynamicResource STR_Common_Parameters}">
                 <StackPanel Margin="10">
 
-                    <Expander Header="РАЗМЕР И УРОН" IsExpanded="True" Margin="0,0,0,12">
+                    <Expander Header="{DynamicResource STR_Characteristics_SizeDamage_Header}" IsExpanded="True" Margin="0,0,0,12">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
@@ -37,64 +37,64 @@
                             </Grid.RowDefinitions>
 
                             <!-- ScaleBig -->
-                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Коэф. роста (Гигант)">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="{DynamicResource STR_Char_ScaleBig_Label}">
                                 <TextBlock.ToolTip>
                                     <ToolTip MaxWidth="420">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Изменяет масштаб игрока при эффекте «Гигант». "/>
-                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                            <Run Text=" Большие значения могут приводить к проблемам с коллизиями и анимациями." Foreground="Red"/>
+                                            <Run Text="{DynamicResource STR_Char_ScaleBig_Tip1}" />
+                                            <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text="{DynamicResource STR_Char_ScaleBig_Tip2}" Foreground="Red"/>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                             </TextBlock>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="ScaleBigBox" Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScaleBig" ToolTip="Сбросить на Default (2.0)" Click="DefaultRow_Click"/>
+                                    Tag="ScaleBig" ToolTip="{DynamicResource STR_Char_Reset_ScaleBig}" Click="DefaultRow_Click"/>
 
                             <!-- DamageBig -->
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Множитель урона (Гигант)"
-                                       ToolTip="Множитель урона игрока при эффекте «Гигант»."/>
+                                       Text="{DynamicResource STR_Char_DamageBig_Label}"
+                                       ToolTip="{DynamicResource STR_Char_DamageBig_Tooltip}"/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="DamageBigBox" Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DamageBig" ToolTip="Сбросить на Default (5.0)" Click="DefaultRow_Click"/>
+                                    Tag="DamageBig" ToolTip="{DynamicResource STR_Char_Reset_DamageBig}" Click="DefaultRow_Click"/>
 
                             <!-- ScaleSmall -->
-                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Коэф. роста (Лилипут)">
+                            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="{DynamicResource STR_Char_ScaleSmall_Label}">
                                 <TextBlock.ToolTip>
                                     <ToolTip MaxWidth="420">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Изменяет масштаб игрока при эффекте «Лилипут». "/>
-                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                            <Run Text=" Слишком малые значения могут ломать коллизии и поведение камеры." Foreground="Red"/>
+                                            <Run Text="{DynamicResource STR_Char_ScaleSmall_Tip1}" />
+                                            <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text="{DynamicResource STR_Char_ScaleSmall_Tip2}" Foreground="Red"/>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                             </TextBlock>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="ScaleSmallBox" Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="ScaleSmall" ToolTip="Сбросить на Default (0.33)" Click="DefaultRow_Click"/>
+                                    Tag="ScaleSmall" ToolTip="{DynamicResource STR_Char_Reset_ScaleSmall}" Click="DefaultRow_Click"/>
 
                             <!-- DamageSmall -->
                             <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Множитель урона (Лилипут)"
-                                       ToolTip="Множитель урона игрока при эффекте «Лилипут»."/>
+                                       Text="{DynamicResource STR_Char_DamageSmall_Label}"
+                                       ToolTip="{DynamicResource STR_Char_DamageSmall_Tooltip}"/>
                             <TextBox Grid.Row="3" Grid.Column="1" x:Name="DamageSmallBox" Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="3" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="DamageSmall" ToolTip="Сбросить на Default (0.5)" Click="DefaultRow_Click"/>
+                                    Tag="DamageSmall" ToolTip="{DynamicResource STR_Char_Reset_DamageSmall}" Click="DefaultRow_Click"/>
 
                             <!-- SizeDuration -->
                             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Длительность размера (сек)"
-                                       ToolTip="Длительность эффекта изменения размера (в секундах)."/>
+                                       Text="{DynamicResource STR_Char_SizeDuration_Label}"
+                                       ToolTip="{DynamicResource STR_Char_SizeDuration_Tooltip}"/>
                             <TextBox Grid.Row="4" Grid.Column="1" x:Name="SizeDurationBox" Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="SizeDuration" ToolTip="Сбросить на Default (60)" Click="DefaultRow_Click"/>
+                                    Tag="SizeDuration" ToolTip="{DynamicResource STR_Char_Reset_SizeDuration}" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 
-                    <Expander Header="СКОРОСТЬ" IsExpanded="True">
+                    <Expander Header="{DynamicResource STR_Characteristics_Speed_Header}" IsExpanded="True">
                         <Grid Margin="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="260"/>
@@ -110,36 +110,36 @@
                             </Grid.RowDefinitions>
 
                             <!-- SpeedFast -->
-                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="Множитель скорости (ускорение)">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource RowLabelStyle}" Text="{DynamicResource STR_Char_SpeedFast_Label}">
                                 <TextBlock.ToolTip>
                                     <ToolTip MaxWidth="420">
                                         <TextBlock TextWrapping="Wrap">
-                                            <Run Text="Множитель скорости передвижения при ускорении. "/>
-                                            <Run Text="ВНИМАНИЕ!" Foreground="Red" FontWeight="Bold"/>
-                                            <Run Text=" Слишком большие значения могут приводить к нестабильной физике и анимациям." Foreground="Red"/>
+                                            <Run Text="{DynamicResource STR_Char_SpeedFast_Tip1}" />
+                                            <Run Text="{DynamicResource STR_Common_Warning}" Foreground="Red" FontWeight="Bold"/>
+                                            <Run Text="{DynamicResource STR_Char_SpeedFast_Tip2}" Foreground="Red"/>
                                         </TextBlock>
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                             </TextBlock>
                             <TextBox Grid.Row="0" Grid.Column="1" x:Name="SpeedFastBox" Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="SpeedFast" ToolTip="Сбросить на Default (3)" Click="DefaultRow_Click"/>
+                                    Tag="SpeedFast" ToolTip="{DynamicResource STR_Char_Reset_SpeedFast}" Click="DefaultRow_Click"/>
 
                             <!-- SpeedSlow -->
                             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Множитель скорости (замедление)"
-                                       ToolTip="Множитель скорости передвижения при замедлении."/>
+                                       Text="{DynamicResource STR_Char_SpeedSlow_Label}"
+                                       ToolTip="{DynamicResource STR_Char_SpeedSlow_Tooltip}"/>
                             <TextBox Grid.Row="1" Grid.Column="1" x:Name="SpeedSlowBox" Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="SpeedSlow" ToolTip="Сбросить на Default (0.5)" Click="DefaultRow_Click"/>
+                                    Tag="SpeedSlow" ToolTip="{DynamicResource STR_Char_Reset_SpeedSlow}" Click="DefaultRow_Click"/>
 
                             <!-- SpeedDuration -->
                             <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource RowLabelStyle}"
-                                       Text="Длительность скорости (сек)"
-                                       ToolTip="Длительность эффекта изменения скорости (в секундах)."/>
+                                       Text="{DynamicResource STR_Char_SpeedDuration_Label}"
+                                       ToolTip="{DynamicResource STR_Char_SpeedDuration_Tooltip}"/>
                             <TextBox Grid.Row="2" Grid.Column="1" x:Name="SpeedDurationBox" Style="{StaticResource NumericBoxStyle}"/>
                             <Button Grid.Row="2" Grid.Column="2" Style="{StaticResource ResetButtonStyle}"
-                                    Tag="SpeedDuration" ToolTip="Сбросить на Default (60)" Click="DefaultRow_Click"/>
+                                    Tag="SpeedDuration" ToolTip="{DynamicResource STR_Char_Reset_SpeedDuration}" Click="DefaultRow_Click"/>
                         </Grid>
                     </Expander>
 

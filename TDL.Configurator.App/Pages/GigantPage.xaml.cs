@@ -22,7 +22,8 @@ public partial class GigantPage : System.Windows.Controls.UserControl
     private const string ToolsRelativePath = @"Data\TDL\Tools\tdl_send.exe";
 
     private const string SectionName = "Gigant";
-    private const string UiTitle = "TDL Configurator";
+    private const string FallbackTitleRu = "TDL Configurator";
+    private const string FallbackTitleEn = "TDL Configurator";
 
     // TDL_AllRanges.txt → GIGANT
     private const int DefaultSizeDuration = 60;   // 5..600
@@ -44,6 +45,29 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         AutoLoadFromIniSilent();
     }
 
+    private static string L(string key, string ruFallback, string enFallback)
+    {
+        try
+        {
+            if (System.Windows.Application.Current?.TryFindResource(key) is string s && !string.IsNullOrWhiteSpace(s))
+                return s;
+        }
+        catch
+        {
+            // ignore
+        }
+
+        // Fallback based on persisted app settings
+        var lang = AppSettings.Load().Language;
+        return lang == AppLanguage.En ? enFallback : ruFallback;
+    }
+
+    private static string LF(string key, string ruFallback, string enFallback, params object[] args)
+        => string.Format(L(key, ruFallback, enFallback), args);
+
+    private static string UiTitle =>
+        L("STR_App_Title", FallbackTitleRu, FallbackTitleEn);
+
     private static string SafeNow() => DateTime.Now.ToString("HH:mm:ss");
 
     private bool TryGetGamePath(out string gamePath)
@@ -57,7 +81,11 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         catch (Exception ex)
         {
             System.Windows.MessageBox.Show(
-                "Не удалось прочитать settings.json.\n" + ex.Message,
+                LF(
+                    "STR_Common_Msg_SettingsReadFailed",
+                    "Не удалось прочитать settings.json.\n{0}",
+                    "Failed to read settings.json.\n{0}",
+                    ex.Message),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -67,7 +95,10 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         if (string.IsNullOrWhiteSpace(gamePath) || !Directory.Exists(gamePath))
         {
             System.Windows.MessageBox.Show(
-                "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.",
+                L(
+                    "STR_Common_Msg_GamePathMissing",
+                    "Путь к игре не задан или неверный.\nОткрой настройки и укажи папку Skyrim Special Edition.",
+                    "Game path is missing or invalid.\nOpen Settings and select the Skyrim Special Edition folder."),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -93,13 +124,21 @@ public partial class GigantPage : System.Windows.Controls.UserControl
 
         if (!TryGetIniPath(out var iniPath))
         {
-            GigantStatusText.Text = "Путь к игре не задан (default).";
+            GigantStatusText.Text = L(
+                "STR_Common_Status_GamePathMissingDefault",
+                "Путь к игре не задан (default).",
+                "Game path not set (defaults)."
+            );
             return;
         }
 
         if (!File.Exists(iniPath))
         {
-            GigantStatusText.Text = "INI не найден (default).";
+            GigantStatusText.Text = L(
+                "STR_Common_Status_IniMissingDefault",
+                "INI не найден (default).",
+                "INI not found (defaults)."
+            );
             return;
         }
 
@@ -117,7 +156,12 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         SpeedFastBox.Text = GetOr(map, "SpeedFast", SpeedFastBox.Text);
         SpeedSlowBox.Text = GetOr(map, "SpeedSlow", SpeedSlowBox.Text);
 
-        GigantStatusText.Text = $"Загружено из INI ({SafeNow()}).";
+        GigantStatusText.Text = LF(
+            "STR_Common_Status_LoadedFromIni",
+            "Загружено из INI ({0}).",
+            "Loaded from INI ({0}).",
+            SafeNow()
+        );
     }
 
     private void SaveApply_Click(object sender, RoutedEventArgs e)
@@ -157,7 +201,11 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         catch (Exception ex)
         {
             System.Windows.MessageBox.Show(
-                "Не удалось сохранить INI.\n" + ex.Message,
+                LF(
+                    "STR_Common_Msg_SaveIniFailed",
+                    "Не удалось сохранить INI.\n{0}",
+                    "Failed to save INI.\n{0}",
+                    ex.Message),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -166,13 +214,27 @@ public partial class GigantPage : System.Windows.Controls.UserControl
 
         if (TryApplyInGame(out var reason))
         {
-            GigantStatusText.Text = $"Сохранено и применено ({SafeNow()}).";
+            GigantStatusText.Text = LF(
+                "STR_Common_Status_SavedApplied",
+                "Сохранено и применено ({0}).",
+                "Saved and applied ({0}).",
+                SafeNow()
+            );
         }
         else
         {
-            GigantStatusText.Text = $"Сохранено, но не применено ({SafeNow()}).";
+            GigantStatusText.Text = LF(
+                "STR_Common_Status_SavedNotApplied",
+                "Сохранено, но не применено ({0}).",
+                "Saved, but not applied ({0}).",
+                SafeNow()
+            );
             System.Windows.MessageBox.Show(
-                "INI сохранён, но применить в игре не удалось.\n" + reason,
+                LF(
+                    "STR_Common_Msg_SavedNotApplied",
+                    "INI сохранён, но применить в игре не удалось.\n{0}",
+                    "INI was saved, but could not be applied in-game.\n{0}",
+                    reason),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -184,14 +246,23 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         reason = "";
         if (!TryGetGamePath(out var gamePath))
         {
-            reason = "Путь к игре не задан.";
+            reason = L(
+                "STR_Common_Reason_GamePathMissing",
+                "Путь к игре не задан.",
+                "Game path is not set."
+            );
             return false;
         }
 
         var tdlSend = Path.Combine(gamePath, ToolsRelativePath);
         if (!File.Exists(tdlSend))
         {
-            reason = $"tdl_send.exe не найден: {tdlSend}";
+            reason = LF(
+                "STR_Common_Reason_TdlSendMissing",
+                "tdl_send.exe не найден: {0}",
+                "tdl_send.exe not found: {0}",
+                tdlSend
+            );
             return false;
         }
 
@@ -211,14 +282,22 @@ public partial class GigantPage : System.Windows.Controls.UserControl
             using var p = Process.Start(psi);
             if (p == null)
             {
-                reason = "Не удалось запустить tdl_send.exe.";
+                reason = L(
+                    "STR_Common_Reason_TdlSendStartFailed",
+                    "Не удалось запустить tdl_send.exe.",
+                    "Failed to start tdl_send.exe."
+                );
                 return false;
             }
 
             if (!p.WaitForExit(3500))
             {
                 try { p.Kill(entireProcessTree: true); } catch { }
-                reason = "tdl_send.exe не завершился по таймауту.";
+                reason = L(
+                    "STR_Common_Reason_TdlSendTimeout",
+                    "tdl_send.exe не завершился по таймауту.",
+                    "tdl_send.exe timed out."
+                );
                 return false;
             }
 
@@ -227,7 +306,13 @@ public partial class GigantPage : System.Windows.Controls.UserControl
 
             if (p.ExitCode != 0)
             {
-                reason = $"Код выхода: {p.ExitCode}\n{(string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)}".Trim();
+                reason = LF(
+                    "STR_Common_Reason_TdlSendExitCode",
+                    "Код выхода: {0}\n{1}",
+                    "Exit code: {0}\n{1}",
+                    p.ExitCode,
+                    (string.IsNullOrWhiteSpace(stderr) ? stdout : stderr)
+                ).Trim();
                 return false;
             }
 
@@ -243,7 +328,12 @@ public partial class GigantPage : System.Windows.Controls.UserControl
     private void DefaultsAll_Click(object sender, RoutedEventArgs e)
     {
         ApplyDefaultsToUi();
-        GigantStatusText.Text = $"Сброшено на default ({SafeNow()}).";
+        GigantStatusText.Text = LF(
+            "STR_Common_Status_ResetDefault",
+            "Сброшено на default ({0}).",
+            "Reset to defaults ({0}).",
+            SafeNow()
+        );
     }
 
     private void DefaultRow_Click(object sender, RoutedEventArgs e)
@@ -256,7 +346,13 @@ public partial class GigantPage : System.Windows.Controls.UserControl
             return;
 
         SetDefaultForKey(key);
-        GigantStatusText.Text = $"Default: {key} ({SafeNow()}).";
+        GigantStatusText.Text = LF(
+            "STR_Common_Status_DefaultKey",
+            "Default: {0} ({1}).",
+            "Default: {0} ({1}).",
+            key,
+            SafeNow()
+        );
     }
 
     private void ApplyDefaultsToUi()
@@ -273,7 +369,11 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         SpeedFastBox.Text = DefaultSpeedFast.ToString("0.##", CultureInfo.InvariantCulture);
         SpeedSlowBox.Text = DefaultSpeedSlow.ToString("0.##", CultureInfo.InvariantCulture);
 
-        GigantStatusText.Text = "Готово (default).";
+        GigantStatusText.Text = L(
+            "STR_Common_Status_ReadyDefault",
+            "Готово (default).",
+            "Ready (defaults)."
+        );
     }
 
     private void SetDefaultForKey(string key)
@@ -395,7 +495,11 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         if (!int.TryParse((box.Text ?? "").Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name}: введи целое число.",
+                LF(
+                    "STR_Common_Msg_EnterInteger",
+                    "{0}: введи целое число.",
+                    "{0}: enter an integer.",
+                    name),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -405,7 +509,13 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: допустимый диапазон {min}..{max}.",
+                LF(
+                    "STR_Common_Msg_RangeInt",
+                    "{0}: допустимый диапазон {1}..{2}.",
+                    "{0}: valid range is {1}..{2}.",
+                    name,
+                    min,
+                    max),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -422,7 +532,11 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         if (!double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
         {
             System.Windows.MessageBox.Show(
-                $"{name}: введи число.",
+                LF(
+                    "STR_Common_Msg_EnterNumber",
+                    "{0}: введи число.",
+                    "{0}: enter a number.",
+                    name),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -432,7 +546,13 @@ public partial class GigantPage : System.Windows.Controls.UserControl
         if (value < min || value > max)
         {
             System.Windows.MessageBox.Show(
-                $"{name}: допустимый диапазон {min}..{max}.",
+                LF(
+                    "STR_Common_Msg_RangeDouble",
+                    "{0}: допустимый диапазон {1}..{2}.",
+                    "{0}: valid range is {1}..{2}.",
+                    name,
+                    min,
+                    max),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);

@@ -219,17 +219,73 @@
     <sys:String x:Key="STR_Info_Btn_CopyMarkdown" xmlns:sys="clr-namespace:System;assembly=mscorlib">Копировать Markdown</sys:String>
     <sys:String x:Key="STR_Info_Group_Documents" xmlns:sys="clr-namespace:System;assembly=mscorlib">Документы</sys:String>
     <sys:String x:Key="STR_Info_Msg_DocsFolderNotFound" xmlns:sys="clr-namespace:System;assembly=mscorlib">Папка docs не найдена рядом с приложением.</sys:String>
-    <sys:String x:Key="STR_Info_Msg_FileNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Файл не найден:
-{0}</sys:String>
+    <sys:String x:Key="STR_Info_Msg_FileNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Файл не найден:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_Copied_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Скопировано в буфер ({0})</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_SelectDoc" xmlns:sys="clr-namespace:System;assembly=mscorlib">Выбери документ слева.</sys:String>
     <sys:String x:Key="STR_Info_Status_DocsMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">docs не найдена (положи docs\ рядом с .exe).</sys:String>
     <sys:String x:Key="STR_Info_Status_FoundCount_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Найдено документов: {0}</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_NoDocs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Документы не найдены (нет .md файлов).</sys:String>
     <sys:String x:Key="STR_Info_Status_NotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не найдено: {0}</sys:String>
-    <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не удалось прочитать файл:
-{0}</sys:String>
+    <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не удалось прочитать файл:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_ReadError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Ошибка чтения</sys:String>
     <sys:String x:Key="STR_Info_Status_Opened_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыто: {0} ({1})</sys:String>
+
+    <!--Gigant -->
+    <sys:String x:Key="STR_Characteristics_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Характеристики</sys:String>
+    <sys:String x:Key="STR_Characteristics_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки секции [Gigant] в TDL_StreamPlugin.ini</sys:String>
+    <sys:String x:Key="STR_Characteristics_SizeDamage_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">РАЗМЕР И УРОН</sys:String>
+    <sys:String x:Key="STR_Characteristics_Speed_Header" xmlns:sys="clr-namespace:System;assembly=mscorlib">СКОРОСТЬ</sys:String>
+    <sys:String x:Key="STR_Char_ScaleBig_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Коэф. роста (Гигант)</sys:String>
+    <sys:String x:Key="STR_Char_ScaleBig_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Изменяет масштаб игрока при эффекте «Гигант».</sys:String>
+    <sys:String x:Key="STR_Char_ScaleBig_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Большие значения могут приводить к проблемам с коллизиями и анимациями.</sys:String>
+    <sys:String x:Key="STR_Char_DamageBig_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель урона (Гигант)</sys:String>
+    <sys:String x:Key="STR_Char_DamageBig_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель урона игрока при эффекте «Гигант».</sys:String>
+    <sys:String x:Key="STR_Char_ScaleSmall_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Коэф. роста (Лилипут)</sys:String>
+    <sys:String x:Key="STR_Char_ScaleSmall_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Изменяет масштаб игрока при эффекте «Лилипут».</sys:String>
+    <sys:String x:Key="STR_Char_ScaleSmall_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Слишком малые значения могут ломать коллизии и поведение камеры.</sys:String>
+    <sys:String x:Key="STR_Char_DamageSmall_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель урона (Лилипут)</sys:String>
+    <sys:String x:Key="STR_Char_DamageSmall_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель урона игрока при эффекте «Лилипут».</sys:String>
+    <sys:String x:Key="STR_Char_SizeDuration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Длительность размера (сек)</sys:String>
+    <sys:String x:Key="STR_Char_SizeDuration_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Длительность эффекта изменения размера (в секундах).</sys:String>
+    <sys:String x:Key="STR_Char_SpeedFast_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель скорости (ускорение)</sys:String>
+    <sys:String x:Key="STR_Char_SpeedFast_Tip1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель скорости передвижения при ускорении.</sys:String>
+    <sys:String x:Key="STR_Char_SpeedFast_Tip2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Слишком большие значения могут приводить к нестабильной физике и анимациям.</sys:String>
+    <sys:String x:Key="STR_Char_SpeedSlow_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель скорости (замедление)</sys:String>
+    <sys:String x:Key="STR_Char_SpeedSlow_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Множитель скорости передвижения при замедлении.</sys:String>
+    <sys:String x:Key="STR_Char_SpeedDuration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Длительность скорости (сек)</sys:String>
+    <sys:String x:Key="STR_Char_SpeedDuration_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Длительность эффекта изменения скорости (в секундах).</sys:String>
+    <sys:String x:Key="STR_Char_Reset_ScaleBig" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (2.0)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_DamageBig" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (5.0)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_ScaleSmall" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (0.33)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_DamageSmall" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (0.5)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_SizeDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (60)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_SpeedFast" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (3)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_SpeedSlow" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (0.5)</sys:String>
+    <sys:String x:Key="STR_Char_Reset_SpeedDuration" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (60)</sys:String>
+
+    <!-- Hunter -->
+    <sys:String x:Key="STR_Hunter_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Охотник</sys:String>
+    <sys:String x:Key="STR_Hunter_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Настройки секции [Hunter] в TDL_StreamPlugin.ini</sys:String>
+
+    <sys:String x:Key="STR_Hunter_CorpseTime_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Время исчезновения трупа (сек)</sys:String>
+    <sys:String x:Key="STR_Hunter_CorpseTime_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сколько секунд труп охотника остаётся после смерти. 0 — исчезает сразу.</sys:String>
+    <sys:String x:Key="STR_Hunter_CorpseTime_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (30)</sys:String>
+
+    <sys:String x:Key="STR_Hunter_Duration_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Длительность эффекта (сек)</sys:String>
+    <sys:String x:Key="STR_Hunter_Duration_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Длительность активности события/эффекта «Hunter» (в секундах).</sys:String>
+    <sys:String x:Key="STR_Hunter_Duration_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (90)</sys:String>
+
+    <sys:String x:Key="STR_Hunter_MaxDistance_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Макс. дистанция (units)</sys:String>
+    <sys:String x:Key="STR_Hunter_MaxDistance_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Максимальная дистанция, на которой логика «Hunter» может искать/поддерживать цель.</sys:String>
+    <sys:String x:Key="STR_Hunter_MaxDistance_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (5500)</sys:String>
+
+    <sys:String x:Key="STR_Hunter_ReAggro_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Интервал повторной агрессии (сек)</sys:String>
+    <sys:String x:Key="STR_Hunter_ReAggro_Tooltip" xmlns:sys="clr-namespace:System;assembly=mscorlib">Как часто «Hunter» обновляет цель/повторно «цепляется» за игрока.</sys:String>
+    <sys:String x:Key="STR_Hunter_ReAggro_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (4.0)</sys:String>
+
+    <sys:String x:Key="STR_Hunter_SpawnOffset_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Смещение спавна (units)</sys:String>
+    <sys:String x:Key="STR_Hunter_SpawnOffset_Tooltip_P1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Дистанция, на которой спавнится «Hunter» относительно игрока.</sys:String>
+    <sys:String x:Key="STR_Hunter_SpawnOffset_Tooltip_P2" xmlns:sys="clr-namespace:System;assembly=mscorlib">Слишком малое значение может приводить к появлению почти вплотную и визуальным артефактам.</sys:String>
+    <sys:String x:Key="STR_Hunter_SpawnOffset_Reset" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сбросить на Default (1200)</sys:String>
 
 </ResourceDictionary>
