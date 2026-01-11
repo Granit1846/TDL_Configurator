@@ -12,6 +12,15 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Input;
+using System.Windows.Navigation;
+
+// В решении включен UseWindowsForms, из-за чего появляются неоднозначности типов
+// (System.Drawing.Brush vs System.Windows.Media.Brush, System.Windows.Forms.Application vs System.Windows.Application).
+// Дальше используем алиасы, чтобы не ловить CS0104.
+using WpfApplication = System.Windows.Application;
+using WpfBrush = System.Windows.Media.Brush;
+using WpfBrushes = System.Windows.Media.Brushes;
 
 namespace TDL.Configurator.App.Pages;
 
@@ -41,6 +50,10 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
     private readonly ObservableCollection<DocItem> _docs = new();
     private ICollectionView? _docsView;
 
+
+    private string _searchQuery = "";
+    private string _searchQueryLower = "";
+    private readonly Dictionary<string, string> _docTextCache = new(StringComparer.OrdinalIgnoreCase);
     private string? _docsRoot;     // ...\docs
     private string? _docsContent;  // ...\docs or ...\docs\TDL_Docs
     private string? _currentMd;    // raw markdown for CopyMarkdown
@@ -49,8 +62,30 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
     {
         InitializeComponent();
 
+        // Включаем открытие ссылок (Hyperlink) ...
+        // FlowDocumentScrollViewer сам по себе не открывает ссылки — ...
+        DocViewer.AddHandler(Hyperlink.RequestNavigateEvent, new RequestNavigateEventHandler(OnRequestNavigate));
+
         // Важно: грузим после построения визуального дерева (меньше "дерганий" при старте в оконном режиме)
         Loaded += (_, _) => LoadDocs();
+    }
+
+    private static void OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+    {
+        try
+        {
+            var target = e.Uri?.OriginalString;
+            if (!string.IsNullOrWhiteSpace(target))
+            {
+                Process.Start(new ProcessStartInfo(target) { UseShellExecute = true });
+            }
+
+            e.Handled = true;
+        }
+        catch
+        {
+            // ignore
+        }
     }
 
     // ---------------- UI events ----------------
@@ -99,28 +134,76 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         DocsStatusText.Text = $"Скопировано в буфер ({DateTime.Now:HH:mm:ss})";
     }
 
+
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (_docsView == null)
-            return;
-
-        _docsView.Refresh();
-
-        // Если выбранный документ отфильтровался — выбираем первый доступный
-        if (_docsView.IsEmpty)
+        try
         {
-            DocsList.SelectedItem = null;
-            DocTitleText.Text = "";
-            _currentMd = null;
-            DocViewer.Document = BuildInfoDocument("Ничего не найдено по фильтру.");
-            DocsStatusText.Text = "Фильтр: 0";
-            return;
+            _searchQueryLower = _searchQuery.ToLowerInvariant();
+
+            // Поиск работает по ТЕКСТУ в документах:
+            // 1) фильтрует список слева по содержимому markdown-файлов,
+            // 2) подсвечивает совпадения в открытом документе справа.
+            _docsView?.Refresh();
+
+            if (DocViewer.Document is FlowDocument doc)
+            {
+                ClearSearchHighlight(doc);
+
+                if (!string.IsNullOrWhiteSpace(_searchQuery) && _searchQuery.Length <= 128)
+                    ApplySearchHighlight(doc, _searchQuery);
+            }
+        }
+        catch
+        {
+            // Не даём приложению "падать" из-за поиска.
+        }
+    }
+
+    private bool FilterDocBySearch(object obj)
+    {
+        if (obj is not DocItem doc)
+            return false;
+
+        if (string.IsNullOrWhiteSpace(_searchQueryLower))
+            return true;
+
+        // Опционально: совпадение в заголовке
+        if (!string.IsNullOrWhiteSpace(doc.Title) &&
+            doc.Title.IndexOf(_searchQuery, StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            return true;
         }
 
-        if (DocsList.SelectedItem == null)
+        var contentLower = GetDocTextLower(doc);
+        return contentLower.Contains(_searchQueryLower, StringComparison.Ordinal);
+    }
+
+    private string GetDocTextLower(DocItem doc)
+    {
+        if (string.IsNullOrWhiteSpace(doc.FullPath))
+            return "";
+
+        if (_docTextCache.TryGetValue(doc.FullPath, out var cached))
+            return cached;
+
+        string text;
+        try
         {
-            DocsList.SelectedIndex = 0;
+            text = File.Exists(doc.FullPath) ? File.ReadAllText(doc.FullPath) : "";
         }
+        catch
+        {
+            text = "";
+        }
+
+        // Защита от "гигантских" файлов (нам нужен только поиск).
+        if (text.Length > 750_000)
+            text = text.Substring(0, 750_000);
+
+        text = text.ToLowerInvariant();
+        _docTextCache[doc.FullPath] = text;
+        return text;
     }
 
     private void DocsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -136,6 +219,8 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         _docs.Clear();
         _currentMd = null;
 
+
+        _docTextCache.Clear();
         DocTitleText.Text = "";
         DocViewer.Document = BuildInfoDocument("Выбери документ слева.");
 
@@ -170,8 +255,8 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             _docs.Add(it);
 
         _docsView = CollectionViewSource.GetDefaultView(_docs);
-        _docsView.Filter = FilterDoc;
 
+        _docsView.Filter = FilterDocBySearch;
         DocsList.ItemsSource = _docsView;
 
         DocsStatusText.Text = $"Найдено документов: {_docs.Count}";
@@ -180,19 +265,6 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             DocsList.SelectedIndex = 0;
         else
             DocViewer.Document = BuildInfoDocument("Документы не найдены (нет .md файлов).");
-    }
-
-    private bool FilterDoc(object obj)
-    {
-        if (obj is not DocItem d)
-            return false;
-
-        var q = (SearchBox.Text ?? "").Trim();
-        if (q.Length == 0)
-            return true;
-
-        return d.Title.Contains(q, StringComparison.OrdinalIgnoreCase)
-               || d.FileName.Contains(q, StringComparison.OrdinalIgnoreCase);
     }
 
     private static string? FindExistingDocsFolder(string initial)
@@ -303,7 +375,8 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         DocTitleText.Text = doc.Title;
         _currentMd = md;
 
-        DocViewer.Document = MarkdownToFlowDocument(md);
+        var flow = MarkdownToFlowDocument(md);
+        DocViewer.Document = flow;
         DocsStatusText.Text = $"Открыто: {doc.FileName} ({DateTime.Now:HH:mm:ss})";
     }
 
@@ -334,11 +407,11 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         return Regex.Replace(s, @"[ \t]{2,}", " ").Trim();
     }
 
-    private static System.Windows.Media.Brush TryFindBrush(string key, System.Windows.Media.Brush fallback)
+    private static WpfBrush TryFindBrush(string key, WpfBrush fallback)
     {
         try
         {
-                    return (System.Windows.Application.Current?.TryFindResource(key) as System.Windows.Media.Brush) ?? fallback;
+            return (WpfApplication.Current?.TryFindResource(key) as WpfBrush) ?? fallback;
         }
         catch
         {
@@ -353,17 +426,44 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             new SolidColorBrush(System.Windows.Media.Color.FromRgb(245, 245, 245)));
         var codeBlockBorder = TryFindBrush(
             "TDL.Brush.DocCodeBorder",
-            System.Windows.Media.Brushes.Transparent);
+            WpfBrushes.Transparent);
         var codeBlockFg = TryFindBrush(
             "TDL.Brush.Text",
-            System.Windows.Media.Brushes.Black);
+            WpfBrushes.Black);
+
+        // Links: используем Accent + hover, чтобы в Dark/Nexus ссылки не терялись.
+        var linkFg = TryFindBrush(
+            "TDL.Brush.Accent",
+            WpfBrushes.DodgerBlue);
+        var linkHoverFg = TryFindBrush(
+            "TDL.Brush.AccentHover",
+            linkFg);
 
         var doc = new FlowDocument
         {
             PagePadding = new Thickness(8),
             FontSize = 13,
-            TextAlignment = TextAlignment.Left
+            TextAlignment = TextAlignment.Left,
+            LineHeight = 18,
+            LineStackingStrategy = LineStackingStrategy.BlockLineHeight
         };
+
+        // Единая типографика (отступы и ссылки)
+        var paragraphStyle = new Style(typeof(Paragraph));
+        paragraphStyle.Setters.Add(new Setter(Block.MarginProperty, new Thickness(0, 0, 0, 10)));
+        doc.Resources.Add(typeof(Paragraph), paragraphStyle);
+
+        var hyperlinkStyle = new Style(typeof(Hyperlink));
+        hyperlinkStyle.Setters.Add(new Setter(Inline.ForegroundProperty, linkFg));
+        hyperlinkStyle.Setters.Add(new Setter(Hyperlink.TextDecorationsProperty, TextDecorations.Underline));
+        hyperlinkStyle.Setters.Add(new Setter(Hyperlink.CursorProperty, System.Windows.Forms.Cursors.Hand));
+        hyperlinkStyle.Triggers.Add(new Trigger
+        {
+            Property = Hyperlink.IsMouseOverProperty,
+            Value = true,
+            Setters = { new Setter(Inline.ForegroundProperty, linkHoverFg) }
+        });
+        doc.Resources.Add(typeof(Hyperlink), hyperlinkStyle);
 
         var lines = (md ?? "").Replace("\r\n", "\n").Split('\n');
 
@@ -482,7 +582,8 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             {
                 FlushParagraph();
 
-                var p = new Paragraph { Margin = new Thickness(18, 0, 0, 6) };
+                // Псевдо-list с висящим отступом: переносы строк выравниваются по тексту, а не по маркеру.
+                var p = new Paragraph { Margin = new Thickness(24, 0, 0, 6), TextIndent = -12 };
                 p.Inlines.Add(new Run("• "));
                 AppendInlines(p.Inlines, NormalizeWs(bulletText));
                 doc.Blocks.Add(p);
@@ -494,7 +595,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             {
                 FlushParagraph();
 
-                var p = new Paragraph { Margin = new Thickness(18, 0, 0, 6) };
+                var p = new Paragraph { Margin = new Thickness(24, 0, 0, 6), TextIndent = -12 };
                 p.Inlines.Add(new Run(numPrefix + " "));
                 AppendInlines(p.Inlines, NormalizeWs(numText));
                 doc.Blocks.Add(p);
@@ -509,6 +610,161 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         if (inCode) FlushCode();
 
         return doc;
+    }
+
+    private static void ClearSearchHighlight(FlowDocument doc)
+    {
+        foreach (var b in doc.Blocks)
+            ClearHighlightBlock(b);
+    }
+
+    private static void ClearHighlightBlock(Block block)
+    {
+        if (block is Paragraph p)
+        {
+            ClearHighlightInlines(p.Inlines);
+            return;
+        }
+
+        if (block is BlockUIContainer ui && ui.Child is Border border)
+        {
+            // code block (BlockUIContainer -> Border -> TextBlock)
+            border.BorderBrush = TryFindBrush("TDL.Brush.DocCodeBorder", WpfBrushes.Transparent);
+            if (border.Child is TextBlock tb)
+                tb.Background = null;
+            return;
+        }
+
+        if (block is Section s)
+        {
+            foreach (var b in s.Blocks)
+                ClearHighlightBlock(b);
+        }
+    }
+
+
+    private static void ClearHighlightInlines(InlineCollection inlines)
+    {
+        for (Inline? inline = inlines.FirstInline; inline != null; inline = inline.NextInline)
+        {
+            switch (inline)
+            {
+                case Run run:
+                    run.Background = null;
+                    break;
+                case Span span:
+                    ClearHighlightInlines(span.Inlines);
+                    break;
+            }
+        }
+    }
+
+    // Подсветка совпадений запроса (используем существующий SearchBox: он фильтрует список слева,
+    // но при открытии документа мы дополнительно подсвечиваем совпадения в тексте).
+    private static void ApplySearchHighlight(FlowDocument doc, string? query)
+    {
+        var q = (query ?? "").Trim();
+        if (q.Length == 0)
+            return;
+
+        var bg = TryFindBrush(
+            "TDL.Brush.Selection",
+            new SolidColorBrush(System.Windows.Media.Color.FromArgb(0x33, 0x4F, 0xC1, 0xFF)));
+
+        foreach (var b in doc.Blocks)
+            HighlightBlock(b, q, bg);
+    }
+
+    private static void HighlightBlock(Block block, string query, WpfBrush bg)
+    {
+        if (block is Paragraph p)
+        {
+            HighlightInlines(p.Inlines, query, bg);
+            return;
+        }
+
+        if (block is BlockUIContainer ui && ui.Child is Border border && border.Child is TextBlock tb)
+        {
+            // code block (BlockUIContainer -> Border -> TextBlock)
+            if (!string.IsNullOrEmpty(tb.Text) &&
+                tb.Text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                border.BorderBrush = bg;
+                tb.Background = bg;
+            }
+
+            return;
+        }
+
+        if (block is Section s)
+        {
+            foreach (var b in s.Blocks)
+                HighlightBlock(b, query, bg);
+        }
+    }
+
+
+    private static void HighlightInlines(InlineCollection inlines, string query, WpfBrush bg)
+    {
+        for (Inline? inline = inlines.FirstInline; inline != null;)
+        {
+            var next = inline.NextInline;
+
+            switch (inline)
+            {
+                case Run run:
+                    ReplaceRunWithHighlighted(inlines, run, query, bg);
+                    break;
+                case Span span:
+                    HighlightInlines(span.Inlines, query, bg);
+                    break;
+            }
+
+            inline = next;
+        }
+    }
+
+    private static void ReplaceRunWithHighlighted(InlineCollection parent, Run run, string query, WpfBrush bg)
+    {
+        var text = run.Text;
+        if (string.IsNullOrEmpty(text))
+            return;
+
+        var idx = text.IndexOf(query, StringComparison.OrdinalIgnoreCase);
+        if (idx < 0)
+            return;
+
+        var cursor = (Inline)run;
+        var pos = 0;
+
+        while (idx >= 0)
+        {
+            if (idx > pos)
+                parent.InsertBefore(cursor, CloneRun(text.Substring(pos, idx - pos), run));
+
+            var match = CloneRun(text.Substring(idx, query.Length), run);
+            match.Background = bg;
+            parent.InsertBefore(cursor, match);
+
+            pos = idx + query.Length;
+            idx = text.IndexOf(query, pos, StringComparison.OrdinalIgnoreCase);
+        }
+
+        if (pos < text.Length)
+            parent.InsertBefore(cursor, CloneRun(text.Substring(pos), run));
+
+        parent.Remove(cursor);
+    }
+
+    private static Run CloneRun(string text, Run template)
+    {
+        return new Run(text)
+        {
+            Foreground = template.Foreground,
+            FontWeight = template.FontWeight,
+            FontStyle = template.FontStyle,
+            TextDecorations = template.TextDecorations
+        };
     }
 
     private static bool IsBullet(string line, out string text)
@@ -557,11 +813,27 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         // Inline `code` is used heavily for paths/names in our docs.
         // In dark themes the default "light code background" looks like a bright highlight,
         // so we render it as subtle italic emphasis instead.
-        var inlineCodeFg = TryFindBrush("TDL.Brush.TextDim", System.Windows.Media.Brushes.Gray);
+        var inlineCodeFg = TryFindBrush("TDL.Brush.TextDim", WpfBrushes.Gray);
 
         var i = 0;
         while (i < s.Length)
         {
+            // markdown link: [text](url)
+            if (s[i] == '[' && TryParseMarkdownLink(s, i, out var linkText, out var linkTarget, out var consumedLink))
+            {
+                inlines.Add(BuildHyperlink(linkText, linkTarget));
+                i += consumedLink;
+                continue;
+            }
+
+            // auto URL: http(s)://...
+            if (TryParseAutoUrl(s, i, out var autoUrl, out var consumedUrl))
+            {
+                inlines.Add(BuildHyperlink(autoUrl, autoUrl));
+                i += consumedUrl;
+                continue;
+            }
+
             // inline code
             if (s[i] == '`')
             {
@@ -610,13 +882,109 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         }
     }
 
+    private static Hyperlink BuildHyperlink(string text, string target)
+    {
+        var link = new Hyperlink(new Run(text))
+        {
+            ToolTip = target
+        };
+
+        if (Uri.TryCreate(target, UriKind.RelativeOrAbsolute, out var uri))
+            link.NavigateUri = uri;
+
+        return link;
+    }
+
+    private static bool TryParseMarkdownLink(string s, int start, out string text, out string target, out int consumed)
+    {
+        // Very small subset: [text](target)
+        text = "";
+        target = "";
+        consumed = 0;
+
+        if (start < 0 || start >= s.Length || s[start] != '[')
+            return false;
+
+        var closeText = s.IndexOf(']', start + 1);
+        if (closeText <= start)
+            return false;
+
+        if (closeText + 1 >= s.Length || s[closeText + 1] != '(')
+            return false;
+
+        var closeTarget = s.IndexOf(')', closeText + 2);
+        if (closeTarget <= closeText)
+            return false;
+
+        text = s.Substring(start + 1, closeText - start - 1);
+        target = s.Substring(closeText + 2, closeTarget - closeText - 2);
+
+        if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(target))
+            return false;
+
+        consumed = (closeTarget - start) + 1;
+        return true;
+    }
+
+    private static bool TryParseAutoUrl(string s, int start, out string url, out int consumed)
+    {
+        url = "";
+        consumed = 0;
+
+        // Simple detection: http:// or https://
+        if (start < 0 || start >= s.Length)
+            return false;
+
+        if (!s.AsSpan(start).StartsWith("http://", StringComparison.OrdinalIgnoreCase)
+            && !s.AsSpan(start).StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        var end = start;
+        while (end < s.Length && !char.IsWhiteSpace(s[end]))
+            end++;
+
+        if (end <= start)
+            return false;
+
+        var raw = s.Substring(start, end - start);
+
+        // Убираем типичные "хвосты" в тексте (точка в конце предложения, запятая и т.п.)
+        url = raw.TrimEnd('.', ',', ';', ':', ')', ']', '"', '\'');
+        if (string.IsNullOrWhiteSpace(url))
+            return false;
+
+        // Пунктуацию после URL не "съедаем" — она пойдёт как обычный текст.
+        consumed = url.Length;
+        return true;
+    }
+
     private static int NextSpecialIndex(string s, int start)
     {
         var idx1 = s.IndexOf('`', start);
         var idx2 = s.IndexOf('*', start);
+        var idx3 = s.IndexOf('[', start);
+        var idx4 = IndexOfHttp(s, start);
 
-        if (idx1 < 0) return idx2;
-        if (idx2 < 0) return idx1;
-        return Math.Min(idx1, idx2);
+        return MinPositive(idx1, idx2, idx3, idx4);
+    }
+
+    private static int IndexOfHttp(string s, int start)
+    {
+        var i1 = s.IndexOf("http://", start, StringComparison.OrdinalIgnoreCase);
+        var i2 = s.IndexOf("https://", start, StringComparison.OrdinalIgnoreCase);
+        return MinPositive(i1, i2);
+    }
+
+    private static int MinPositive(params int[] values)
+    {
+        var min = -1;
+        foreach (var v in values)
+        {
+            if (v < 0) continue;
+            min = min < 0 ? v : Math.Min(min, v);
+        }
+        return min;
     }
 }
