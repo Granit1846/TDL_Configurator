@@ -83,11 +83,13 @@
                                                 shell:WindowChrome.IsHitTestVisibleInChrome="True">
                                         <Image Width="16" Height="16"
                                                Source="{TemplateBinding Icon}"
-                                               Margin="0,0,8,0"/>
+                                               Margin="0,0,8,0"
+                                               shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
                                         <TextBlock Text="{TemplateBinding Title}"
                                                    VerticalAlignment="Center"
                                                    FontWeight="SemiBold"
-                                                   Foreground="{TemplateBinding Foreground}"/>
+                                                   Foreground="{TemplateBinding Foreground}"
+                                                   shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
                                     </StackPanel>
 
                                     <!-- Right: caption buttons -->

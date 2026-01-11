@@ -39,8 +39,7 @@
 
                             <!-- Title bar -->
                             <Grid Grid.Row="0"
-                                Background="{TemplateBinding Background}"
-                                shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                                Background="{TemplateBinding Background}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
@@ -52,15 +51,13 @@
                                         Background="{TemplateBinding Background}"
                                         BorderBrush="{TemplateBinding BorderBrush}"
                                         BorderThickness="0,0,0,1"
-                                        Panel.ZIndex="0"
-                                        shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
+                                        Panel.ZIndex="0"/>
 
                                 <!-- Left: icon + title (drag area too) -->
                                 <StackPanel Orientation="Horizontal"
                                             VerticalAlignment="Center"
                                             Margin="12,0,0,0"
-                                            Panel.ZIndex="1"
-                                            shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                                            Panel.ZIndex="1">
                                     <Image Width="16" Height="16"
                                            Source="{TemplateBinding Icon}"
                                            Margin="0,0,8,0"/>
@@ -75,14 +72,14 @@
                                             VerticalAlignment="Center"
                                             Margin="0,0,10,0"
                                             Panel.ZIndex="2"
-                                            shell:WindowChrome.IsHitTestVisibleInChrome="False">
+                                            shell:WindowChrome.IsHitTestVisibleInChrome="True">
 
                                     <Button Width="36" Height="26" Margin="6,0,0,0"
                                             Background="Transparent"
                                             BorderBrush="{DynamicResource TDL.Brush.ControlBorder}"
                                             BorderThickness="1"
                                             Padding="0"
-                                            shell:WindowChrome.IsHitTestVisibleInChrome="False"
+                                            shell:WindowChrome.IsHitTestVisibleInChrome="True"
                                             Command="{x:Static sw:SystemCommands.MinimizeWindowCommand}"
                                             CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                         <TextBlock Text="—" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -94,7 +91,7 @@
                                             BorderBrush="{DynamicResource TDL.Brush.ControlBorder}"
                                             BorderThickness="1"
                                             Padding="0"
-                                            shell:WindowChrome.IsHitTestVisibleInChrome="False"
+                                            shell:WindowChrome.IsHitTestVisibleInChrome="True"
                                             Command="{x:Static sw:SystemCommands.MaximizeWindowCommand}"
                                             CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                         <TextBlock Text="□" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -107,7 +104,7 @@
                                             BorderThickness="1"
                                             Padding="0"
                                             Visibility="Collapsed"
-                                            shell:WindowChrome.IsHitTestVisibleInChrome="False"
+                                            shell:WindowChrome.IsHitTestVisibleInChrome="True"
                                             Command="{x:Static sw:SystemCommands.RestoreWindowCommand}"
                                             CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                         <TextBlock Text="❐" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -118,7 +115,7 @@
                                             BorderBrush="{DynamicResource TDL.Brush.ControlBorder}"
                                             BorderThickness="1"
                                             Padding="0"
-                                            shell:WindowChrome.IsHitTestVisibleInChrome="False"
+                                            shell:WindowChrome.IsHitTestVisibleInChrome="True"
                                             Command="{x:Static sw:SystemCommands.CloseWindowCommand}"
                                             CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                         <TextBlock Text="✕" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -387,8 +384,7 @@
                             <Border Grid.Row="0"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="0,0,0,1"
-                                shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                                BorderThickness="0,0,0,1">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -399,8 +395,7 @@
                                     <!-- Left: title (drag area) -->
                                     <StackPanel Orientation="Horizontal"
                                             VerticalAlignment="Center"
-                                            Margin="12,0,0,0"
-                                            shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                                            Margin="12,0,0,0">
                                         <Image Width="16" Height="16"
                                            Source="{TemplateBinding Icon}"
                                            Margin="0,0,8,0"/>
@@ -414,7 +409,7 @@
                                             Orientation="Horizontal"
                                             VerticalAlignment="Center"
                                             Margin="0,0,10,0"
-                                            shell:WindowChrome.IsHitTestVisibleInChrome="False">
+                                            shell:WindowChrome.IsHitTestVisibleInChrome="True">
 
                                         <!-- Minimize -->
                                         <Button Width="36" Height="26" Margin="6,0,0,0"
