@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -15,6 +15,8 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        ApplyTestPageVisibility();
 
         // Выберем первую вкладку при старте
         NavList.SelectedIndex = 0;
@@ -36,13 +38,52 @@ public partial class MainWindow : Window
         }
     }
 
+    private void ApplyTestPageVisibility()
+    {
+        bool show = true;
+        try
+        {
+            var s = AppSettings.Load();
+            show = s?.ShowTestPage ?? true;
+        }
+        catch
+        {
+            show = true;
+        }
+
+        ListBoxItem? testItem = null;
+        foreach (var obj in NavList.Items)
+        {
+            if (obj is ListBoxItem li && (li.Tag?.ToString() ?? "") == "Test")
+            {
+                testItem = li;
+                break;
+            }
+        }
+
+        if (testItem == null)
+            return;
+
+        testItem.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+
+        if (!show && NavList.SelectedItem is ListBoxItem sel && (sel.Tag?.ToString() ?? "") == "Test")
+        {
+            NavList.SelectedIndex = 0;
+        }
+    }
+
     private void OnSettingsClick(object sender, RoutedEventArgs e)
     {
         var w = new TDL.Configurator.App.Windows.SettingsWindow
         {
             Owner = this
         };
-        w.ShowDialog();
+        var saved = w.ShowDialog() == true;
+        if (saved)
+        {
+            // Применяем настройки навигации, которые должны вступать в силу только после сохранения.
+            ApplyTestPageVisibility();
+        }
 
         // Пока ничего не обновляем принудительно — QuickAccess будем читать настройки при открытии.
         // Если нужно — позже добавим "Refresh current page".

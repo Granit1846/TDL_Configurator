@@ -50,6 +50,10 @@
     <sys:String x:Key="STR_Settings_Updates_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Updates</sys:String>
     <sys:String x:Key="STR_Settings_CheckUpdates" xmlns:sys="clr-namespace:System;assembly=mscorlib">Check for updates</sys:String>
     <sys:String x:Key="STR_Settings_UpdatePlaceholder" xmlns:sys="clr-namespace:System;assembly=mscorlib">(URL not set yet)</sys:String>
+    <sys:String x:Key="STR_Settings_TestPage_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Test page</sys:String>
+    <sys:String x:Key="STR_Settings_TestPage_Hint" xmlns:sys="clr-namespace:System;assembly=mscorlib">Shows/hides the “Test” tab in the main window (applies after saving).</sys:String>
+    <sys:String x:Key="STR_Settings_TestPage_ShowBtn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Show</sys:String>
+    <sys:String x:Key="STR_Settings_TestPage_HideBtn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Hide</sys:String>
 
     <!-- Buttons -->
     <sys:String x:Key="STR_Settings_Save" xmlns:sys="clr-namespace:System;assembly=mscorlib">Save</sys:String>
@@ -240,6 +244,21 @@
     <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Failed to read file:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_ReadError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Read error</sys:String>
     <sys:String x:Key="STR_Info_Status_Opened_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Opened: {0} ({1})</sys:String>
+    <sys:String x:Key="STR_DocTitle_quickstart" xmlns:sys="clr-namespace:System;assembly=mscorlib">Quick start</sys:String>
+    <sys:String x:Key="STR_DocTitle_ui_help" xmlns:sys="clr-namespace:System;assembly=mscorlib">UI help</sys:String>
+    <sys:String x:Key="STR_DocTitle_protocol" xmlns:sys="clr-namespace:System;assembly=mscorlib">Protocol and modes</sys:String>
+    <sys:String x:Key="STR_DocTitle_catalog_normal" xmlns:sys="clr-namespace:System;assembly=mscorlib">NORMAL commands (overview)</sys:String>
+    <sys:String x:Key="STR_DocTitle_action_reference" xmlns:sys="clr-namespace:System;assembly=mscorlib">Action reference (descriptions)</sys:String>
+    <sys:String x:Key="STR_DocTitle_ini_reference" xmlns:sys="clr-namespace:System;assembly=mscorlib">INI reference (settings)</sys:String>
+    <sys:String x:Key="STR_DocTitle_configs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Configs and applying</sys:String>
+    <sys:String x:Key="STR_DocTitle_stages_description" xmlns:sys="clr-namespace:System;assembly=mscorlib">Stages description</sys:String>
+    <sys:String x:Key="STR_DocTitle_force_safety" xmlns:sys="clr-namespace:System;assembly=mscorlib">FORCE and safety</sys:String>
+    <sys:String x:Key="STR_DocTitle_stream_rules" xmlns:sys="clr-namespace:System;assembly=mscorlib">Stream integration rules</sys:String>
+    <sys:String x:Key="STR_DocTitle_architecture_overview" xmlns:sys="clr-namespace:System;assembly=mscorlib">Mod architecture (overview)</sys:String>
+    <sys:String x:Key="STR_DocTitle_logs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Logs and diagnostics</sys:String>
+    <sys:String x:Key="STR_DocTitle_faq" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAQ / Common issues</sys:String>
+    <sys:String x:Key="STR_DocTitle_faq_stream" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAQ (stream/architecture)</sys:String>
+    <sys:String x:Key="STR_DocTitle_versions" xmlns:sys="clr-namespace:System;assembly=mscorlib">Versions and compatibility</sys:String>
 
     <!--Gigant -->
     <sys:String x:Key="STR_Characteristics_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Characteristics</sys:String>

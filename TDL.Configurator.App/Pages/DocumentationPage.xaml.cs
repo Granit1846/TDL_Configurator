@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -26,7 +26,40 @@ namespace TDL.Configurator.App.Pages;
 
 public partial class DocumentationPage : System.Windows.Controls.UserControl
 {
-    private const string UiTitle = "TDL Configurator";
+    private static string S(string key, string fallback = "")
+    {
+        var v = WpfApplication.Current?.TryFindResource(key);
+        var s = v?.ToString();
+        return string.IsNullOrWhiteSpace(s)
+            ? (string.IsNullOrWhiteSpace(fallback) ? key : fallback)
+            : s;
+    }
+
+    private static string SF(string key, string fallbackFormat, params object[] args)
+    {
+        var fmt = S(key, fallbackFormat);
+        try
+        {
+            return string.Format(fmt, args);
+        }
+        catch
+        {
+            return fmt;
+        }
+    }
+
+    private static string UiTitle => S("STR_App_Title", "TDL Configurator");
+
+    private static string LocalizeDocTitle(string id, string fallback)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return fallback;
+
+        var key = "STR_DocTitle_" + id.Trim();
+        var res = WpfApplication.Current?.TryFindResource(key)?.ToString();
+        return string.IsNullOrWhiteSpace(res) ? fallback : res;
+    }
+
 
     private sealed class DocItem
     {
@@ -97,7 +130,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         if (string.IsNullOrWhiteSpace(_docsRoot) || !Directory.Exists(_docsRoot))
         {
             System.Windows.MessageBox.Show(
-                "Папка docs не найдена рядом с приложением.",
+                S("STR_Info_Msg_DocsFolderNotFound", "Docs folder not found next to the app."),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -115,7 +148,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         if (!File.Exists(doc.FullPath))
         {
             System.Windows.MessageBox.Show(
-                $"Файл не найден:\n{doc.FullPath}",
+                SF("STR_Info_Msg_FileNotFound_Fmt", "File not found:{0}", "\n" + doc.FullPath),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -131,7 +164,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             return;
 
         System.Windows.Clipboard.SetText(_currentMd);
-        DocsStatusText.Text = $"Скопировано в буфер ({DateTime.Now:HH:mm:ss})";
+        DocsStatusText.Text = SF("STR_Info_Status_Copied_Fmt", "Copied to clipboard ({0})", DateTime.Now.ToString("HH:mm:ss"));
     }
 
 
@@ -222,7 +255,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
 
         _docTextCache.Clear();
         DocTitleText.Text = "";
-        DocViewer.Document = BuildInfoDocument("Выбери документ слева.");
+        DocViewer.Document = BuildInfoDocument(S("STR_Info_Placeholder_SelectDoc", "Select a document on the left."));
 
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
         var docsRoot = Path.Combine(baseDir, "docs");
@@ -232,7 +265,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
 
         if (!Directory.Exists(docsRoot))
         {
-            DocsStatusText.Text = "docs не найдена (положи docs\\ рядом с .exe).";
+            DocsStatusText.Text = S("STR_Info_Status_DocsMissing", "docs folder is missing (place docs next to the .exe).");
             return;
         }
 
@@ -259,12 +292,12 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         _docsView.Filter = FilterDocBySearch;
         DocsList.ItemsSource = _docsView;
 
-        DocsStatusText.Text = $"Найдено документов: {_docs.Count}";
+        DocsStatusText.Text = SF("STR_Info_Status_FoundCount_Fmt", "Documents found: {0}", _docs.Count);
 
         if (_docs.Count > 0)
             DocsList.SelectedIndex = 0;
         else
-            DocViewer.Document = BuildInfoDocument("Документы не найдены (нет .md файлов).");
+            DocViewer.Document = BuildInfoDocument(S("STR_Info_Placeholder_NoDocs", "No documents found (no .md files)."));
     }
 
     private static string? FindExistingDocsFolder(string initial)
@@ -308,7 +341,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
                     return new DocItem
                     {
                         Id = x.id?.Trim() ?? fileName,
-                        Title = NormalizeWs(x.title?.Trim() ?? Path.GetFileNameWithoutExtension(fileName)),
+                        Title = LocalizeDocTitle(x.id?.Trim() ?? fileName, NormalizeWs(x.title?.Trim() ?? Path.GetFileNameWithoutExtension(fileName))),
                         FileName = fileName,
                         Order = x.order,
                         FullPath = fullPath
@@ -334,7 +367,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             .Select((p, idx) => new DocItem
             {
                 Id = Path.GetFileNameWithoutExtension(p),
-                Title = NormalizeWs(Path.GetFileNameWithoutExtension(p)),
+                Title = LocalizeDocTitle(Path.GetFileNameWithoutExtension(p), NormalizeWs(Path.GetFileNameWithoutExtension(p))),
                 FileName = Path.GetFileName(p),
                 Order = idx + 1,
                 FullPath = p
@@ -352,8 +385,8 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         {
             DocTitleText.Text = doc.Title;
             _currentMd = null;
-            DocViewer.Document = BuildInfoDocument($"Файл не найден:\n{doc.FullPath}");
-            DocsStatusText.Text = $"Не найдено: {doc.FileName}";
+            DocViewer.Document = BuildInfoDocument(SF("STR_Info_Msg_FileNotFound_Fmt", "File not found:{0}", "\n" + doc.FullPath));
+            DocsStatusText.Text = SF("STR_Info_Status_NotFound_Fmt", "Not found: {0}", doc.FileName);
             return;
         }
 
@@ -367,8 +400,8 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         {
             DocTitleText.Text = doc.Title;
             _currentMd = null;
-            DocViewer.Document = BuildInfoDocument("Не удалось прочитать файл:\n" + ex.Message);
-            DocsStatusText.Text = "Ошибка чтения";
+            DocViewer.Document = BuildInfoDocument(SF("STR_Info_Placeholder_ReadError_Fmt", "Failed to read file:{0}", "\n" + ex.Message));
+            DocsStatusText.Text = S("STR_Info_Status_ReadError", "Read error");
             return;
         }
 
@@ -377,7 +410,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
 
         var flow = MarkdownToFlowDocument(md);
         DocViewer.Document = flow;
-        DocsStatusText.Text = $"Открыто: {doc.FileName} ({DateTime.Now:HH:mm:ss})";
+        DocsStatusText.Text = SF("STR_Info_Status_Opened_Fmt", "Opened: {0} ({1})", doc.FileName, DateTime.Now.ToString("HH:mm:ss"));
     }
 
     private static FlowDocument BuildInfoDocument(string text)

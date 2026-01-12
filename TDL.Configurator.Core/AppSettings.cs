@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -12,6 +12,9 @@ public sealed class AppSettings
     // UI
     public AppTheme Theme { get; set; } = AppTheme.Light;
     public AppLanguage Language { get; set; } = AppLanguage.Ru;
+
+    // Navigation
+    public bool ShowTestPage { get; set; } = true;
 
     public static string SettingsFilePath
     {

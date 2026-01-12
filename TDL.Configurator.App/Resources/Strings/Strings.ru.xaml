@@ -51,6 +51,13 @@
     <sys:String x:Key="STR_Settings_CheckUpdates" xmlns:sys="clr-namespace:System;assembly=mscorlib">Проверить обновления</sys:String>
     <sys:String x:Key="STR_Settings_UpdatePlaceholder" xmlns:sys="clr-namespace:System;assembly=mscorlib">(пока без URL)</sys:String>
 
+
+    <sys:String x:Key="STR_Settings_TestPage_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Страница «Тест»</sys:String>
+    <sys:String x:Key="STR_Settings_TestPage_Hint" xmlns:sys="clr-namespace:System;assembly=mscorlib">Скрывает/показывает вкладку «Тест» в главном окне (применится после сохранения).</sys:String>
+    <sys:String x:Key="STR_Settings_TestPage_ShowBtn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Показать</sys:String>
+    <sys:String x:Key="STR_Settings_TestPage_HideBtn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Скрыть</sys:String>
+
+
     <!-- Buttons -->
     <sys:String x:Key="STR_Settings_Save" xmlns:sys="clr-namespace:System;assembly=mscorlib">Сохранить</sys:String>
     <sys:String x:Key="STR_Settings_Cancel" xmlns:sys="clr-namespace:System;assembly=mscorlib">Отмена</sys:String>
@@ -237,6 +244,21 @@
     <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не удалось прочитать файл:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_ReadError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Ошибка чтения</sys:String>
     <sys:String x:Key="STR_Info_Status_Opened_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыто: {0} ({1})</sys:String>
+    <sys:String x:Key="STR_DocTitle_quickstart" xmlns:sys="clr-namespace:System;assembly=mscorlib">Быстрый старт</sys:String>
+    <sys:String x:Key="STR_DocTitle_ui_help" xmlns:sys="clr-namespace:System;assembly=mscorlib">Справка по интерфейсу</sys:String>
+    <sys:String x:Key="STR_DocTitle_protocol" xmlns:sys="clr-namespace:System;assembly=mscorlib">Протокол и режимы</sys:String>
+    <sys:String x:Key="STR_DocTitle_catalog_normal" xmlns:sys="clr-namespace:System;assembly=mscorlib">Команды NORMAL (обзор)</sys:String>
+    <sys:String x:Key="STR_DocTitle_action_reference" xmlns:sys="clr-namespace:System;assembly=mscorlib">Action Reference (описания)</sys:String>
+    <sys:String x:Key="STR_DocTitle_ini_reference" xmlns:sys="clr-namespace:System;assembly=mscorlib">Справочник INI (параметры)</sys:String>
+    <sys:String x:Key="STR_DocTitle_configs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Конфиги и применение</sys:String>
+    <sys:String x:Key="STR_DocTitle_stages_description" xmlns:sys="clr-namespace:System;assembly=mscorlib">Описание стадий</sys:String>
+    <sys:String x:Key="STR_DocTitle_force_safety" xmlns:sys="clr-namespace:System;assembly=mscorlib">FORCE и безопасность</sys:String>
+    <sys:String x:Key="STR_DocTitle_stream_rules" xmlns:sys="clr-namespace:System;assembly=mscorlib">Правила стрим-интеграции</sys:String>
+    <sys:String x:Key="STR_DocTitle_architecture_overview" xmlns:sys="clr-namespace:System;assembly=mscorlib">Архитектура мода (обзор)</sys:String>
+    <sys:String x:Key="STR_DocTitle_logs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Логи и диагностика</sys:String>
+    <sys:String x:Key="STR_DocTitle_faq" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAQ / Типовые проблемы</sys:String>
+    <sys:String x:Key="STR_DocTitle_faq_stream" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAQ (стрим/архитектура)</sys:String>
+    <sys:String x:Key="STR_DocTitle_versions" xmlns:sys="clr-namespace:System;assembly=mscorlib">Версии и совместимость</sys:String>
 
     <!--Gigant -->
     <sys:String x:Key="STR_Characteristics_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Характеристики</sys:String>

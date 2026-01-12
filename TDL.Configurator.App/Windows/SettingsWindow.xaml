@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{DynamicResource STR_Settings_Title}"
         Style="{DynamicResource TDL.WindowStyle}"
-        Width="860" Height="460"
+        Width="860" Height="500"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Background="{DynamicResource TDL.Brush.WindowBackground}"
@@ -208,7 +208,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Padding="14" CornerRadius="10"
+            <Border Grid.Column="0" Padding="14" CornerRadius="10" 
                     BorderBrush="{DynamicResource TDL.Brush.Border}" BorderThickness="1"
                     Background="{DynamicResource TDL.Brush.PanelBackground}" Margin="0,0,10,0">
                 <StackPanel>
@@ -238,9 +238,13 @@
                     Background="{DynamicResource TDL.Brush.PanelBackground}">
                 <StackPanel>
                     <TextBlock FontWeight="SemiBold" Text="{DynamicResource STR_Settings_Updates_Label}"/>
-                    <Button Height="30" Margin="0,10,0,0" Style="{StaticResource TDL.SettingsLeftButtonStyle}" Content="{DynamicResource STR_Settings_CheckUpdates}" Click="CheckUpdates_Click"/>
+                    <Button Height="30" Margin="0,10,0,15" Style="{StaticResource TDL.SettingsLeftButtonStyle}" Content="{DynamicResource STR_Settings_CheckUpdates}" Click="CheckUpdates_Click"/>
+                    <TextBlock FontWeight="SemiBold" Text="{DynamicResource STR_Settings_TestPage_Label}"/>
+                    <Button x:Name="TestPageToggleButton" Height="30" Margin="0,10,0,0"
+                            Style="{StaticResource TDL.SettingsLeftButtonStyle}"
+                            Click="ToggleTestPage_Click"/>
                     <TextBlock Margin="0,8,0,0" Opacity="0.7"
-                               Text="{DynamicResource STR_Settings_UpdatePlaceholder}"/>
+                               Text="{DynamicResource STR_Settings_TestPage_Hint}"/>
                 </StackPanel>
             </Border>
         </Grid>

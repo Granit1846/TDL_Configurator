@@ -1,92 +1,92 @@
 [
   {
+    "id": "overview_installation",
+    "title_ru": "Обзор и установка",
+    "title_en": "Overview & Installation",
+    "file_ru": "ru/00_Overview_Installation.md",
+    "file_en": "en/00_Overview_Installation.md",
+    "order": 1,
+    "visibility": "normal"
+  },
+  {
     "id": "quickstart",
-    "title": "Быстрый старт",
-    "file": "01_QuickStart.md",
-    "order": 1
+    "title_ru": "Быстрый старт",
+    "title_en": "Quick start",
+    "file_ru": "ru/01_QuickStart.md",
+    "file_en": "en/01_QuickStart.md",
+    "order": 2,
+    "visibility": "normal"
   },
   {
     "id": "ui_help",
-    "title": "Справка по интерфейсу",
-    "file": "08_UI_Help.md",
-    "order": 2
+    "title_ru": "Справка по интерфейсу",
+    "title_en": "UI help",
+    "file_ru": "ru/02_Configurator_UI.md",
+    "file_en": "en/02_Configurator_UI.md",
+    "order": 3,
+    "visibility": "normal"
   },
   {
-    "id": "protocol",
-    "title": "Протокол и режимы",
-    "file": "02_Protocol.md",
-    "order": 3
+    "id": "bot_integration",
+    "title_ru": "Интеграция со стримом",
+    "title_en": "Stream integration",
+    "file_ru": "ru/03_Bot_Integration_Guide.md",
+    "file_en": "en/03_Bot_Integration_Guide.md",
+    "order": 4,
+    "visibility": "normal"
   },
   {
-    "id": "catalog_normal",
-    "title": "Команды NORMAL (обзор)",
-    "file": "03_ActionCatalog_NORMAL.md",
-    "order": 4
+    "id": "protocol_modes",
+    "title_ru": "Протокол и режимы",
+    "title_en": "Protocol & modes",
+    "file_ru": "ru/04_Protocol_Modes.md",
+    "file_en": "en/04_Protocol_Modes.md",
+    "order": 5,
+    "visibility": "advanced"
   },
   {
-    "id": "action_reference",
-    "title": "Action Reference (описания)",
-    "file": "09_ActionReference.md",
-    "order": 5
+    "id": "stages_actions",
+    "title_ru": "Стадии и ACTION",
+    "title_en": "Stages & ACTIONs",
+    "file_ru": "ru/05_Stages_Actions.md",
+    "file_en": "en/05_Stages_Actions.md",
+    "order": 6,
+    "visibility": "normal"
   },
   {
-    "id": "ini_reference",
-    "title": "Справочник INI (параметры)",
-    "file": "10_INI_Settings_Reference.md",
-    "order": 6
-  },
-  {
-    "id": "configs",
-    "title": "Конфиги и применение",
-    "file": "05_Configs_Restart.md",
-    "order": 7
-  },
-  {
-    "id": "stages_description",
-    "title": "Описание стадий",
-    "file": "15_TDL_Stages_Description.md",
-    "order": 8
+    "id": "ini_settings",
+    "title_ru": "INI: справочник",
+    "title_en": "INI: reference",
+    "file_ru": "ru/06_INI_Settings.md",
+    "file_en": "en/06_INI_Settings.md",
+    "order": 7,
+    "visibility": "advanced"
   },
   {
     "id": "force_safety",
-    "title": "FORCE и безопасность",
-    "file": "04_FORCE_Safety.md",
-    "order": 9
+    "title_ru": "FORCE: безопасность",
+    "title_en": "FORCE: safety",
+    "file_ru": "ru/07_FORCE_Safety_Cooldowns.md",
+    "file_en": "en/07_FORCE_Safety_Cooldowns.md",
+    "order": 8,
+    "visibility": "advanced"
   },
   {
-    "id": "stream_rules",
-    "title": "Правила стрим-интеграции",
-    "file": "12_TDL_Stream_Rules.md",
-    "order": 10
+    "id": "logs_diagnostics",
+    "title_ru": "Логи и диагностика",
+    "title_en": "Logs & diagnostics",
+    "file_ru": "ru/08_Logs_Diagnostics.md",
+    "file_en": "en/08_Logs_Diagnostics.md",
+    "order": 9,
+    "visibility": "normal"
   },
   {
-    "id": "architecture_overview",
-    "title": "Архитектура мода (обзор)",
-    "file": "13_TDL_Architecture_Overview.md",
-    "order": 11
-  },
-  {
-    "id": "logs",
-    "title": "Логи и диагностика",
-    "file": "11_Logs_Diagnostics.md",
-    "order": 12
-  },
-  {
-    "id": "faq",
-    "title": "FAQ / Типовые проблемы",
-    "file": "06_FAQ_KnownIssues.md",
-    "order": 13
-  },
-  {
-    "id": "faq_stream",
-    "title": "FAQ (стрим/архитектура)",
-    "file": "14_TDL_FAQ.md",
-    "order": 14
-  },
-  {
-    "id": "versions",
-    "title": "Версии и совместимость",
-    "file": "07_Versions_Compatibility.md",
-    "order": 15
+    "id": "faq_known",
+    "title_ru": "FAQ / проблемы",
+    "title_en": "FAQ / known issues",
+    "file_ru": "ru/09_FAQ_KnownIssues.md",
+    "file_en": "en/09_FAQ_KnownIssues.md",
+    "order": 10,
+    "visibility": "normal"
   }
 ]

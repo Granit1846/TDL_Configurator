@@ -164,6 +164,28 @@
         <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
     </Style>
 
+    <Style TargetType="ToolTip">
+        <Setter Property="Background" Value="{DynamicResource TDL.Brush.ControlBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.ControlBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          TextElement.Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Controls -->
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="{DynamicResource TDL.Brush.ControlBackground}"/>
