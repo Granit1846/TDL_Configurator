@@ -90,7 +90,7 @@
                         <ListBoxItem Tag="Show" Content="{DynamicResource STR_Tab_Show}" Height="30"/>
                         <ListBoxItem Tag="Information" Content="{DynamicResource STR_Tab_Information}" Height="30"/>
                         <ListBoxItem Tag="QuickAccess" Content="{DynamicResource STR_Tab_QuickAccess}" Height="30"/>
-                        <ListBoxItem Tag="Test" Content="{DynamicResource STR_Tab_Test}" Height="30"/>
+                        <ListBoxItem x:Name="NavTestItem" Tag="Test" Content="{DynamicResource STR_Tab_Test}" Height="30"/>
                     </ListBox>
                 </Grid>
             </Border>

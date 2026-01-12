@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- General -->
@@ -50,12 +50,9 @@
     <sys:String x:Key="STR_Settings_Updates_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Обновления</sys:String>
     <sys:String x:Key="STR_Settings_CheckUpdates" xmlns:sys="clr-namespace:System;assembly=mscorlib">Проверить обновления</sys:String>
     <sys:String x:Key="STR_Settings_UpdatePlaceholder" xmlns:sys="clr-namespace:System;assembly=mscorlib">(пока без URL)</sys:String>
-
-
-    <sys:String x:Key="STR_Settings_TestPage_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Страница «Тест»</sys:String>
-    <sys:String x:Key="STR_Settings_TestPage_Hint" xmlns:sys="clr-namespace:System;assembly=mscorlib">Скрывает/показывает вкладку «Тест» в главном окне (применится после сохранения).</sys:String>
-    <sys:String x:Key="STR_Settings_TestPage_ShowBtn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Показать</sys:String>
-    <sys:String x:Key="STR_Settings_TestPage_HideBtn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Скрыть</sys:String>
+    <sys:String x:Key="STR_Settings_AdvancedMode_Button" xmlns:sys="clr-namespace:System;assembly=mscorlib">Расширенный режим</sys:String>
+    <sys:String x:Key="STR_Settings_AdvancedMode_Tooltip_Line1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Включает вкладку «Тест»</sys:String>
+    <sys:String x:Key="STR_Settings_AdvancedMode_Tooltip_Line2" xmlns:sys="clr-namespace:System;assembly=mscorlib">и показывает полную документацию</sys:String>
 
 
     <!-- Buttons -->
@@ -226,39 +223,24 @@
 
     <!-- Information (Documentation page) -->
     <sys:String x:Key="STR_Info_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Информация</sys:String>
-    <sys:String x:Key="STR_Info_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Встроенная справка (Markdown) из папки docs\ (рядом с приложением).</sys:String>
+    <sys:String x:Key="STR_Info_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Встроенная справка (Markdown) из папки Docs\ru/Docs\en (рядом с приложением).</sys:String>
     <sys:String x:Key="STR_Info_Group_GameMod" xmlns:sys="clr-namespace:System;assembly=mscorlib">Игра / мод</sys:String>
     <sys:String x:Key="STR_Info_Btn_Refresh" xmlns:sys="clr-namespace:System;assembly=mscorlib">Обновить</sys:String>
-    <sys:String x:Key="STR_Info_Btn_OpenDocsFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть папку docs</sys:String>
+    <sys:String x:Key="STR_Info_Btn_OpenDocsFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть папку Docs</sys:String>
     <sys:String x:Key="STR_Info_Btn_OpenFile" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыть файл</sys:String>
     <sys:String x:Key="STR_Info_Btn_CopyMarkdown" xmlns:sys="clr-namespace:System;assembly=mscorlib">Копировать Markdown</sys:String>
     <sys:String x:Key="STR_Info_Group_Documents" xmlns:sys="clr-namespace:System;assembly=mscorlib">Документы</sys:String>
-    <sys:String x:Key="STR_Info_Msg_DocsFolderNotFound" xmlns:sys="clr-namespace:System;assembly=mscorlib">Папка docs не найдена рядом с приложением.</sys:String>
+    <sys:String x:Key="STR_Info_Msg_DocsFolderNotFound" xmlns:sys="clr-namespace:System;assembly=mscorlib">Папка Docs не найдена рядом с приложением.</sys:String>
     <sys:String x:Key="STR_Info_Msg_FileNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Файл не найден:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_Copied_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Скопировано в буфер ({0})</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_SelectDoc" xmlns:sys="clr-namespace:System;assembly=mscorlib">Выбери документ слева.</sys:String>
-    <sys:String x:Key="STR_Info_Status_DocsMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">docs не найдена (положи docs\ рядом с .exe).</sys:String>
+    <sys:String x:Key="STR_Info_Status_DocsMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">Docs не найдена (положи Docs\ рядом с .exe).</sys:String>
     <sys:String x:Key="STR_Info_Status_FoundCount_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Найдено документов: {0}</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_NoDocs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Документы не найдены (нет .md файлов).</sys:String>
     <sys:String x:Key="STR_Info_Status_NotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не найдено: {0}</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Не удалось прочитать файл:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_ReadError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Ошибка чтения</sys:String>
     <sys:String x:Key="STR_Info_Status_Opened_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Открыто: {0} ({1})</sys:String>
-    <sys:String x:Key="STR_DocTitle_quickstart" xmlns:sys="clr-namespace:System;assembly=mscorlib">Быстрый старт</sys:String>
-    <sys:String x:Key="STR_DocTitle_ui_help" xmlns:sys="clr-namespace:System;assembly=mscorlib">Справка по интерфейсу</sys:String>
-    <sys:String x:Key="STR_DocTitle_protocol" xmlns:sys="clr-namespace:System;assembly=mscorlib">Протокол и режимы</sys:String>
-    <sys:String x:Key="STR_DocTitle_catalog_normal" xmlns:sys="clr-namespace:System;assembly=mscorlib">Команды NORMAL (обзор)</sys:String>
-    <sys:String x:Key="STR_DocTitle_action_reference" xmlns:sys="clr-namespace:System;assembly=mscorlib">Action Reference (описания)</sys:String>
-    <sys:String x:Key="STR_DocTitle_ini_reference" xmlns:sys="clr-namespace:System;assembly=mscorlib">Справочник INI (параметры)</sys:String>
-    <sys:String x:Key="STR_DocTitle_configs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Конфиги и применение</sys:String>
-    <sys:String x:Key="STR_DocTitle_stages_description" xmlns:sys="clr-namespace:System;assembly=mscorlib">Описание стадий</sys:String>
-    <sys:String x:Key="STR_DocTitle_force_safety" xmlns:sys="clr-namespace:System;assembly=mscorlib">FORCE и безопасность</sys:String>
-    <sys:String x:Key="STR_DocTitle_stream_rules" xmlns:sys="clr-namespace:System;assembly=mscorlib">Правила стрим-интеграции</sys:String>
-    <sys:String x:Key="STR_DocTitle_architecture_overview" xmlns:sys="clr-namespace:System;assembly=mscorlib">Архитектура мода (обзор)</sys:String>
-    <sys:String x:Key="STR_DocTitle_logs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Логи и диагностика</sys:String>
-    <sys:String x:Key="STR_DocTitle_faq" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAQ / Типовые проблемы</sys:String>
-    <sys:String x:Key="STR_DocTitle_faq_stream" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAQ (стрим/архитектура)</sys:String>
-    <sys:String x:Key="STR_DocTitle_versions" xmlns:sys="clr-namespace:System;assembly=mscorlib">Версии и совместимость</sys:String>
 
     <!--Gigant -->
     <sys:String x:Key="STR_Characteristics_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Характеристики</sys:String>

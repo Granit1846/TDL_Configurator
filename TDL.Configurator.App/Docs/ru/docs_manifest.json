@@ -1,0 +1,72 @@
+[
+  {
+    "id": "overview_installation",
+    "title": "Обзор и установка",
+    "file": "00_Overview_Installation.md",
+    "order": 1,
+    "visibility": "normal"
+  },
+  {
+    "id": "quickstart",
+    "title": "Быстрый старт",
+    "file": "01_QuickStart.md",
+    "order": 2,
+    "visibility": "normal"
+  },
+  {
+    "id": "ui_help",
+    "title": "Справка по интерфейсу",
+    "file": "02_Configurator_UI.md",
+    "order": 3,
+    "visibility": "normal"
+  },
+  {
+    "id": "bot_integration",
+    "title": "Интеграция со стримом",
+    "file": "03_Bot_Integration_Guide.md",
+    "order": 4,
+    "visibility": "normal"
+  },
+  {
+    "id": "protocol_modes",
+    "title": "Протокол и режимы",
+    "file": "04_Protocol_Modes.md",
+    "order": 5,
+    "visibility": "advanced"
+  },
+  {
+    "id": "stages_actions",
+    "title": "Стадии и ACTION",
+    "file": "05_Stages_Actions.md",
+    "order": 6,
+    "visibility": "normal"
+  },
+  {
+    "id": "ini_settings",
+    "title": "INI: справочник",
+    "file": "06_INI_Settings.md",
+    "order": 7,
+    "visibility": "advanced"
+  },
+  {
+    "id": "force_safety",
+    "title": "FORCE: безопасность",
+    "file": "07_FORCE_Safety_Cooldowns.md",
+    "order": 8,
+    "visibility": "advanced"
+  },
+  {
+    "id": "logs_diagnostics",
+    "title": "Логи и диагностика",
+    "file": "08_Logs_Diagnostics.md",
+    "order": 9,
+    "visibility": "normal"
+  },
+  {
+    "id": "faq_known",
+    "title": "FAQ / проблемы",
+    "file": "09_FAQ_KnownIssues.md",
+    "order": 10,
+    "visibility": "normal"
+  }
+]

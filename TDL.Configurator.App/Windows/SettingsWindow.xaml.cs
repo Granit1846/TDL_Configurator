@@ -23,7 +23,6 @@ public partial class SettingsWindow : Window
     private readonly AppSettings _settings;
     private readonly AppTheme _originalTheme;
     private readonly AppLanguage _originalLanguage;
-    private readonly bool _originalShowTestPage;
 
     private bool _saved;
 
@@ -41,7 +40,6 @@ public partial class SettingsWindow : Window
             {
                 ThemeManager.ApplyTheme(_originalTheme);
                 LocalizationManager.ApplyLanguage(_originalLanguage);
-                _settings.ShowTestPage = _originalShowTestPage;
             }
         };
 
@@ -51,14 +49,10 @@ public partial class SettingsWindow : Window
         _originalTheme = _settings.Theme;
         _originalLanguage = _settings.Language;
 
-        _originalShowTestPage = _settings.ShowTestPage;
-
         _isInitializing = true;
         SelectComboItemByTag(ThemeBox, _settings.Theme.ToString());
         SelectComboItemByTag(LanguageBox, _settings.Language.ToString());
         _isInitializing = false;
-
-        UpdateTestPageToggleButton();
     }
 
     private void Browse_Click(object sender, RoutedEventArgs e)
@@ -133,22 +127,6 @@ public partial class SettingsWindow : Window
     private void Donation_Click(object sender, RoutedEventArgs e) => OpenLinkOrWarn(UrlDonation);
     private void Discord_Click(object sender, RoutedEventArgs e) => OpenLinkOrWarn(UrlDiscord);
 
-    private void ToggleTestPage_Click(object sender, RoutedEventArgs e)
-    {
-        _settings.ShowTestPage = !_settings.ShowTestPage;
-        UpdateTestPageToggleButton();
-    }
-
-    private void UpdateTestPageToggleButton()
-    {
-        if (TestPageToggleButton == null)
-            return;
-
-        TestPageToggleButton.Content = _settings.ShowTestPage
-            ? GetString("STR_Settings_TestPage_HideBtn")
-            : GetString("STR_Settings_TestPage_ShowBtn");
-    }
-
     private void Save_Click(object sender, RoutedEventArgs e)
     {
         var path = (GamePathBox.Text ?? string.Empty).Trim();
@@ -179,7 +157,6 @@ public partial class SettingsWindow : Window
         // Roll back preview changes
         ThemeManager.ApplyTheme(_originalTheme);
         LocalizationManager.ApplyLanguage(_originalLanguage);
-        _settings.ShowTestPage = _originalShowTestPage;
 
         _saved = false;
 

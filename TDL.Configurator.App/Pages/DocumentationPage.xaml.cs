@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -22,44 +22,14 @@ using WpfApplication = System.Windows.Application;
 using WpfBrush = System.Windows.Media.Brush;
 using WpfBrushes = System.Windows.Media.Brushes;
 
+using TDL.Configurator.App.Services;
+using TDL.Configurator.Core;
+
 namespace TDL.Configurator.App.Pages;
 
 public partial class DocumentationPage : System.Windows.Controls.UserControl
 {
-    private static string S(string key, string fallback = "")
-    {
-        var v = WpfApplication.Current?.TryFindResource(key);
-        var s = v?.ToString();
-        return string.IsNullOrWhiteSpace(s)
-            ? (string.IsNullOrWhiteSpace(fallback) ? key : fallback)
-            : s;
-    }
-
-    private static string SF(string key, string fallbackFormat, params object[] args)
-    {
-        var fmt = S(key, fallbackFormat);
-        try
-        {
-            return string.Format(fmt, args);
-        }
-        catch
-        {
-            return fmt;
-        }
-    }
-
-    private static string UiTitle => S("STR_App_Title", "TDL Configurator");
-
-    private static string LocalizeDocTitle(string id, string fallback)
-    {
-        if (string.IsNullOrWhiteSpace(id))
-            return fallback;
-
-        var key = "STR_DocTitle_" + id.Trim();
-        var res = WpfApplication.Current?.TryFindResource(key)?.ToString();
-        return string.IsNullOrWhiteSpace(res) ? fallback : res;
-    }
-
+    private const string UiTitle = "TDL Configurator";
 
     private sealed class DocItem
     {
@@ -78,6 +48,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         public string? title { get; set; }
         public string? file { get; set; }
         public int order { get; set; }
+        public string? visibility { get; set; } // "normal" | "advanced"
     }
 
     private readonly ObservableCollection<DocItem> _docs = new();
@@ -87,9 +58,10 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
     private string _searchQuery = "";
     private string _searchQueryLower = "";
     private readonly Dictionary<string, string> _docTextCache = new(StringComparer.OrdinalIgnoreCase);
-    private string? _docsRoot;     // ...\docs
-    private string? _docsContent;  // ...\docs or ...\docs\TDL_Docs
+    private string? _docsRoot;     // ...\Docs
+    private string? _docsLangDir;  // ...\Docs\ru or ...\Docs\en
     private string? _currentMd;    // raw markdown for CopyMarkdown
+    private bool _initialized;    // raw markdown for CopyMarkdown
 
     public DocumentationPage()
     {
@@ -99,8 +71,32 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         // FlowDocumentScrollViewer сам по себе не открывает ссылки — ...
         DocViewer.AddHandler(Hyperlink.RequestNavigateEvent, new RequestNavigateEventHandler(OnRequestNavigate));
 
-        // Важно: грузим после построения визуального дерева (меньше "дерганий" при старте в оконном режиме)
-        Loaded += (_, _) => LoadDocs();
+        Loaded += OnLoaded;
+        Unloaded += OnUnloaded;
+    }
+
+
+    public void ReloadFromSettings() => LoadDocs(preserveSelection: true);
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        if (_initialized)
+            return;
+
+        _initialized = true;
+        LocalizationManager.LanguageChanged += OnLanguageChanged;
+        LoadDocs(preserveSelection: false);
+    }
+
+    private void OnUnloaded(object sender, RoutedEventArgs e)
+    {
+        LocalizationManager.LanguageChanged -= OnLanguageChanged;
+        _initialized = false;
+    }
+
+    private void OnLanguageChanged(AppLanguage language)
+    {
+        LoadDocs(preserveSelection: true);
     }
 
     private static void OnRequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -121,16 +117,30 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         }
     }
 
-    // ---------------- UI events ----------------
+    
 
-    private void Refresh_Click(object sender, RoutedEventArgs e) => LoadDocs();
+    private static string GetString(string key)
+    {
+        try
+        {
+            var v = System.Windows.Application.Current?.TryFindResource(key);
+            return v?.ToString() ?? key;
+        }
+        catch
+        {
+            return key;
+        }
+    }
+// ---------------- UI events ----------------
+
+    private void Refresh_Click(object sender, RoutedEventArgs e) => LoadDocs(preserveSelection: true);
 
     private void OpenDocsFolder_Click(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(_docsRoot) || !Directory.Exists(_docsRoot))
         {
             System.Windows.MessageBox.Show(
-                S("STR_Info_Msg_DocsFolderNotFound", "Docs folder not found next to the app."),
+                GetString("STR_Info_Msg_DocsFolderNotFound"),
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -148,7 +158,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         if (!File.Exists(doc.FullPath))
         {
             System.Windows.MessageBox.Show(
-                SF("STR_Info_Msg_FileNotFound_Fmt", "File not found:{0}", "\n" + doc.FullPath),
+                $"Файл не найден:\n{doc.FullPath}",
                 UiTitle,
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -164,7 +174,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             return;
 
         System.Windows.Clipboard.SetText(_currentMd);
-        DocsStatusText.Text = SF("STR_Info_Status_Copied_Fmt", "Copied to clipboard ({0})", DateTime.Now.ToString("HH:mm:ss"));
+        DocsStatusText.Text = string.Format(GetString("STR_Info_Status_Copied_Fmt"), DateTime.Now.ToString("HH:mm:ss"));
     }
 
 
@@ -247,72 +257,112 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
 
     // ---------------- Loading ----------------
 
-    private void LoadDocs()
+    private void LoadDocs(bool preserveSelection)
     {
+        var selectedId = preserveSelection ? (DocsList.SelectedItem as DocItem)?.Id : null;
+
         _docs.Clear();
         _currentMd = null;
-
-
         _docTextCache.Clear();
+
         DocTitleText.Text = "";
-        DocViewer.Document = BuildInfoDocument(S("STR_Info_Placeholder_SelectDoc", "Select a document on the left."));
+        DocViewer.Document = BuildInfoDocument(GetString("STR_Info_Placeholder_SelectDoc"));
 
         var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        var docsRoot = Path.Combine(baseDir, "docs");
 
+        // Prefer "Docs" (project/output folder), but also support legacy "docs".
+        var docsRoot = Path.Combine(baseDir, "Docs");
         docsRoot = FindExistingDocsFolder(docsRoot) ?? docsRoot;
+        if (!Directory.Exists(docsRoot))
+        {
+            // Try legacy name
+            var legacy = Path.Combine(baseDir, "docs");
+            legacy = FindExistingDocsFolder(legacy) ?? legacy;
+            docsRoot = legacy;
+        }
+
         _docsRoot = docsRoot;
 
         if (!Directory.Exists(docsRoot))
         {
-            DocsStatusText.Text = S("STR_Info_Status_DocsMissing", "docs folder is missing (place docs next to the .exe).");
+            DocsStatusText.Text = GetString("STR_Info_Status_DocsMissing");
             return;
         }
 
-        // Поддержка раскладок:
-        // 1) docs\*.md + docs\docs_manifest.json
-        // 2) docs\TDL_Docs\*.md + docs\TDL_Docs\docs_manifest.json
-        var contentDir = Directory.Exists(Path.Combine(docsRoot, "TDL_Docs"))
-            ? Path.Combine(docsRoot, "TDL_Docs")
-            : docsRoot;
+        var langFolder = LocalizationManager.CurrentLanguage == AppLanguage.En ? "en" : "ru";
+        var langDir = Path.Combine(docsRoot, langFolder);
 
-        _docsContent = contentDir;
+        // Fallback: if requested language folder missing, use the other one
+        if (!Directory.Exists(langDir))
+        {
+            var alt = Path.Combine(docsRoot, langFolder == "en" ? "ru" : "en");
+            if (Directory.Exists(alt))
+                langDir = alt;
+        }
 
-        var manifestPath = Path.Combine(contentDir, "docs_manifest.json");
+        _docsLangDir = langDir;
+
+        if (!Directory.Exists(langDir))
+        {
+            DocsStatusText.Text = GetString("STR_Info_Status_DocsMissing");
+            return;
+        }
+
+        var settings = AppSettings.Load();
+        bool showAdvanced = settings.AdvancedMode;
+
+        var manifestPath = Path.Combine(langDir, "docs_manifest.json");
 
         List<DocItem> items = File.Exists(manifestPath)
-            ? LoadFromManifest(contentDir, manifestPath)
-            : LoadFromFolder(contentDir);
+            ? LoadFromManifest(langDir, manifestPath, showAdvanced)
+            : LoadFromFolder(langDir);
 
         foreach (var it in items)
             _docs.Add(it);
 
         _docsView = CollectionViewSource.GetDefaultView(_docs);
-
         _docsView.Filter = FilterDocBySearch;
         DocsList.ItemsSource = _docsView;
 
-        DocsStatusText.Text = SF("STR_Info_Status_FoundCount_Fmt", "Documents found: {0}", _docs.Count);
+        DocsStatusText.Text = string.Format(GetString("STR_Info_Status_FoundCount_Fmt"), _docs.Count);
 
-        if (_docs.Count > 0)
-            DocsList.SelectedIndex = 0;
+        if (_docs.Count == 0)
+        {
+            DocViewer.Document = BuildInfoDocument(GetString("STR_Info_Placeholder_NoDocs"));
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(selectedId))
+        {
+            var match = _docs.FirstOrDefault(d => string.Equals(d.Id, selectedId, StringComparison.OrdinalIgnoreCase));
+            if (match != null)
+                DocsList.SelectedItem = match;
+            else
+                DocsList.SelectedIndex = 0;
+        }
         else
-            DocViewer.Document = BuildInfoDocument(S("STR_Info_Placeholder_NoDocs", "No documents found (no .md files)."));
+        {
+            DocsList.SelectedIndex = 0;
+        }
     }
 
     private static string? FindExistingDocsFolder(string initial)
     {
-        // initial = <base>\docs
-        // Если запущено из bin\Debug\net8.0-windows — ищем docs выше по дереву
+        // initial = <base>\Docs or <base>\docs
+        // If launched from bin\Debug\... — search higher in directory tree.
         try
         {
             var start = Path.GetDirectoryName(initial) ?? "";
             var cur = new DirectoryInfo(start);
             for (var i = 0; i < 6 && cur != null; i++)
             {
-                var candidate = Path.Combine(cur.FullName, "docs");
-                if (Directory.Exists(candidate))
-                    return candidate;
+                var candDocs = Path.Combine(cur.FullName, "Docs");
+                if (Directory.Exists(candDocs))
+                    return candDocs;
+
+                var candLegacy = Path.Combine(cur.FullName, "docs");
+                if (Directory.Exists(candLegacy))
+                    return candLegacy;
 
                 cur = cur.Parent;
             }
@@ -325,7 +375,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         return null;
     }
 
-    private static List<DocItem> LoadFromManifest(string contentDir, string manifestPath)
+    private static List<DocItem> LoadFromManifest(string contentDir, string manifestPath, bool showAdvanced)
     {
         try
         {
@@ -334,6 +384,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
 
             return list
                 .Where(x => !string.IsNullOrWhiteSpace(x.file))
+                .Where(x => showAdvanced || !string.Equals((x.visibility ?? "normal").Trim(), "advanced", StringComparison.OrdinalIgnoreCase))
                 .Select(x =>
                 {
                     var fileName = x.file!.Trim();
@@ -341,7 +392,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
                     return new DocItem
                     {
                         Id = x.id?.Trim() ?? fileName,
-                        Title = LocalizeDocTitle(x.id?.Trim() ?? fileName, NormalizeWs(x.title?.Trim() ?? Path.GetFileNameWithoutExtension(fileName))),
+                        Title = NormalizeWs(x.title?.Trim() ?? Path.GetFileNameWithoutExtension(fileName)),
                         FileName = fileName,
                         Order = x.order,
                         FullPath = fullPath
@@ -367,7 +418,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
             .Select((p, idx) => new DocItem
             {
                 Id = Path.GetFileNameWithoutExtension(p),
-                Title = LocalizeDocTitle(Path.GetFileNameWithoutExtension(p), NormalizeWs(Path.GetFileNameWithoutExtension(p))),
+                Title = NormalizeWs(Path.GetFileNameWithoutExtension(p)),
                 FileName = Path.GetFileName(p),
                 Order = idx + 1,
                 FullPath = p
@@ -385,8 +436,8 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         {
             DocTitleText.Text = doc.Title;
             _currentMd = null;
-            DocViewer.Document = BuildInfoDocument(SF("STR_Info_Msg_FileNotFound_Fmt", "File not found:{0}", "\n" + doc.FullPath));
-            DocsStatusText.Text = SF("STR_Info_Status_NotFound_Fmt", "Not found: {0}", doc.FileName);
+            DocViewer.Document = BuildInfoDocument($"Файл не найден:\n{doc.FullPath}");
+            DocsStatusText.Text = string.Format(GetString("STR_Info_Status_NotFound_Fmt"), doc.FileName);
             return;
         }
 
@@ -400,8 +451,8 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
         {
             DocTitleText.Text = doc.Title;
             _currentMd = null;
-            DocViewer.Document = BuildInfoDocument(SF("STR_Info_Placeholder_ReadError_Fmt", "Failed to read file:{0}", "\n" + ex.Message));
-            DocsStatusText.Text = S("STR_Info_Status_ReadError", "Read error");
+            DocViewer.Document = BuildInfoDocument("Не удалось прочитать файл:\n" + ex.Message);
+            DocsStatusText.Text = GetString("STR_Info_Status_ReadError");
             return;
         }
 
@@ -410,7 +461,7 @@ public partial class DocumentationPage : System.Windows.Controls.UserControl
 
         var flow = MarkdownToFlowDocument(md);
         DocViewer.Document = flow;
-        DocsStatusText.Text = SF("STR_Info_Status_Opened_Fmt", "Opened: {0} ({1})", doc.FileName, DateTime.Now.ToString("HH:mm:ss"));
+        DocsStatusText.Text = string.Format(GetString("STR_Info_Status_Opened_Fmt"), doc.FileName, DateTime.Now.ToString("HH:mm:ss"));
     }
 
     private static FlowDocument BuildInfoDocument(string text)

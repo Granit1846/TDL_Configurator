@@ -28,6 +28,8 @@ public sealed class AppSettings
         }
     }
 
+    public bool AdvancedMode { get; set; }
+
     public static AppSettings Load()
     {
         try

@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- General -->
@@ -50,10 +50,10 @@
     <sys:String x:Key="STR_Settings_Updates_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Updates</sys:String>
     <sys:String x:Key="STR_Settings_CheckUpdates" xmlns:sys="clr-namespace:System;assembly=mscorlib">Check for updates</sys:String>
     <sys:String x:Key="STR_Settings_UpdatePlaceholder" xmlns:sys="clr-namespace:System;assembly=mscorlib">(URL not set yet)</sys:String>
-    <sys:String x:Key="STR_Settings_TestPage_Label" xmlns:sys="clr-namespace:System;assembly=mscorlib">Test page</sys:String>
-    <sys:String x:Key="STR_Settings_TestPage_Hint" xmlns:sys="clr-namespace:System;assembly=mscorlib">Shows/hides the “Test” tab in the main window (applies after saving).</sys:String>
-    <sys:String x:Key="STR_Settings_TestPage_ShowBtn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Show</sys:String>
-    <sys:String x:Key="STR_Settings_TestPage_HideBtn" xmlns:sys="clr-namespace:System;assembly=mscorlib">Hide</sys:String>
+    <sys:String x:Key="STR_Settings_AdvancedMode_Button" xmlns:sys="clr-namespace:System;assembly=mscorlib">Advanced mode</sys:String>
+    <sys:String x:Key="STR_Settings_AdvancedMode_Tooltip_Line1" xmlns:sys="clr-namespace:System;assembly=mscorlib">Enables the “Test” tab</sys:String>
+    <sys:String x:Key="STR_Settings_AdvancedMode_Tooltip_Line2" xmlns:sys="clr-namespace:System;assembly=mscorlib">and shows the full documentation</sys:String>
+
 
     <!-- Buttons -->
     <sys:String x:Key="STR_Settings_Save" xmlns:sys="clr-namespace:System;assembly=mscorlib">Save</sys:String>
@@ -226,10 +226,10 @@
 
     <!-- Information (Documentation page) -->
     <sys:String x:Key="STR_Info_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Information</sys:String>
-    <sys:String x:Key="STR_Info_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Built-in help (Markdown) from the docs\ folder (next to the app).</sys:String>
+    <sys:String x:Key="STR_Info_Subtitle" xmlns:sys="clr-namespace:System;assembly=mscorlib">Built-in help (Markdown) from the Docs\ru / Docs\en folders (next to the app).</sys:String>
     <sys:String x:Key="STR_Info_Group_GameMod" xmlns:sys="clr-namespace:System;assembly=mscorlib">Game / mod</sys:String>
     <sys:String x:Key="STR_Info_Btn_Refresh" xmlns:sys="clr-namespace:System;assembly=mscorlib">Refresh</sys:String>
-    <sys:String x:Key="STR_Info_Btn_OpenDocsFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Open docs folder</sys:String>
+    <sys:String x:Key="STR_Info_Btn_OpenDocsFolder" xmlns:sys="clr-namespace:System;assembly=mscorlib">Open Docs folder</sys:String>
     <sys:String x:Key="STR_Info_Btn_OpenFile" xmlns:sys="clr-namespace:System;assembly=mscorlib">Open file</sys:String>
     <sys:String x:Key="STR_Info_Btn_CopyMarkdown" xmlns:sys="clr-namespace:System;assembly=mscorlib">Copy Markdown</sys:String>
     <sys:String x:Key="STR_Info_Group_Documents" xmlns:sys="clr-namespace:System;assembly=mscorlib">Documents</sys:String>
@@ -237,28 +237,13 @@
     <sys:String x:Key="STR_Info_Msg_FileNotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">File not found:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_Copied_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Copied to clipboard ({0})</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_SelectDoc" xmlns:sys="clr-namespace:System;assembly=mscorlib">Select a document from the list on the left.</sys:String>
-    <sys:String x:Key="STR_Info_Status_DocsMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">docs folder not found (place docs\ next to the .exe).</sys:String>
+    <sys:String x:Key="STR_Info_Status_DocsMissing" xmlns:sys="clr-namespace:System;assembly=mscorlib">Docs folder not found (place Docs\ next to the .exe).</sys:String>
     <sys:String x:Key="STR_Info_Status_FoundCount_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Documents found: {0}</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_NoDocs" xmlns:sys="clr-namespace:System;assembly=mscorlib">No documents found (no .md files).</sys:String>
     <sys:String x:Key="STR_Info_Status_NotFound_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Not found: {0}</sys:String>
     <sys:String x:Key="STR_Info_Placeholder_ReadError_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Failed to read file:{0}</sys:String>
     <sys:String x:Key="STR_Info_Status_ReadError" xmlns:sys="clr-namespace:System;assembly=mscorlib">Read error</sys:String>
     <sys:String x:Key="STR_Info_Status_Opened_Fmt" xmlns:sys="clr-namespace:System;assembly=mscorlib">Opened: {0} ({1})</sys:String>
-    <sys:String x:Key="STR_DocTitle_quickstart" xmlns:sys="clr-namespace:System;assembly=mscorlib">Quick start</sys:String>
-    <sys:String x:Key="STR_DocTitle_ui_help" xmlns:sys="clr-namespace:System;assembly=mscorlib">UI help</sys:String>
-    <sys:String x:Key="STR_DocTitle_protocol" xmlns:sys="clr-namespace:System;assembly=mscorlib">Protocol and modes</sys:String>
-    <sys:String x:Key="STR_DocTitle_catalog_normal" xmlns:sys="clr-namespace:System;assembly=mscorlib">NORMAL commands (overview)</sys:String>
-    <sys:String x:Key="STR_DocTitle_action_reference" xmlns:sys="clr-namespace:System;assembly=mscorlib">Action reference (descriptions)</sys:String>
-    <sys:String x:Key="STR_DocTitle_ini_reference" xmlns:sys="clr-namespace:System;assembly=mscorlib">INI reference (settings)</sys:String>
-    <sys:String x:Key="STR_DocTitle_configs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Configs and applying</sys:String>
-    <sys:String x:Key="STR_DocTitle_stages_description" xmlns:sys="clr-namespace:System;assembly=mscorlib">Stages description</sys:String>
-    <sys:String x:Key="STR_DocTitle_force_safety" xmlns:sys="clr-namespace:System;assembly=mscorlib">FORCE and safety</sys:String>
-    <sys:String x:Key="STR_DocTitle_stream_rules" xmlns:sys="clr-namespace:System;assembly=mscorlib">Stream integration rules</sys:String>
-    <sys:String x:Key="STR_DocTitle_architecture_overview" xmlns:sys="clr-namespace:System;assembly=mscorlib">Mod architecture (overview)</sys:String>
-    <sys:String x:Key="STR_DocTitle_logs" xmlns:sys="clr-namespace:System;assembly=mscorlib">Logs and diagnostics</sys:String>
-    <sys:String x:Key="STR_DocTitle_faq" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAQ / Common issues</sys:String>
-    <sys:String x:Key="STR_DocTitle_faq_stream" xmlns:sys="clr-namespace:System;assembly=mscorlib">FAQ (stream/architecture)</sys:String>
-    <sys:String x:Key="STR_DocTitle_versions" xmlns:sys="clr-namespace:System;assembly=mscorlib">Versions and compatibility</sys:String>
 
     <!--Gigant -->
     <sys:String x:Key="STR_Characteristics_Title" xmlns:sys="clr-namespace:System;assembly=mscorlib">Characteristics</sys:String>

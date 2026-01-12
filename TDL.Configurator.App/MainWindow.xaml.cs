@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -16,7 +16,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        ApplyTestPageVisibility();
+        ApplyAdvancedMode();
 
         // Выберем первую вкладку при старте
         NavList.SelectedIndex = 0;
@@ -38,37 +38,22 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ApplyTestPageVisibility()
+    private void ApplyAdvancedMode()
     {
-        bool show = true;
         try
         {
             var s = AppSettings.Load();
-            show = s?.ShowTestPage ?? true;
+            var enabled = s?.AdvancedMode ?? false;
+
+            if (NavTestItem != null)
+                NavTestItem.Visibility = enabled ? Visibility.Visible : Visibility.Collapsed;
+
+            if (!enabled && NavList.SelectedItem is ListBoxItem li && string.Equals(li.Tag?.ToString(), "Test", StringComparison.OrdinalIgnoreCase))
+                NavList.SelectedIndex = 0;
         }
         catch
         {
-            show = true;
-        }
-
-        ListBoxItem? testItem = null;
-        foreach (var obj in NavList.Items)
-        {
-            if (obj is ListBoxItem li && (li.Tag?.ToString() ?? "") == "Test")
-            {
-                testItem = li;
-                break;
-            }
-        }
-
-        if (testItem == null)
-            return;
-
-        testItem.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
-
-        if (!show && NavList.SelectedItem is ListBoxItem sel && (sel.Tag?.ToString() ?? "") == "Test")
-        {
-            NavList.SelectedIndex = 0;
+            // ignore
         }
     }
 
@@ -78,11 +63,14 @@ public partial class MainWindow : Window
         {
             Owner = this
         };
-        var saved = w.ShowDialog() == true;
-        if (saved)
+
+        var ok = w.ShowDialog() == true;
+        if (ok)
         {
-            // Применяем настройки навигации, которые должны вступать в силу только после сохранения.
-            ApplyTestPageVisibility();
+            ApplyAdvancedMode();
+
+            if (MainContent.Content is DocumentationPage dp)
+                dp.ReloadFromSettings();
         }
 
         // Пока ничего не обновляем принудительно — QuickAccess будем читать настройки при открытии.
