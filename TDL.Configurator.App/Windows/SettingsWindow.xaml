@@ -253,28 +253,28 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Style="{StaticResource TDL.IconButtonStyle}" ToolTip="{DynamicResource STR_Link_Nexus}" Click="Nexus_Click" Margin="0,0,8,0">
-                    <Path Width="18" Height="18" Stretch="Uniform"
-                          Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                          Data="M9,1 A8,8 0 1 1 1,9 A8,8 0 0 1 9,1 Z M2.2,9 C2.2,12.8 5.2,15.8 9,15.8 C12.8,15.8 15.8,12.8 15.8,9 C15.8,5.2 12.8,2.2 9,2.2 C5.2,2.2 2.2,5.2 2.2,9 Z"/>
+                <Button Style="{StaticResource TDL.IconButtonStyle}" ToolTip="{DynamicResource STR_Link_Nexus}" Click="Nexus_Click" Margin="10,0,0,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="/Assets/nexus-logo.png" Width="24" Height="24" Stretch="Uniform"/>
+                    </StackPanel>
                 </Button>
 
-                <Button Style="{StaticResource TDL.IconButtonStyle}" ToolTip="{DynamicResource STR_Link_GitHub}" Click="GitHub_Click" Margin="0,0,8,0">
-                    <Path Width="18" Height="18" Stretch="Uniform"
-                          Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                          Data="M4,3 H14 V5 H4 Z M4,7 H10 V9 H4 z M4,11 H14 V13 H4 Z"/>
+                <Button Style="{StaticResource TDL.IconButtonStyle}" ToolTip="{DynamicResource STR_Link_GitHub}" Click="GitHub_Click" Margin="0,0,0,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="/Assets/git-logo.png" Width="24" Height="24" Stretch="Uniform"/>
+                    </StackPanel>
                 </Button>
 
-                <Button Style="{StaticResource TDL.IconButtonStyle}" ToolTip="{DynamicResource STR_Link_Donation}" Click="Donation_Click" Margin="0,0,8,0">
-                    <Path Width="18" Height="18" Stretch="Uniform"
-                          Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                          Data="M9,16 C6,13.5 2,10.5 2,6.7 C2,4.4 3.8,2.6 6.1,2.6 C7.4,2.6 8.5,3.2 9,4 C9.5,3.2 10.6,2.6 11.9,2.6 C14.2,2.6 16,4.4 16,6.7 C16,10.5 12,13.5 9,16 Z"/>
+                <Button Style="{StaticResource TDL.IconButtonStyle}" ToolTip="{DynamicResource STR_Link_Donation}" Click="Donation_Click" Margin="0,0,0,0">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="/Assets/donate-logo.png" Width="40" Height="40" Stretch="Uniform"/>
+                    </StackPanel>
                 </Button>
 
                 <Button Style="{StaticResource TDL.IconButtonStyle}" ToolTip="{DynamicResource STR_Link_Discord}" Click="Discord_Click">
-                    <Path Width="18" Height="18" Stretch="Uniform"
-                          Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                          Data="M2,3 H16 V12 H10 L6,15 V12 H2 Z"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="/Assets/discord-logo.png" Width="24" Height="24" Stretch="Uniform"/>
+                    </StackPanel>
                 </Button>
             </StackPanel>
 
