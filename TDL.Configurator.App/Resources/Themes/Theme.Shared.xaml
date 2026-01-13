@@ -189,7 +189,6 @@
         <Setter Property="Background" Value="{DynamicResource TDL.Brush.ControlBackground}"/>
         <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.Text}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.ControlBorder}"/>
-        <Setter Property="SelectionBrush" Value="{DynamicResource TDL.Brush.Accent}"/>
     </Style>
 
     <Style TargetType="ComboBox">
@@ -232,16 +231,12 @@
 
     <!-- Accent button (Save) -->
     <Style x:Key="TDL.AccentButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Background" Value="{DynamicResource TDL.Brush.Accent}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.Accent}"/>
         <Setter Property="Foreground" Value="{DynamicResource TDL.Brush.AccentText}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource TDL.Brush.AccentHover}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.AccentHover}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{DynamicResource TDL.Brush.AccentPressed}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource TDL.Brush.AccentPressed}"/>
             </Trigger>
         </Style.Triggers>

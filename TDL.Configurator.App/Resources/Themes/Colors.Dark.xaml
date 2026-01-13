@@ -32,9 +32,6 @@
     <SolidColorBrush x:Key="TDL.Brush.DocCodeBackground" Color="#FF1C1C1C"/>
     <SolidColorBrush x:Key="TDL.Brush.DocCodeBorder" Color="#55DEDEDE"/>
 
-    <SolidColorBrush x:Key="TDL.Brush.Accent" Color="#FF4FC1FF"/>
-    <SolidColorBrush x:Key="TDL.Brush.AccentHover" Color="#FF66CCFF"/>
-    <SolidColorBrush x:Key="TDL.Brush.AccentPressed" Color="#FF2AA7F5"/>
     <SolidColorBrush x:Key="TDL.Brush.AccentText" Color="#FF0A0A0A"/>
 
     <SolidColorBrush x:Key="TDL.Brush.Hover" Color="#22FFFFFF"/>
