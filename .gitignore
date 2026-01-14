@@ -20,5 +20,5 @@
 # OS
 Thumbs.db
 .DS_Store
-.cmd
-.ps1
+*.cmd
+*.ps1
