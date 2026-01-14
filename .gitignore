@@ -20,3 +20,5 @@
 # OS
 Thumbs.db
 .DS_Store
+.cmd
+.ps1
