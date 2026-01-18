@@ -14,8 +14,8 @@ namespace TDL.Configurator.App.Windows;
 public partial class SettingsWindow : Window
 {
     // Links are not provided yet (placeholders).
-    private const string UrlNexus = "";
-    private const string UrlGitHub = "";
+    private const string UrlNexus = "https://www.nexusmods.com/skyrimspecialedition/mods/170091?tab=description";
+    private const string UrlGitHub = "https://github.com/Granit1846/Mods_and_programs";
     private const string UrlDonation = "https://www.donationalerts.com/r/skeorz";
     private const string UrlDiscord = "https://discord.gg/dwgp7E9p";
     private const string UrlUpdateCheck = "";
