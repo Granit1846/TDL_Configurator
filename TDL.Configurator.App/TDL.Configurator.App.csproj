@@ -15,10 +15,6 @@
     <None Remove="Assets\donate-logo.png" />
     <None Remove="Assets\git-logo.png" />
     <None Remove="Assets\logo.png" />
-    <None Remove="Assets\logo1.png" />
-    <None Remove="Assets\logo2.png" />
-    <None Remove="Assets\logo3.png" />
-    <None Remove="Assets\logo4.png" />
     <None Remove="Assets\logo6.png" />
     <None Remove="Assets\nexus-logo.png" />
   </ItemGroup>
@@ -39,10 +35,6 @@
     <Resource Include="Assets\donate-logo.png" />
     <Resource Include="Assets\git-logo.png" />
     <Resource Include="Assets\logo.png" />
-    <Resource Include="Assets\logo1.png" />
-    <Resource Include="Assets\logo2.png" />
-    <Resource Include="Assets\logo3.png" />
-    <Resource Include="Assets\logo4.png" />
     <Resource Include="Assets\logo6.png" />
     <Resource Include="Assets\nexus-logo.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
