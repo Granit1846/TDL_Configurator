@@ -7,6 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
+	<ApplicationIcon>Assets\TDL-logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\TDL-logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\discord-logo.png" />
     <Resource Include="Assets\donate-logo.png" />
     <Resource Include="Assets\git-logo.png" />
@@ -39,7 +44,9 @@
     <Resource Include="Assets\logo3.png" />
     <Resource Include="Assets\logo4.png" />
     <Resource Include="Assets\logo6.png" />
-    <Resource Include="Assets\nexus-logo.png" />
+    <Resource Include="Assets\nexus-logo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
